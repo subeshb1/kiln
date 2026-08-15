@@ -153,8 +153,11 @@
   }
   @keyframes wordrise { to { opacity: 1; translate: 0 0; } }
   @keyframes fadeup { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
-  #cycleWord { display: inline-block; transition: opacity .28s ease, translate .28s ease; }
-  #cycleWord.swap { opacity: 0; translate: 0 .35em; }
+  /* word swap = masked slide (never an opacity fade — contrast holds at every
+     frame, so audits can't catch a low-contrast in-between state) */
+  h1 .wmask { display: inline-block; overflow: hidden; }
+  #cycleWord { display: inline-block; line-height: 1.18; padding-bottom: .07em; transition: translate .3s cubic-bezier(.5,0,.6,1); }
+  #cycleWord.swap { translate: 0 1.45em; }
 
   /* ————— live token ticker ————— */
   .token-tick {
@@ -225,30 +228,91 @@
   @media (max-width: 640px) { .nav nav { gap: 14px; } .nav a { font-size: 12.5px; } }
 
   /* ————— Hero ————— */
-  .hero { position: relative; overflow: hidden; padding: 190px 0 130px; border-bottom: 1px solid var(--line); }
-  .hero-art {
-    position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    display: flex; justify-content: flex-end; align-items: center;
-  }
-  .hero-art svg { height: 155%; margin-right: -14%; opacity: .9; }
-  .ring { transform-box: fill-box; transform-origin: center; }
-  .r1 { stroke: hsl(var(--hue) 45% 38%); }
-  .r2 { stroke: hsl(var(--hue) 50% 48%); }
-  .r3 { stroke: hsl(var(--hue) 45% 38%); }
-  .r4 { stroke: hsl(var(--hue) 60% 55%); }
-  .r4-dot { fill: hsl(var(--hue) 60% 55%); }
-  .r-core { fill: var(--accent); }
-  .r-hole { fill: var(--page); }
-  html[data-theme="light"] .hero-art svg { opacity: .55; }
-  @media (prefers-reduced-motion: no-preference) {
-    .spin { animation: spin 70s linear infinite; }
-    .spinr { animation: spinr 90s linear infinite; }
-    .breathe { animation: breathe 9s ease-in-out infinite; }
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes spinr { to { transform: rotate(-360deg); } }
-  @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+  .hero { position: relative; overflow: hidden; padding: 168px 0 92px; border-bottom: 1px solid var(--line); }
   .hero .wrap { position: relative; z-index: 1; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); gap: 54px; align-items: center; }
+  @media (max-width: 1020px) {
+    .hero { padding: 148px 0 80px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 54px; }
+    .hero-stage { max-width: 640px; }
+  }
+
+  /* the shapeshifter stage — a live browser frame cycling the real templates */
+  .hero-stage { position: relative; }
+  .hero-stage::before {
+    content: ""; position: absolute; inset: -14% -10%; z-index: 0; pointer-events: none;
+    background: radial-gradient(closest-side, var(--glow-a), transparent 70%);
+  }
+  .frame {
+    position: relative; z-index: 1; margin: 0;
+    border: 1px solid var(--line); border-radius: calc(var(--radius) * 1.3);
+    background: var(--panel); overflow: hidden;
+    box-shadow: var(--shadow),
+      0 0 0 1px hsl(var(--hue) var(--sat) 55% / .1),
+      0 34px 90px hsl(var(--hue) var(--sat) 40% / .2);
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    html.js .frame { transform: perspective(1300px) rotateY(var(--fy, -7deg)) rotateX(var(--fx, 2.5deg)); transition: transform .5s ease, border-radius .5s ease; }
+    html.js .hero-stage:hover .frame { --fy: -2.5deg; --fx: 1deg; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html.js .frame { animation: framefloat 8s ease-in-out infinite alternate; }
+  }
+  @keyframes framefloat { from { translate: 0 -6px; } to { translate: 0 8px; } }
+  .frame-bar {
+    display: flex; align-items: center; gap: 6px; padding: 10px 14px;
+    border-bottom: 1px solid var(--line); background: var(--panel-2);
+  }
+  .frame-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+  .frame-bar i:first-child { background: var(--accent); }
+  .frame-url {
+    margin-left: 10px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-family: var(--f-data); font-size: 11.5px; color: var(--ink-3);
+    border: 1px solid var(--line); border-radius: 999px; padding: 2px 12px; background: var(--page);
+  }
+  .frame-body { position: relative; aspect-ratio: 16 / 10; background: var(--panel-2); }
+  .frame-shot {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: top;
+    opacity: 0; transition: opacity .65s ease;
+  }
+  .frame-shot.on { opacity: 1; }
+  .frame-cap {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    padding: 10px 14px; font-size: 12.5px; color: var(--ink-2);
+    border-top: 1px solid var(--line); background: var(--panel-2);
+  }
+  .frame-cap b { font-family: var(--f-data); font-weight: 600; color: var(--accent-text); white-space: nowrap; }
+  .orb-chip {
+    position: absolute; z-index: 2; pointer-events: none;
+    font-family: var(--f-data); font-size: 11.5px; letter-spacing: .03em; color: var(--ink-2);
+    border: 1px solid var(--line); background: var(--glass);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    padding: 6px 13px; border-radius: 999px;
+    box-shadow: 0 12px 32px hsl(var(--hue) 60% 5% / .28);
+  }
+  .orb-chip b { color: var(--accent-text); font-weight: 600; }
+  .orb-chip.c1 { top: -17px; left: -20px; }
+  .orb-chip.c2 { bottom: 40px; right: -18px; }
+  .orb-chip.c3 { top: 46%; left: -26px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .orb-chip.c1 { animation: bob 6s ease-in-out infinite alternate; }
+    .orb-chip.c2 { animation: bob 7.5s ease-in-out infinite alternate; animation-delay: .8s; }
+    .orb-chip.c3 { animation: bob 8.5s ease-in-out infinite alternate; animation-delay: .4s; }
+  }
+  @keyframes bob { from { translate: 0 -5px; } to { translate: 0 7px; } }
+  @media (max-width: 1020px) { .orb-chip { display: none; } }
+
+  /* whole-page cross-fade while the shapeshifter re-brands (zero specificity,
+     so any element with its own transition list keeps it) */
+  @media (prefers-reduced-motion: no-preference) {
+    :where(html.morphing *),
+    :where(html.morphing *)::before,
+    :where(html.morphing *)::after {
+      transition: color .8s ease, background-color .8s ease, border-color .8s ease,
+        fill .8s ease, stroke .8s ease, box-shadow .8s ease, text-shadow .8s ease;
+    }
+  }
   .hero-tag {
     display: inline-flex; align-items: center; gap: 8px;
     font-family: var(--f-data); font-size: 12.5px; letter-spacing: .08em;
@@ -259,11 +323,26 @@
   .hero-tag .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
   h1 {
     font-family: var(--font-display); font-weight: 800;
-    font-size: clamp(46px, 8.4vw, 112px); line-height: .98;
-    letter-spacing: -0.025em; text-wrap: balance;
-    margin: 0 0 26px; max-width: 12ch;
+    line-height: 1.02; letter-spacing: -0.02em;
+    margin: 0 0 24px;
+  }
+  h1 .l1 {
+    display: block; font-size: clamp(27px, 2.8vw, 41px); font-weight: 700;
+    letter-spacing: -0.01em; margin-bottom: 4px;
   }
   h1 em { font-style: normal; color: var(--accent-text); }
+  h1 #cycleWord {
+    font-size: clamp(42px, 5.7vw, 80px);
+    letter-spacing: -0.03em;
+  }
+  /* ambient wash behind the headline (a text-shadow on the sliding word would
+     be clipped by the mask into a visible rectangle) */
+  .hero-copy { position: relative; }
+  .hero-copy::before {
+    content: ""; position: absolute; z-index: -1; pointer-events: none;
+    top: 4%; left: -14%; width: 76%; height: 46%;
+    background: radial-gradient(closest-side, hsl(var(--hue) var(--sat) 55% / .13), transparent 72%);
+  }
   .hero p.sub { color: var(--ink-2); font-size: 18px; max-width: 46ch; margin: 0 0 36px; }
   .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
   .btn {
@@ -428,39 +507,48 @@
 </div>
 
 <header class="hero">
-  <div class="hero-art" aria-hidden="true">
-    <svg viewBox="0 0 900 900">
-      <g class="ring spin"><circle class="r1" cx="450" cy="450" r="392" fill="none" stroke-width="1.6" stroke-dasharray="10 26" stroke-linecap="round"/></g>
-      <g class="ring spinr"><circle class="r2" cx="450" cy="450" r="318" fill="none" stroke-width="1.2" stroke-dasharray="2 20" stroke-linecap="round"/></g>
-      <g class="ring spin" style="animation-duration: 110s"><circle class="r3" cx="450" cy="450" r="238" fill="none" stroke-width="7" stroke-dasharray="1 46" stroke-linecap="round"/></g>
-      <g class="ring spinr" style="animation-duration: 60s">
-        <circle class="r4" cx="450" cy="450" r="160" fill="none" stroke-width="1.4" stroke-dasharray="60 34" stroke-linecap="round"/>
-        <circle class="r4-dot" cx="610" cy="450" r="9"/>
-      </g>
-      <g class="ring breathe"><circle class="r-core" cx="450" cy="450" r="64"/><circle class="r-hole" cx="450" cy="450" r="26"/></g>
-    </svg>
-  </div>
-
-  <div class="wrap">
-    <span class="hero-tag"><span class="dot" aria-hidden="true"></span>frontend studio · web / mobile / games</span>
-    <h1 class="kinetic"><span class="w">We</span> <span class="w">build</span> <span class="w">configurable</span> <span class="w"><em id="cycleWord" aria-label="everything.">everything.</em></span></h1>
-    <p class="sub">Kiln is a frontend studio for web apps, cross-platform mobile, and games.
-       Your brand lives in one token file — so every surface we ship can be
-       re-skinned in minutes, not sprints.</p>
-    <p class="token-tick" aria-live="off">live tokens <b>·</b>
-      <span>--hue: <b id="ttHue">173</b></span>
-      <span>--radius: <b id="ttRadius">14px</b></span>
-      <span>type: <b id="ttFont">Modern</b></span>
-      <span>mode: <b id="ttMode">dark</b></span>
-    </p>
-    <div class="cta-row">
-      <a class="btn btn-primary" href="#contact">Book a token workshop</a>
-      <a class="btn btn-ghost" href="#templates">See the proof</a>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="hero-tag"><span class="dot" aria-hidden="true"></span>frontend studio · web / mobile / games</span>
+      <h1 class="kinetic"><span class="l1"><span class="w">We</span> <span class="w">build</span> <span class="w">configurable</span></span><span class="w wmask"><em id="cycleWord" aria-label="everything.">everything.</em></span></h1>
+      <p class="sub">Kiln is a frontend studio for web apps, cross-platform mobile, and games.
+         Your brand lives in one token file — so every surface we ship can be
+         re-skinned in minutes, not sprints. Don't take our word for it — this
+         page is re-branding itself while you read.</p>
+      <p class="token-tick" aria-live="off">live tokens <b>·</b>
+        <span>--hue: <b id="ttHue">173</b></span>
+        <span>--radius: <b id="ttRadius">14px</b></span>
+        <span>type: <b id="ttFont">Modern</b></span>
+        <span>mode: <b id="ttMode">dark</b></span>
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#contact">Book a token workshop</a>
+        <a class="btn btn-ghost" href="#templates">See the proof</a>
+      </div>
+      <div class="hero-foot">
+        <span><b data-count="12">12</b> live configurable demos</span>
+        <span><b data-count="4">4</b> platforms from one config</span>
+        <span><b data-count="100">100</b> Lighthouse a11y, both themes</span>
+      </div>
     </div>
-    <div class="hero-foot">
-      <span><b data-count="12">12</b> live configurable demos</span>
-      <span><b data-count="4">4</b> platforms from one config</span>
-      <span><b data-count="100">100</b> Lighthouse a11y, both themes</span>
+
+    <div class="hero-stage" aria-hidden="true">
+      <figure class="frame">
+        <div class="frame-bar"><i></i><i></i><i></i>
+          <span class="frame-url" id="frameUrl">kiln/showcase</span>
+        </div>
+        <div class="frame-body">
+          <img class="frame-shot on" id="shotA" src="templates/shots/showcase.jpeg" alt="" width="2560" height="1600">
+          <img class="frame-shot" id="shotB" src="templates/shots/showcase.jpeg" alt="" width="2560" height="1600">
+        </div>
+        <figcaption class="frame-cap">
+          <span id="frameName">The Prototype Console</span>
+          <b>--hue: <span id="frameHue">173</span></b>
+        </figcaption>
+      </figure>
+      <span class="orb-chip c1">--hue: <b id="chipHue">173</b></span>
+      <span class="orb-chip c2">type: <b id="chipFont">Sora / Inter</b></span>
+      <span class="orb-chip c3">--radius: <b id="chipRad">14px</b></span>
     </div>
   </div>
 </header>
@@ -896,19 +984,24 @@ html[data-theme="light"] .kw-panel{--kw-bg:hsl(var(--hue) 30% 98% / .92);}
   });
   apply();
   // the home page leads with the panel open — the widget IS the pitch.
-  // it folds away on first scroll unless the visitor is playing with it.
+  // it folds after the shapeshifter's second morph (or on scroll), so the
+  // hero stage gets the corner back — unless the visitor is playing with it.
   if (matchMedia("(min-width: 900px)").matches) {
     $("kwPanel").hidden = false;
     $("kwFab").setAttribute("aria-expanded", "true");
-    let touched = false;
+    let touched = false, morphs = 0;
     $("kwPanel").addEventListener("pointerdown", () => { touched = true; }, { once: true });
-    const fold = () => {
-      if (scrollY < innerHeight * .6) return;
-      removeEventListener("scroll", fold);
+    const foldIfIdle = () => {
       if (!touched && !$("kwPanel").hidden && !$("kwPanel").contains(document.activeElement)) {
         $("kwPanel").hidden = true;
         $("kwFab").setAttribute("aria-expanded", "false");
       }
+    };
+    document.addEventListener("kiln:morph", () => { if (++morphs >= 2) foldIfIdle(); });
+    const fold = () => {
+      if (scrollY < innerHeight * .6) return;
+      removeEventListener("scroll", fold);
+      foldIfIdle();
     };
     addEventListener("scroll", fold, { passive: true });
   }
@@ -949,16 +1042,88 @@ html[data-theme="light"] .kw-panel{--kw-bg:hsl(var(--hue) 30% 98% / .92);}
     if (s.font != null) tick("ttFont", ["Modern", "Editorial", "Mono"][s.font] || "Modern");
   } catch {}
 
-  // cycling hero word — the thesis, animated
+  // ————— the shapeshifter —————
+  // As the headline cycles industries, the WHOLE PAGE re-brands to that
+  // template's preset (hue / type / corners) and the browser frame crossfades
+  // to its real screenshot. The hero doesn't describe the thesis; it runs it.
   const cyc = document.getElementById("cycleWord");
   if (cyc && motionOK) {
-    const words = ["everything.", "storefronts.", "clinics.", "launches.", "restaurants.", "games.", "conferences."];
-    let i = 0;
+    const PRESETS = [
+      { w: "everything.",  hue: 173, font: 0, r: "14px", shot: "showcase", url: "kiln/showcase",            name: "The Prototype Console" },
+      { w: "launches.",    hue: 190, font: 0, r: "14px", shot: "nocturne", url: "kiln/templates/nocturne",  name: "Nocturne · hardware launch" },
+      { w: "storefronts.", hue: 155, font: 0, r: "26px", shot: "verso",    url: "kiln/templates/verso",     name: "Verso · homeware shop" },
+      { w: "SaaS.",        hue: 250, font: 0, r: "14px", shot: "pulse",    url: "kiln/templates/pulse",     name: "Pulse · multi-page SaaS" },
+      { w: "restaurants.", hue: 22,  font: 1, r: "2px",  shot: "ember",    url: "kiln/templates/ember",     name: "Ember · wood-fire dining" },
+      { w: "clinics.",     hue: 200, font: 0, r: "26px", shot: "lumen",    url: "kiln/templates/lumen",     name: "Lumen · dental clinic" },
+      { w: "conferences.", hue: 195, font: 2, r: "2px",  shot: "signal",   url: "kiln/templates/signal",    name: "Signal · two-day conference" },
+    ];
+    const STACKS = [
+      ["'Sora',sans-serif", "'Inter',sans-serif", "Sora / Inter", "Modern"],
+      ["'Fraunces',serif", "'Inter',sans-serif", "Fraunces / Inter", "Editorial"],
+      ["'Space Grotesk',sans-serif", "'Space Grotesk',sans-serif", "Space Grotesk", "Mono"],
+    ];
+    const root = document.documentElement;
+    const el = id => document.getElementById(id);
+    const shots = [el("shotA"), el("shotB")];
+    let cur = 0, i = 0, heroOn = true, morphTimer = 0;
+
+    // a visitor who has made it theirs (now or on a past visit) keeps their
+    // brand — we still cycle the word + frame, but stop driving the tokens.
+    // the orbit chips always describe the PAGE's live tokens, so in that case
+    // they hold the visitor's values instead of the preset's.
+    const chipSync = s => {
+      el("chipHue").textContent = s.hue;
+      el("chipRad").textContent = s.radius;
+      el("chipFont").textContent = (STACKS[s.font] || STACKS[0])[2];
+    };
+    let custom = false;
+    try {
+      const s0 = { hue: 173, radius: "14px", font: 0, ...JSON.parse(localStorage.getItem("kiln.site.v1") || "{}") };
+      custom = s0.hue !== 173 || s0.font !== 0 || s0.radius !== "14px";
+      if (custom) chipSync(s0);
+    } catch {}
+    let armed = false;
+    requestAnimationFrame(() => { armed = true; });
+    document.addEventListener("kiln:theme", e => { if (!armed) return; custom = true; chipSync(e.detail); });
+
+    const hero = document.querySelector(".hero");
+    if ("IntersectionObserver" in window && hero) {
+      new IntersectionObserver(es => { heroOn = es[0].isIntersecting; }, { threshold: .1 }).observe(hero);
+    }
+
+    const applyPreset = p => {
+      if (!custom) {
+        root.classList.add("morphing");
+        clearTimeout(morphTimer);
+        morphTimer = setTimeout(() => root.classList.remove("morphing"), 900);
+        root.style.setProperty("--hue", p.hue);
+        root.style.setProperty("--radius", p.r);
+        root.style.setProperty("--font-display", STACKS[p.font][0]);
+        root.style.setProperty("--font-body", STACKS[p.font][1]);
+        tick("ttHue", p.hue); tick("ttRadius", p.r); tick("ttFont", STACKS[p.font][3]);
+        chipSync({ hue: p.hue, radius: p.r, font: p.font });
+      }
+      el("frameHue").textContent = p.hue;
+      el("frameUrl").textContent = p.url;
+      el("frameName").textContent = p.name;
+      const next = shots[1 - cur], prev = shots[cur];
+      const swap = () => { next.classList.add("on"); prev.classList.remove("on"); cur = 1 - cur; };
+      next.onload = null;
+      next.src = `templates/shots/${p.shot}.jpeg`;
+      if (next.complete) swap(); else next.onload = swap;
+    };
+
+    addEventListener("load", () => PRESETS.forEach(p => { const im = new Image(); im.src = `templates/shots/${p.shot}.jpeg`; }));
+
     setInterval(() => {
-      i = (i + 1) % words.length;
+      if (document.hidden || !heroOn) return;
+      i = (i + 1) % PRESETS.length;
+      const p = PRESETS[i];
       cyc.classList.add("swap");
-      setTimeout(() => { cyc.textContent = words[i]; cyc.classList.remove("swap"); }, 300);
-    }, words[i] === "everything." ? 2600 : 2600);
+      setTimeout(() => { cyc.textContent = p.w; cyc.classList.remove("swap"); }, 300);
+      applyPreset(p);
+      document.dispatchEvent(new CustomEvent("kiln:morph"));
+    }, 3400);
   }
 
   // hero stat count-up
