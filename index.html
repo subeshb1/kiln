@@ -225,7 +225,18 @@
   .nav nav { margin-left: auto; display: flex; gap: 22px; flex-wrap: wrap; }
   .nav a { font-size: 13.5px; text-decoration: none; color: var(--ink-2); }
   .nav a:hover { color: var(--ink); }
-  @media (max-width: 640px) { .nav nav { gap: 14px; } .nav a { font-size: 12.5px; } }
+  /* phones: one swipeable row, never a ragged second line */
+  @media (max-width: 760px) {
+    .nav-inner { align-items: center; gap: 16px; padding: 16px 20px; }
+    .nav nav {
+      gap: 16px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; padding: 4px 28px 4px 2px;
+      mask-image: linear-gradient(to right, #000 88%, transparent);
+      -webkit-mask-image: linear-gradient(to right, #000 88%, transparent);
+    }
+    .nav nav::-webkit-scrollbar { display: none; }
+    .nav a { font-size: 12.5px; white-space: nowrap; }
+  }
 
   /* ————— Hero ————— */
   .hero { position: relative; overflow: hidden; padding: 168px 0 92px; border-bottom: 1px solid var(--line); }
