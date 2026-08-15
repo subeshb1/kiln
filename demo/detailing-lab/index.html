@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="description" content="Redesign concept for the Detailing Lab Yorkshire landing page — proposed by Subesh Bhandari. Demonstrates a conversion-first layout: inquiry form above the fold, anchor pricing, real work up front.">
+<title>Detailing Lab Yorkshire — Redesign Concept</title>
+<style>
+:root{
+  --bg:#0d0c0a; --bg2:#141210; --panel:#1a1815; --line:#2a261f;
+  --ink:#f4f0e8; --ink2:#b3aa9b; --ink3:#7d7568;
+  --amber:#f0a028; --amber-deep:#c77f12; --amber-ink:#1d1304;
+  --green:#4ade80;
+  --r:14px; --r-lg:20px;
+  --f:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+:is(a,button,input,select):focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+/* concept ribbon */
+.ribbon{
+  background:var(--amber);color:var(--amber-ink);
+  font-size:12.5px;font-weight:700;text-align:center;padding:8px 14px;letter-spacing:.02em;
+}
+.ribbon a{color:inherit}
+
+/* header */
+header.top{
+  position:sticky;top:0;z-index:40;
+  background:rgba(13,12,10,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.top .wrap{display:flex;align-items:center;gap:18px;padding-top:13px;padding-bottom:13px}
+.brand{font-weight:800;letter-spacing:.12em;font-size:14px;text-transform:uppercase}
+.brand em{font-style:normal;color:var(--amber)}
+.top nav{margin-left:auto;display:flex;gap:20px;align-items:center}
+.top nav a{font-size:13.5px;color:var(--ink2);text-decoration:none}
+.top nav a:hover{color:var(--ink)}
+.btn{
+  display:inline-block;text-decoration:none;text-align:center;cursor:pointer;
+  font-family:var(--f);font-weight:700;font-size:15px;border:0;
+  padding:13px 24px;border-radius:12px;transition:transform .12s,filter .2s;
+}
+.btn:active{transform:scale(.97)}
+.btn-amber{background:linear-gradient(180deg,var(--amber),var(--amber-deep));color:var(--amber-ink)}
+.btn-amber:hover{filter:brightness(1.07)}
+.btn-ghost{border:1.5px solid #ffffff33;color:var(--ink)}
+.btn-ghost:hover{border-color:#ffffff66}
+.btn-wa{background:#1faa53;color:#fff}
+.btn-wa:hover{filter:brightness(1.08)}
+.top .btn{padding:9px 16px;font-size:13.5px}
+@media(max-width:760px){.top nav a.navlink{display:none}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 62%;opacity:.42}
+.hero-bg::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,rgba(13,12,10,.96) 30%,rgba(13,12,10,.55) 65%,rgba(13,12,10,.85)),
+             linear-gradient(0deg,var(--bg) 0%,transparent 30%)}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:44px;padding-top:72px;padding-bottom:72px;align-items:center}
+@media(max-width:880px){.hero .wrap{grid-template-columns:1fr;gap:30px;padding-top:44px;padding-bottom:44px}}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
+h1{font-size:clamp(34px,5.4vw,56px);line-height:1.06;font-weight:800;letter-spacing:-.015em;margin-bottom:16px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--amber)}
+.hero p.sub{color:var(--ink2);font-size:17.5px;max-width:44ch;margin-bottom:22px}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.chip{font-size:12.5px;font-weight:600;color:var(--ink2);border:1px solid var(--line);background:rgba(26,24,21,.6);border-radius:999px;padding:6px 13px}
+.chip b{color:var(--amber)}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+
+/* quote form card */
+.quote{
+  background:linear-gradient(180deg,#1c1a16,#161411);
+  border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.5);
+}
+.quote h2{font-size:19px;margin-bottom:4px}
+.quote .hint{font-size:13px;color:var(--ink3);margin-bottom:18px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.field input,.field select{
+  width:100%;padding:12px 14px;border-radius:10px;font:inherit;font-size:15px;
+  background:var(--bg);border:1px solid var(--line);color:var(--ink);
+}
+.field input::placeholder{color:var(--ink3)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--amber)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.quote .btn{width:100%;margin-top:6px}
+.alt{margin-top:12px;text-align:center;font-size:13px;color:var(--ink3)}
+.alt a{color:#3ecf74;font-weight:700;text-decoration:none}
+.done{display:none;text-align:center;padding:26px 6px}
+.done .tick{width:52px;height:52px;border-radius:50%;background:rgba(74,222,128,.14);color:var(--green);display:grid;place-items:center;margin:0 auto 14px;font-size:24px}
+.done h3{margin-bottom:6px}
+.done p{font-size:14px;color:var(--ink2)}
+.demo-note{margin-top:14px;font-size:11.5px;color:var(--ink3);text-align:center;border-top:1px dashed var(--line);padding-top:12px}
+
+/* sections */
+section{padding:72px 0}
+section+section{border-top:1px solid var(--line)}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.eyebrow::after{content:".";color:var(--amber)}
+h2.sec{font-size:clamp(24px,3.4vw,36px);font-weight:800;letter-spacing:-.01em;margin-bottom:10px;text-wrap:balance}
+.lede{color:var(--ink2);max-width:56ch}
+
+/* reviews */
+.stars{color:var(--amber);letter-spacing:2px}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+@media(max-width:760px){.rev-grid{grid-template-columns:1fr}}
+.rev{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.rev p{font-size:14.5px;color:var(--ink2);margin:10px 0 12px}
+.rev b{font-size:13.5px}
+.rev span{font-size:12.5px;color:var(--ink3)}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:32px}
+@media(max-width:760px){.gal{grid-template-columns:1fr}}
+.shot{position:relative;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);background:var(--panel)}
+.shot img{width:100%;height:100%;object-fit:cover;aspect-ratio:16/10;transition:transform .5s ease}
+.shot:hover img{transform:scale(1.03)}
+.shot .cap{position:absolute;left:0;right:0;bottom:0;padding:30px 18px 14px;font-size:13px;font-weight:600;
+  background:linear-gradient(0deg,rgba(10,9,7,.88),transparent)}
+.gal .side{display:grid;gap:16px}
+.gal .side .shot img{aspect-ratio:16/9.4}
+
+/* pricing */
+.price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
+@media(max-width:980px){.price-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.price-grid{grid-template-columns:1fr}}
+.pkg{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px;display:flex;flex-direction:column;gap:10px}
+.pkg.hot{border-color:var(--amber);box-shadow:inset 0 0 0 1px var(--amber)}
+.pkg .tag{align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);background:rgba(240,160,40,.12);border-radius:999px;padding:3px 10px}
+.pkg h3{font-size:17px}
+.pkg .time{font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em}
+.pkg p{font-size:13.5px;color:var(--ink2);flex:1}
+.pkg .from{font-size:24px;font-weight:800}
+.pkg .from small{font-size:12px;color:var(--ink3);font-weight:600}
+.pkg .btn{width:100%;padding:11px;font-size:14px}
+.price-note{margin-top:14px;font-size:12px;color:var(--ink3)}
+
+/* faq */
+.faq{max-width:720px;margin-top:26px}
+details{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:10px}
+summary{cursor:pointer;list-style:none;padding:16px 18px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";color:var(--amber);font-size:19px;font-weight:400}
+details[open] summary::after{content:"–"}
+details div{padding:0 18px 16px;font-size:14.5px;color:var(--ink2)}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:40px 0 110px;background:var(--bg2)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;font-size:13.5px;color:var(--ink3)}
+footer a{color:var(--ink2)}
+
+/* sticky mobile bar */
+.bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;display:none;
+  gap:8px;padding:10px 12px calc(env(safe-area-inset-bottom) + 10px);
+  background:rgba(13,12,10,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+}
+.bar .btn{flex:1;padding:12px 8px;font-size:14px}
+@media(max-width:760px){.bar{display:flex}}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="ribbon">Redesign concept for Detailing Lab Yorkshire — proposed by Subesh Bhandari. This is a demonstration, not the live site.</div>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">Detailing <em>Lab</em> Yorkshire</div>
+    <nav>
+      <a class="navlink" href="#results">Results</a>
+      <a class="navlink" href="#pricing">Pricing</a>
+      <a class="navlink" href="#faq">FAQ</a>
+      <a class="btn btn-amber" href="#quote">Get a quote</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding:0;border-top:0">
+  <div class="hero-bg"><img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/xP6BElg81fF4LMpxumdh/media/6a698e87b7fe5a8e31a717c0.jpg" alt="" fetchpriority="high"></div>
+  <div class="wrap">
+    <div>
+      <span class="kicker">Mobile &amp; indoor studio · Yorkshire</span>
+      <h1>Your car, back to <em>showroom finish</em> — at your door.</h1>
+      <p class="sub">Paint correction, ceramic coating and deep cleans by a fully insured detailer. We come to your home or workplace, or you visit our indoor studio.</p>
+      <div class="chips">
+        <span class="chip"><b>★ 5.0</b> local reviews</span>
+        <span class="chip">Fully insured</span>
+        <span class="chip">Premium products only</span>
+        <span class="chip">Satisfaction promise</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-amber" href="#quote">Get my free quote</a>
+        <a class="btn btn-ghost" href="#results">See real results</a>
+      </div>
+    </div>
+
+    <form class="quote" id="quote" autocomplete="on">
+      <h2>Free personalised quote</h2>
+      <p class="hint">Takes 30 seconds. No obligation — we reply within working hours, usually much faster.</p>
+      <div id="qFields">
+        <div class="row2">
+          <div class="field"><label for="qName">Name</label><input id="qName" name="name" placeholder="Sam" required></div>
+          <div class="field"><label for="qPhone">Mobile</label><input id="qPhone" name="phone" type="tel" placeholder="07…" required></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="qCar">Vehicle</label><input id="qCar" name="vehicle" placeholder="BMW 4 Series"></div>
+          <div class="field"><label for="qPost">Postcode</label><input id="qPost" name="postcode" placeholder="LS1…"></div>
+        </div>
+        <div class="field"><label for="qSvc">What does it need?</label>
+          <select id="qSvc" name="service">
+            <option>Not sure — recommend for me</option>
+            <option>Deep clean detail</option>
+            <option>Single stage paint enhancement</option>
+            <option>Two stage paint correction</option>
+            <option>Multi stage correction + ceramic</option>
+          </select>
+        </div>
+        <button class="btn btn-amber" type="submit">Send my quote request</button>
+        <p class="alt">Prefer to chat? <a href="https://wa.me/447873533081" rel="noopener">WhatsApp us directly →</a></p>
+      </div>
+      <div class="done" id="qDone">
+        <div class="tick">✓</div>
+        <h3>Request sent</h3>
+        <p>We'll come back to you shortly with a personalised quote. Want it faster? <a href="https://wa.me/447873533081" style="color:#3ecf74;font-weight:700">Message us on WhatsApp</a>.</p>
+      </div>
+      <p class="demo-note">Concept note: in the live build this form feeds your GoHighLevel pipeline with instant notification + auto-reply, so every inquiry is captured and tracked.</p>
+    </form>
+  </div>
+</section>
+
+<section id="reviews" style="padding:52px 0">
+  <div class="wrap">
+    <div class="eyebrow">Trusted locally</div>
+    <h2 class="sec"><span class="stars">★★★★★</span>&nbsp; Rated 5.0 by Yorkshire owners</h2>
+    <div class="rev-grid">
+      <div class="rev"><span class="stars">★★★★★</span><p>"The paint looks better than the day I bought it. Turned up on time, worked on my drive, spotless."</p><b>BMW 4 Series</b> <span>· Leeds</span></div>
+      <div class="rev"><span class="stars">★★★★★</span><p>"Booked the ceramic coating — water just falls off it months later. Worth every penny."</p><b>Audi A5</b> <span>· Wakefield</span></div>
+      <div class="rev"><span class="stars">★★★★★</span><p>"Interior deep clean brought a 7-year-old family car back to life. Genuinely shocked."</p><b>Nissan Qashqai</b> <span>· York</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="wrap">
+    <div class="eyebrow">Real results</div>
+    <h2 class="sec">The difference speaks for itself.</h2>
+    <p class="lede">Every photo below is our own work on real customers' cars — right here in Yorkshire.</p>
+    <div class="gal">
+      <div class="shot">
+        <img loading="lazy" src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/xP6BElg81fF4LMpxumdh/media/6a69eb920aea34991eb669af.png" alt="Black BMW 4 Series after full paint enhancement, deep gloss finish">
+        <div class="cap">Full enhancement — BMW 4 Series, Leeds</div>
+      </div>
+      <div class="side">
+        <div class="shot">
+          <img loading="lazy" src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/xP6BElg81fF4LMpxumdh/media/6a69eb92eb781ab2623c4770.png" alt="Water beading on ceramic coated paintwork">
+          <div class="cap">Ceramic protection — beading months later</div>
+        </div>
+        <div class="shot">
+          <img loading="lazy" src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/xP6BElg81fF4LMpxumdh/media/6a69eb927d99a22464d8bd3d.png" alt="Snow foam pre-wash in progress">
+          <div class="cap">Safe wash process — every single time</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="eyebrow">Pricing</div>
+    <h2 class="sec">Honest packages. Clear starting prices.</h2>
+    <p class="lede">Every vehicle is different — send us a photo on WhatsApp or use the form and we'll confirm an exact price, fast and with no obligation.</p>
+    <div class="price-grid">
+      <div class="pkg">
+        <h3>Deep Clean Detail</h3><span class="time">4–6 hours</span>
+        <p>Full interior and exterior reset — the "new car again" feeling for daily drivers.</p>
+        <div class="from">From £140</div>
+        <a class="btn btn-ghost" href="#quote">Get exact price</a>
+      </div>
+      <div class="pkg hot">
+        <span class="tag">Most popular</span>
+        <h3>Single Stage Enhancement</h3><span class="time">8–12 hours</span>
+        <p>Machine polish to remove light swirls and restore deep gloss across the paintwork.</p>
+        <div class="from">From £220<small>*</small></div>
+        <a class="btn btn-amber" href="#quote">Get exact price</a>
+      </div>
+      <div class="pkg">
+        <h3>Two Stage Correction</h3><span class="time">~2 days</span>
+        <p>Cut and refine — removes the majority of defects for a near-flawless finish.</p>
+        <div class="from">From £420<small>*</small></div>
+        <a class="btn btn-ghost" href="#quote">Get exact price</a>
+      </div>
+      <div class="pkg">
+        <h3>Multi Stage + Ceramic</h3><span class="time">3–5 days</span>
+        <p>Maximum correction, sealed with long-life ceramic protection. The full lab treatment.</p>
+        <div class="from">From £680<small>*</small></div>
+        <a class="btn btn-ghost" href="#quote">Get exact price</a>
+      </div>
+    </div>
+    <p class="price-note">* Example anchor prices for this concept — set to your real rates. Anchors reduce drop-off versus quote-only pages while WhatsApp/form still confirms the exact figure.</p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow">Questions</div>
+    <h2 class="sec">Before you book</h2>
+    <div class="faq">
+      <details open><summary>How do I know which package I need?</summary><div>Send a couple of photos through the form or WhatsApp and we'll recommend the right package for your car's condition — no obligation, no upsell.</div></details>
+      <details><summary>Do you guarantee the results?</summary><div>Yes — we're fully insured and we don't leave until you're happy. If something isn't right, we make it right.</div></details>
+      <details><summary>How long will the ceramic coating last?</summary><div>With sensible maintenance washing, our ceramic coatings protect and bead for years, not months. We'll give you a simple aftercare guide.</div></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><b style="color:var(--ink)">Detailing Lab Yorkshire</b> · mobile &amp; indoor studio</div>
+    <div><a href="https://wa.me/447873533081" rel="noopener">WhatsApp 07873 533081</a> · <a href="mailto:info@detailinglabyorkshire.co.uk">info@detailinglabyorkshire.co.uk</a></div>
+    <div style="width:100%;font-size:12px;margin-top:6px">Design concept by Subesh Bhandari — photographs are Detailing Lab Yorkshire's own work, used here solely to demonstrate a proposed redesign of their page.</div>
+  </div>
+</footer>
+
+<div class="bar">
+  <a class="btn btn-wa" href="https://wa.me/447873533081" rel="noopener">WhatsApp</a>
+  <a class="btn btn-amber" href="#quote">Get a quote</a>
+</div>
+
+<script>
+document.querySelector(".quote").addEventListener("submit", e => {
+  e.preventDefault();
+  document.getElementById("qFields").style.display = "none";
+  document.getElementById("qDone").style.display = "block";
+});
+</script>
+</body>
+</html>
