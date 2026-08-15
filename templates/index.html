@@ -90,6 +90,7 @@ header.top{
 }
 .card:hover{transform:translateY(-5px); border-color:hsl(var(--hue) var(--sat) 55% / .5); box-shadow:0 24px 60px -20px var(--glow)}
 .prev{aspect-ratio:16/10.4; position:relative; overflow:hidden; border-bottom:1px solid var(--line)}
+.shot{width:100%; height:auto; aspect-ratio:16/10; object-fit:cover; object-position:top; display:block; border-bottom:1px solid var(--line); background:var(--bg-2)}
 .chrome{position:absolute; top:10px; left:12px; display:flex; gap:5px; z-index:2}
 .chrome i{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.28}
 /* Nocturne preview — cinematic dark */
@@ -102,6 +103,23 @@ header.top{
 .p-mer .big{position:absolute; left:16px; top:38px; font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.02em; max-width:12ch; line-height:1.2}
 .p-mer .rings{position:absolute; right:16px; bottom:14px}
 .p-mer .pill{position:absolute; left:16px; bottom:16px; font-size:9.5px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; padding:5px 10px; border-radius:999px; background:hsl(160 45% 30%); color:hsl(160 40% 96%)}
+/* Zenith preview — dark lens */
+.p-zen{background:radial-gradient(120% 140% at 50% -20%, hsl(42 40% 14%), hsl(40 20% 5%)); color:hsl(42 30% 92%)}
+.p-zen .lens{position:absolute; right:24px; top:50%; translate:0 -50%}
+.p-zen .big{position:absolute; left:16px; top:44px; font-family:var(--font-display); font-weight:800; font-size:1.35rem; letter-spacing:-.02em; max-width:13ch; line-height:1.2}
+.p-zen .tag{position:absolute; left:16px; bottom:16px; font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; color:hsl(42 70% 62%)}
+/* Verso preview — shop shelf */
+.p-ver{background:hsl(150 20% 96%); color:hsl(155 35% 16%)}
+.p-ver .shelf{position:absolute; inset:38px 16px 40px; display:flex; gap:8px}
+.p-ver .shelf i{flex:1; border-radius:8px; background:hsl(150 18% 88%)}
+.p-ver .shelf i:nth-child(2){background:hsl(150 20% 82%)}
+.p-ver .cart{position:absolute; right:14px; top:32px; width:24px; height:24px; border-radius:50%; background:hsl(155 55% 28%); color:hsl(150 30% 96%); font-size:11px; font-weight:700; display:grid; place-items:center}
+.p-ver .price{position:absolute; left:16px; bottom:14px; font-size:10.5px; font-weight:600; letter-spacing:.06em}
+/* Lumen preview — calm clinic */
+.p-lum{background:linear-gradient(150deg, hsl(202 45% 97%), hsl(202 35% 91%)); color:hsl(204 45% 16%)}
+.p-lum .big{position:absolute; left:16px; top:40px; font-family:var(--font-display); font-weight:700; font-size:1.3rem; max-width:14ch; line-height:1.25}
+.p-lum .smile{position:absolute; right:20px; bottom:20px}
+.p-lum .pill{position:absolute; left:16px; bottom:16px; font-size:9.5px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; padding:5px 10px; border-radius:999px; background:hsl(203 55% 32%); color:hsl(202 40% 97%)}
 /* Atelier preview — editorial paper */
 .p-ate{background:hsl(40 25% 96%); color:hsl(220 15% 14%)}
 .p-ate .rows{position:absolute; inset:38px 16px 12px; font-family:'Fraunces',serif; font-size:12.5px}
@@ -156,12 +174,7 @@ footer.ft{border-top:1px solid var(--line); margin-top:64px}
 
   <section class="grid" aria-label="Templates">
     <a class="card reveal" href="nocturne/">
-      <div class="prev p-noc" aria-hidden="true">
-        <div class="chrome"><i></i><i></i><i></i></div>
-        <span class="tag">Adaptive ANC</span>
-        <span class="big">N1</span>
-        <span class="ring"></span>
-      </div>
+      <img class="shot" src="shots/nocturne.jpeg" alt="Screenshot of the Nocturne template" width="2560" height="1600" loading="lazy">
       <div class="meta">
         <h2>Nocturne <span class="go" aria-hidden="true">→</span></h2>
         <p>A cinematic, launch-day product page. Full-bleed photography, specs bento, dark-first glow. For hardware, audio, anything premium.</p>
@@ -170,17 +183,7 @@ footer.ft{border-top:1px solid var(--line); margin-top:64px}
     </a>
 
     <a class="card reveal" href="meridian/">
-      <div class="prev p-mer" aria-hidden="true">
-        <div class="chrome"><i></i><i></i><i></i></div>
-        <span class="big">Know how ready you are.</span>
-        <svg class="rings" width="86" height="86" viewBox="0 0 86 86" fill="none">
-          <circle cx="43" cy="43" r="38" stroke="hsl(160 30% 55% / .3)" stroke-width="7"/>
-          <circle cx="43" cy="43" r="38" stroke="hsl(160 55% 35%)" stroke-width="7" stroke-linecap="round" stroke-dasharray="180 240" transform="rotate(-90 43 43)"/>
-          <circle cx="43" cy="43" r="26" stroke="hsl(160 30% 55% / .3)" stroke-width="7"/>
-          <circle cx="43" cy="43" r="26" stroke="hsl(85 55% 45%)" stroke-width="7" stroke-linecap="round" stroke-dasharray="120 170" transform="rotate(-90 43 43)"/>
-        </svg>
-        <span class="pill">Readiness 82</span>
-      </div>
+      <img class="shot" src="shots/meridian.jpeg" alt="Screenshot of the Meridian template" width="2560" height="1600" loading="lazy">
       <div class="meta">
         <h2>Meridian <span class="go" aria-hidden="true">→</span></h2>
         <p>Light, warm, and human — a wellness-product page with live SVG data visuals and an honest voice. For health, lifestyle, and DTC.</p>
@@ -189,19 +192,73 @@ footer.ft{border-top:1px solid var(--line); margin-top:64px}
     </a>
 
     <a class="card reveal" href="atelier/">
-      <div class="prev p-ate" aria-hidden="true">
-        <div class="chrome"><i></i><i></i><i></i></div>
-        <div class="rows">
-          <div class="row"><b><span class="no">01</span>Fold House</b><span>Oslo · 2025</span></div>
-          <div class="row"><b><span class="no">02</span>Harbour Loft</b><span>Bergen · 2024</span></div>
-          <div class="row"><b><span class="no">03</span>North Annex</b><span>Tromsø · 2024</span></div>
-          <div class="row"><b><span class="no">04</span>Clay Pavilion</b><span>Malmö · 2023</span></div>
-        </div>
-      </div>
+      <img class="shot" src="shots/atelier.jpeg" alt="Screenshot of the Atelier template" width="2560" height="1600" loading="lazy">
       <div class="meta">
         <h2>Atelier <span class="go" aria-hidden="true">→</span></h2>
         <p>Editorial restraint — ink, paper, serif, whitespace. A studio portfolio that lets the work speak. For architects, designers, consultancies.</p>
         <div class="tags"><span>Portfolio</span><span>Editorial</span><span>Minimal</span></div>
+      </div>
+    </a>
+    <a class="card reveal" href="zenith/">
+      <img class="shot" src="shots/zenith.jpeg" alt="Screenshot of the Zenith template" width="2560" height="1600" loading="lazy">
+      <div class="meta">
+        <h2>Zenith <span class="go" aria-hidden="true">→</span></h2>
+        <p>The showpiece — photography that zooms, pins, and crossfades as you scroll. Keynote-grade motion with zero libraries.</p>
+        <div class="tags"><span>Scroll cinema</span><span>Dark-first</span><span>Animated imagery</span></div>
+      </div>
+    </a>
+
+    <a class="card reveal" href="verso/">
+      <img class="shot" src="shots/verso.jpeg" alt="Screenshot of the Verso template" width="2560" height="1600" loading="lazy">
+      <div class="meta">
+        <h2>Verso <span class="go" aria-hidden="true">→</span></h2>
+        <p>A homeware storefront with a working demo cart — product grid, slide-in drawer, free-shipping meter, honest voice.</p>
+        <div class="tags"><span>Ecommerce</span><span>Demo cart</span><span>Light &amp; warm</span></div>
+      </div>
+    </a>
+
+    <a class="card reveal" href="lumen/">
+      <img class="shot" src="shots/lumen.jpeg" alt="Screenshot of the Lumen template" width="2560" height="1600" loading="lazy">
+      <div class="meta">
+        <h2>Lumen <span class="go" aria-hidden="true">→</span></h2>
+        <p>A calm dental-clinic site that leads with transparent pricing — bookings, team, and an honest FAQ. Built for any local practice.</p>
+        <div class="tags"><span>Local business</span><span>Bookings</span><span>Calm &amp; clear</span></div>
+      </div>
+    </a>
+
+    <a class="card reveal" href="pulse/">
+      <img class="shot" src="shots/pulse.jpeg" alt="Screenshot of the Pulse template" width="2560" height="1600" loading="lazy">
+      <div class="meta">
+        <h2>Pulse <span class="go" aria-hidden="true">→</span></h2>
+        <p>The full SaaS site — four pages (home, features, pricing, changelog) with a token-drawn product mock that re-skins with your brand. One hue choice follows you across every page.</p>
+        <div class="tags"><span>SaaS</span><span>Multi-page</span><span>Product mock</span></div>
+      </div>
+    </a>
+
+    <a class="card reveal" href="signal/">
+      <img class="shot" src="shots/signal.jpeg" alt="Screenshot of the Signal template" width="2560" height="1600" loading="lazy">
+      <div class="meta">
+        <h2>Signal <span class="go" aria-hidden="true">→</span></h2>
+        <p>A two-day conference site — speakers, keyboard-accessible schedule tabs, tickets, venue. Electric type, diagonal cuts, count-up stats.</p>
+        <div class="tags"><span>Event</span><span>Schedule tabs</span><span>Bold</span></div>
+      </div>
+    </a>
+
+    <a class="card reveal" href="ember/">
+      <img class="shot" src="shots/ember.jpeg" alt="Screenshot of the Ember template" width="2560" height="1600" loading="lazy">
+      <div class="meta">
+        <h2>Ember <span class="go" aria-hidden="true">→</span></h2>
+        <p>A wood-fire restaurant in the dark — tasting menu, private dining, reservations. Serif, smoke, and photography doing the atmosphere.</p>
+        <div class="tags"><span>Restaurant</span><span>Reservations</span><span>Moody</span></div>
+      </div>
+    </a>
+
+    <a class="card reveal" href="loud/">
+      <img class="shot" src="shots/loud.jpeg" alt="Screenshot of the Loud template" width="2560" height="1600" loading="lazy">
+      <div class="meta">
+        <h2>Loud <span class="go" aria-hidden="true">→</span></h2>
+        <p>The wild one — neo-brutalist creative studio with cursor-reactive type, ticker tape, and stickers. Zero photography, maximum attitude.</p>
+        <div class="tags"><span>Creative studio</span><span>Brutalist</span><span>Type-only</span></div>
       </div>
     </a>
   </section>

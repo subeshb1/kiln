@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zenith S1 — every photon, accounted for</title>
+<meta name="description" content="Zenith S1: a 61-megapixel full-frame mirrorless camera with 8 stops of stabilization and 8K/30 internal recording. A fictional product page — a configurable template by Kiln Studio.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23100c05'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23f0b429' stroke-width='2.6'/%3E%3Ccircle cx='16' cy='16' r='3.4' fill='%23f0b429'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Sora:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --hue:42; --sat:70%;
+  --font-display:'Sora',sans-serif; --font-body:'Inter',sans-serif;
+  --radius:14px;
+}
+html[data-theme="dark"]{
+  --bg:hsl(var(--hue) 14% 6%);
+  --bg-2:hsl(var(--hue) 12% 8%);
+  --surface:hsl(var(--hue) 12% 10%);
+  --ink:hsl(var(--hue) 30% 96%);
+  --ink-2:hsl(var(--hue) 10% 71%);
+  --line:hsl(var(--hue) 40% 60% / .15);
+  --glass:hsl(var(--hue) 14% 6% / .58);
+  --accent-ink:hsl(var(--hue) 85% 62%);
+  --accent-btn:hsl(var(--hue) 90% 55%);
+  --accent-btn-hov:hsl(var(--hue) 92% 63%);
+  --btn-ink:hsl(var(--hue) 40% 7%);
+  --glow:hsl(var(--hue) 85% 50% / .16);
+  --shadow:0 26px 70px hsl(var(--hue) 60% 2% / .55);
+  color-scheme:dark;
+}
+html[data-theme="light"]{
+  --bg:hsl(var(--hue) 45% 98%);
+  --bg-2:hsl(var(--hue) 38% 95%);
+  --surface:hsl(var(--hue) 45% 99%);
+  --ink:hsl(var(--hue) 35% 9%);
+  --ink-2:hsl(var(--hue) 14% 33%);
+  --line:hsl(var(--hue) 30% 30% / .16);
+  --glass:hsl(var(--hue) 45% 97% / .7);
+  --accent-ink:hsl(var(--hue) 95% 26%);
+  --accent-btn:hsl(var(--hue) 90% 48%);
+  --accent-btn-hov:hsl(var(--hue) 92% 42%);
+  --btn-ink:hsl(var(--hue) 40% 7%);
+  --glow:hsl(var(--hue) 85% 55% / .14);
+  --shadow:0 26px 70px hsl(var(--hue) 45% 35% / .18);
+  color-scheme:light;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:86px}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--font-body);font-size:16.5px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body::after{ /* film grain */
+  content:"";position:fixed;inset:0;z-index:4;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+}
+img{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.skip{position:absolute;left:-9999px;top:0;z-index:2000;background:var(--surface);padding:10px 16px;border-radius:8px}
+.skip:focus{left:12px;top:12px}
+
+/* ---- chip back to gallery ---- */
+.kiln-chip{
+  position:fixed;top:14px;left:14px;z-index:1000;
+  font-size:12.5px;font-weight:600;text-decoration:none;
+  padding:8px 14px;border-radius:999px;border:1px solid var(--line);
+  background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:var(--ink-2);transition:color .2s;
+}
+.kiln-chip:hover{color:var(--ink)}
+@media (max-width:760px){.kiln-chip{top:auto;bottom:14px;left:14px}}
+
+/* ---- nav ---- */
+.nav{
+  position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:900;
+  display:flex;align-items:center;gap:22px;
+  padding:9px 12px 9px 20px;border-radius:999px;border:1px solid transparent;
+  transition:background .3s,border-color .3s;
+  max-width:calc(100vw - 24px);
+}
+.nav.scrolled{background:var(--glass);border-color:var(--line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.brand{font-family:var(--font-display);font-weight:800;letter-spacing:.14em;font-size:14.5px;text-decoration:none}
+.brand em{font-style:normal;color:var(--accent-ink)}
+.nav ul{display:flex;gap:18px;list-style:none}
+.nav ul a{font-size:13.5px;font-weight:500;text-decoration:none;color:var(--ink-2);transition:color .2s}
+.nav ul a:hover{color:var(--ink)}
+.btn{
+  display:inline-block;font-family:var(--font-display);font-weight:700;font-size:14px;
+  text-decoration:none;padding:11px 22px;border-radius:999px;transition:background .2s,transform .2s;
+}
+.btn-solid{background:var(--accent-btn);color:var(--btn-ink)}
+.btn-solid:hover{background:var(--accent-btn-hov);transform:translateY(-1px)}
+.btn-ghost{border:1px solid hsl(var(--hue) 20% 70% / .55);color:hsl(var(--hue) 25% 96%)}
+.btn-ghost:hover{border-color:hsl(var(--hue) 60% 70%)}
+.nav .btn{padding:8px 16px;font-size:12.5px}
+@media (max-width:800px){.nav ul{display:none}}
+
+/* ---- hero ---- */
+.hero{position:relative;height:100svh;min-height:600px;overflow:hidden;display:grid;place-items:end center}
+.hero-media{position:absolute;inset:0;will-change:transform}
+.hero-media img{width:100%;height:100%;object-fit:cover}
+.hero-veil{ /* fixed dark veil so hero text is AA in both themes */
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,hsl(40 20% 4% / .42),hsl(40 20% 4% / .28) 45%,hsl(40 20% 4% / .82) 100%);
+}
+.hero-shade{position:absolute;inset:0;background:hsl(40 20% 4%);opacity:0;will-change:opacity}
+.hero-inner{position:relative;z-index:2;text-align:center;padding:0 24px 11vh;max-width:900px}
+.hero .eyebrow{color:hsl(var(--hue) 88% 66%)}
+.hero h1{
+  font-family:var(--font-display);font-weight:800;letter-spacing:-.025em;line-height:1.02;
+  font-size:clamp(2.9rem,8.4vw,6.4rem);color:hsl(var(--hue) 30% 98%);
+  margin:14px 0 18px;text-wrap:balance;
+}
+.hero .lede{font-size:clamp(16.5px,2vw,20px);color:hsl(var(--hue) 15% 88%);max-width:54ch;margin:0 auto 30px;text-wrap:balance}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hero-price{margin-top:20px;font-size:14px;color:hsl(var(--hue) 12% 80%)}
+.hero-price strong{color:hsl(var(--hue) 30% 98%)}
+.eyebrow{
+  font-family:var(--font-display);font-size:12.5px;font-weight:700;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--accent-ink);
+}
+
+/* ---- feature scenes ---- */
+section{padding:110px 0}
+.feature{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.feature.flip .fcopy{order:2}
+.feature h2{
+  font-family:var(--font-display);font-weight:800;letter-spacing:-.02em;line-height:1.06;
+  font-size:clamp(2rem,4.4vw,3.4rem);margin:14px 0 18px;text-wrap:balance;
+}
+.feature .sub{color:var(--ink-2);max-width:52ch}
+.stat-row{display:flex;gap:36px;margin-top:32px;flex-wrap:wrap}
+.stat b{font-family:var(--font-display);font-size:34px;font-weight:800;color:var(--accent-ink);display:block;line-height:1.1}
+.stat span{font-size:13px;color:var(--ink-2)}
+.px-media{
+  position:relative;overflow:hidden;border-radius:calc(var(--radius)*1.5);
+  aspect-ratio:4/4.6;box-shadow:var(--shadow);
+}
+.px-media img{position:absolute;left:0;top:-7%;width:100%;height:114%;object-fit:cover;will-change:transform}
+@media (max-width:880px){
+  .feature{grid-template-columns:1fr;gap:34px}
+  .feature.flip .fcopy{order:0}
+  .px-media{aspect-ratio:16/11}
+}
+
+/* ---- sticky image-stack scene ---- */
+.scene{height:300vh;padding:0;position:relative}
+.scene-pin{position:sticky;top:0;height:100svh;overflow:hidden}
+.frame{position:absolute;inset:0;opacity:0;will-change:transform,opacity}
+.frame:first-child{opacity:1}
+.frame img{width:100%;height:100%;object-fit:cover}
+.frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,hsl(40 20% 4% / .78))}
+.scene-head{position:absolute;top:9svh;left:0;right:0;text-align:center;z-index:3;padding:0 24px}
+.scene-head h2{
+  font-family:var(--font-display);font-weight:800;letter-spacing:-.02em;
+  font-size:clamp(1.9rem,4.4vw,3.2rem);color:hsl(var(--hue) 30% 98%);margin-top:12px;
+}
+.scene-head .eyebrow{color:hsl(var(--hue) 88% 66%)}
+.scaps{position:absolute;left:0;right:0;bottom:8svh;z-index:3;display:grid;place-items:center;padding:0 24px}
+.scap{
+  grid-area:1/1;text-align:center;max-width:56ch;opacity:0;transform:translateY(12px);
+  transition:opacity .45s ease,transform .45s ease;
+}
+.scap.on{opacity:1;transform:none}
+.scap b{display:block;font-family:var(--font-display);font-size:20px;color:hsl(var(--hue) 30% 98%);margin-bottom:6px}
+.scap p{font-size:15px;color:hsl(var(--hue) 12% 84%)}
+.sdots{position:absolute;right:22px;top:50%;transform:translateY(-50%);z-index:3;display:grid;gap:8px}
+.sdots i{width:6px;height:6px;border-radius:50%;background:hsl(var(--hue) 20% 90% / .35);transition:background .3s,height .3s}
+.sdots i.on{background:hsl(var(--hue) 88% 62%);height:18px;border-radius:4px}
+
+/* ---- specs bento ---- */
+.specs{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:44px}
+.cell{
+  grid-column:span 2;border:1px solid var(--line);border-radius:calc(var(--radius)*1.2);
+  background:var(--surface);padding:24px 24px 22px;
+}
+.cell.wide{grid-column:span 3}
+.cell b{font-family:var(--font-display);font-size:clamp(28px,3.4vw,40px);font-weight:800;color:var(--accent-ink);line-height:1.05;display:block}
+.cell b sub{font-size:.45em;font-weight:700;vertical-align:baseline}
+.cell h3{font-size:14.5px;font-weight:600;margin-top:8px}
+.cell p{font-size:13.5px;color:var(--ink-2);margin-top:3px}
+@media (max-width:880px){.bento{grid-template-columns:repeat(2,1fr)}.cell,.cell.wide{grid-column:span 1}}
+@media (max-width:540px){.bento{grid-template-columns:1fr}}
+
+/* ---- marquee ---- */
+.marq-sec{padding:110px 0 90px;overflow:hidden}
+.marq-sec .wrap{margin-bottom:36px}
+.marq{
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+}
+.marq-track{display:flex;width:max-content}
+.marq-group{display:flex;gap:18px;padding-right:18px}
+.marq figure{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+.marq img{width:300px;height:210px;object-fit:cover}
+.marq figcaption{
+  position:absolute;left:10px;bottom:10px;font-size:11px;font-weight:600;letter-spacing:.06em;
+  padding:4px 10px;border-radius:999px;background:hsl(40 20% 4% / .62);color:hsl(var(--hue) 25% 96%);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+@media (max-width:560px){.marq img{width:230px;height:165px}}
+
+/* ---- reserve band ---- */
+.reserve{position:relative;text-align:center;overflow:hidden}
+.reserve::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(44rem 26rem at 50% 115%,var(--glow),transparent 65%);
+}
+.reserve .wrap{position:relative}
+.reserve h2{
+  font-family:var(--font-display);font-weight:800;letter-spacing:-.02em;line-height:1.05;
+  font-size:clamp(2.2rem,5.4vw,4rem);margin:14px 0 16px;text-wrap:balance;
+}
+.reserve .sub{color:var(--ink-2);max-width:56ch;margin:0 auto 30px}
+.fineprint{margin-top:26px;font-size:12.5px;color:var(--ink-2);opacity:.85}
+
+/* ---- footer ---- */
+footer{border-top:1px solid var(--line);padding:30px 0 90px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+footer p{font-size:13px;color:var(--ink-2)}
+footer a{color:var(--ink)}
+
+/* ---- reveals ---- */
+.rv{opacity:0;transform:translateY(22px)}
+.rv.in{opacity:1;transform:none;transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+
+/* =====================================================================
+   MOTION — everything below is gated on no-preference.
+   Native CSS scroll-driven path first; JS provides the fallback.
+===================================================================== */
+@media (prefers-reduced-motion: no-preference){
+  /* load: ken-burns settle + headline rise */
+  .hero-media img{animation:kb 6.5s cubic-bezier(.2,.65,.25,1) both}
+  @keyframes kb{from{transform:scale(1.14)}to{transform:scale(1.03)}}
+  .hero-inner > *{animation:rise 1s cubic-bezier(.2,.8,.2,1) both}
+  .hero-inner > *:nth-child(2){animation-delay:.12s}
+  .hero-inner > *:nth-child(3){animation-delay:.24s}
+  .hero-inner > *:nth-child(4){animation-delay:.36s}
+  .hero-inner > *:nth-child(5){animation-delay:.48s}
+  @keyframes rise{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+  /* marquee drift */
+  .marq-track{animation:marq 48s linear infinite}
+  .marq:hover .marq-track{animation-play-state:paused}
+  @keyframes marq{to{transform:translateX(-50%)}}
+
+  /* native scroll-driven: hero zoom + darken, parallax */
+  @supports (animation-timeline: view()){
+    .hero-media{animation:heroZoom linear both;animation-timeline:view();animation-range:exit 0% exit 100%}
+    @keyframes heroZoom{to{transform:scale(1.16)}}
+    .hero-shade{animation:heroDark linear both;animation-timeline:view();animation-range:exit 0% exit 100%}
+    @keyframes heroDark{to{opacity:.6}}
+    .px-media img{animation:px linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+    @keyframes px{from{transform:translateY(-6.5%)}to{transform:translateY(6.5%)}}
+  }
+}
+/* reduced motion: static, everything visible, sticky scene unrolled */
+@media (prefers-reduced-motion: reduce){
+  .rv{opacity:1;transform:none}
+  .scene{height:auto;padding:90px 0}
+  .scene-pin{position:static;height:auto;display:grid;gap:16px;padding:0 24px;max-width:1120px;margin:0 auto}
+  .scene-head{position:static;margin-bottom:26px;padding:0}
+  .scene-head h2{color:var(--ink)}
+  .scene-head .eyebrow{color:var(--accent-ink)}
+  .frame{position:static;opacity:1;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9}
+  .frame::after{content:none}
+  .scaps{position:static;margin-top:22px}
+  .scap{grid-area:auto;opacity:1;transform:none;margin-bottom:14px}
+  .scap b,.scap p{color:var(--ink)}
+  .scap p{color:var(--ink-2)}
+  .sdots{display:none}
+  .marq{overflow-x:auto}
+  .marq-group[aria-hidden]{display:none}
+}
+</style>
+</head>
+<body>
+<noscript><style>.rv{opacity:1;transform:none}.frame{position:static;opacity:1}.scene{height:auto}.scene-pin{position:static;height:auto}.scap{grid-area:auto;opacity:1;transform:none}</style></noscript>
+<a class="skip" href="#main">Skip to content</a>
+<a class="kiln-chip" href="../">← Kiln templates</a>
+
+<header>
+  <nav class="nav" id="nav" aria-label="Primary">
+    <a class="brand" href="#top">ZENITH<em>.</em></a>
+    <ul>
+      <li><a href="#sensor">Sensor</a></li>
+      <li><a href="#stabilize">Stabilize</a></li>
+      <li><a href="#focus">Focus</a></li>
+      <li><a href="#specs">Specs</a></li>
+    </ul>
+    <a class="btn btn-solid" href="#reserve">Reserve</a>
+  </nav>
+</header>
+
+<main id="main">
+  <!-- HERO -->
+  <section class="hero" id="top" style="padding:0">
+    <div class="hero-media" id="heroMedia">
+      <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=2400&q=80"
+           alt="Zenith S1 mirrorless camera body on a dark workbench, lens detached beside it"
+           width="2400" height="1600" fetchpriority="high">
+    </div>
+    <div class="hero-veil" aria-hidden="true"></div>
+    <div class="hero-shade" id="heroShade" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="eyebrow">Zenith Optics · S1</p>
+      <h1>Every photon, accounted for.</h1>
+      <p class="lede">A 61-megapixel full-frame sensor, eight stops of stillness, and autofocus that refuses to blink — machined into 520 grams of titanium.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-solid" href="#reserve">Reserve yours</a>
+        <a class="btn btn-ghost" href="#sensor">See how</a>
+      </div>
+      <p class="hero-price">From <strong>$3,999</strong> · body only · ships March</p>
+    </div>
+  </section>
+
+  <!-- SENSOR -->
+  <section id="sensor">
+    <div class="wrap feature">
+      <div class="fcopy">
+        <p class="eyebrow rv">The sensor</p>
+        <h2 class="rv">61 megapixels. Zero apologies.</h2>
+        <p class="sub rv">A backside-illuminated full-frame sensor with fifteen stops of dynamic range. Shadows you can lift twice and still print. Files that crop like you brought a second lens.</p>
+        <div class="stat-row rv">
+          <div class="stat"><b><span data-count="61">0</span> MP</b><span>full-frame BSI</span></div>
+          <div class="stat"><b><span data-count="15">0</span> stops</b><span>dynamic range</span></div>
+          <div class="stat"><b>8K/30</b><span>internal, no crop</span></div>
+        </div>
+      </div>
+      <div class="px-media rv">
+        <img src="https://images.unsplash.com/photo-1495707902641-75cac588d2e9?auto=format&fit=crop&w=1400&q=80"
+             alt="Close view of the Zenith S1 sensor and lens mount" width="1400" height="1610" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- STABILIZE -->
+  <section id="stabilize" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div class="wrap feature flip">
+      <div class="fcopy">
+        <p class="eyebrow rv">Stabilization</p>
+        <h2 class="rv">Eight stops of stillness.</h2>
+        <p class="sub rv">The 5-axis gyro samples ten thousand times a second and moves the sensor before you know you did. Handheld seconds, not sixtieths — streetlights become light, not streaks.</p>
+        <div class="stat-row rv">
+          <div class="stat"><b><span data-count="8">0</span> stops</b><span>CIPA-rated IBIS</span></div>
+          <div class="stat"><b><span data-count="10" data-suffix="k">0</span>/s</b><span>gyro sampling</span></div>
+          <div class="stat"><b><span data-count="5">0</span>-axis</b><span>sensor shift</span></div>
+        </div>
+      </div>
+      <div class="px-media rv">
+        <img src="https://images.unsplash.com/photo-1505739998589-00fc191ce01d?auto=format&fit=crop&w=1400&q=80"
+             alt="Photographer holding the Zenith S1 steady at dusk" width="1400" height="1610" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- FOCUS -->
+  <section id="focus">
+    <div class="wrap feature">
+      <div class="fcopy">
+        <p class="eyebrow rv">Autofocus</p>
+        <h2 class="rv">Focus that never lets go.</h2>
+        <p class="sub rv">Eye-AF holds a subject through crowds, railings, and rain — 759 phase points re-acquire in under a frame when someone walks through your shot. You compose; the S1 keeps the promise.</p>
+        <div class="stat-row rv">
+          <div class="stat"><b><span data-count="759">0</span></b><span>phase-detect points</span></div>
+          <div class="stat"><b><span data-count="120">0</span> fps</b><span>AF calculations</span></div>
+          <div class="stat"><b>−6 EV</b><span>focus in moonlight</span></div>
+        </div>
+      </div>
+      <div class="px-media rv">
+        <img src="https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?auto=format&fit=crop&w=1400&q=80"
+             alt="Front element of the Zenith 50mm lens, aperture blades visible" width="1400" height="1610" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- STICKY IMAGE-STACK SCENE -->
+  <section class="scene" id="design" aria-label="Design details">
+    <div class="scene-pin">
+      <figure class="frame">
+        <img src="https://images.unsplash.com/photo-1517956050595-8932d6d6b740?auto=format&fit=crop&w=1900&q=80"
+             alt="Top plate of the Zenith S1 showing machined titanium dials" width="1900" height="1267" loading="lazy">
+      </figure>
+      <figure class="frame">
+        <img src="https://images.unsplash.com/photo-1533746228171-962520811097?auto=format&fit=crop&w=1900&q=80"
+             alt="Zenith S1 grip and shutter in the hand" width="1900" height="1267" loading="lazy">
+      </figure>
+      <figure class="frame">
+        <img src="https://images.unsplash.com/photo-1580852300513-9b50125bf293?auto=format&fit=crop&w=1900&q=80"
+             alt="Detail of the Zenith S1 lens barrel engraving" width="1900" height="1267" loading="lazy">
+      </figure>
+      <div class="scene-head">
+        <p class="eyebrow">Built like an instrument</p>
+        <h2>Keep scrolling. It gets closer.</h2>
+      </div>
+      <div class="scaps">
+        <div class="scap on"><b>Titanium, not trim.</b><p>The full top plate is milled from a single billet — 41% lighter than brass, and it wears in, not out.</p></div>
+        <div class="scap"><b>A grip decided by 400 hands.</b><p>We cast prototypes until the shutter fell exactly where a resting finger lands. Day-long shoots, no white knuckles.</p></div>
+        <div class="scap"><b>Every dial, machined to click.</b><p>Sealed against dust and rain, knurled for gloves, and damped so a nudge is never a stop.</p></div>
+      </div>
+      <div class="sdots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+    </div>
+  </section>
+
+  <!-- SPECS -->
+  <section class="specs" id="specs">
+    <div class="wrap">
+      <p class="eyebrow rv">The full sheet</p>
+      <h2 class="rv" style="font-family:var(--font-display);font-weight:800;letter-spacing:-.02em;font-size:clamp(2rem,4.4vw,3.2rem);margin-top:12px">Numbers you can lean on.</h2>
+      <div class="bento">
+        <div class="cell rv"><b><span data-count="61">0</span><sub> MP</sub></b><h3>Full-frame BSI sensor</h3><p>15 stops DR, dual-gain readout.</p></div>
+        <div class="cell rv"><b><span data-count="8">0</span><sub> stops</sub></b><h3>In-body stabilization</h3><p>5-axis, CIPA-rated with sync IS.</p></div>
+        <div class="cell rv"><b>8K/30</b><h3>Internal video</h3><p>10-bit 4:2:2, no recording limit.</p></div>
+        <div class="cell wide rv"><b><span data-count="520">0</span><sub> g</sub></b><h3>Titanium body</h3><p>Weather-sealed to IP53. Cold-rated to −25°C — the shutter is, too.</p></div>
+        <div class="cell wide rv"><b><span data-count="5.76" data-dec="2">0</span><sub> M-dot</sub></b><h3>Electronic viewfinder</h3><p>120 fps refresh with zero blackout at full burst.</p></div>
+        <div class="cell rv"><b><span data-count="759">0</span></b><h3>AF points</h3><p>Eye-AF through occlusion, −6 EV.</p></div>
+        <div class="cell rv"><b>2× CFe</b><h3>Dual CFexpress B</h3><p>Relay, backup, or RAW/proxy split.</p></div>
+        <div class="cell rv"><b><span data-count="640">0</span><sub> shots</sub></b><h3>Battery, EVF on</h3><p>USB-C PD charges while shooting.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <section class="marq-sec" aria-label="Sample gallery">
+    <div class="wrap">
+      <p class="eyebrow rv">In the field</p>
+      <h2 class="rv" style="font-family:var(--font-display);font-weight:800;letter-spacing:-.02em;font-size:clamp(2rem,4.4vw,3.2rem);margin-top:12px">Shot on S1. Straight off the card.</h2>
+    </div>
+    <div class="marq">
+      <div class="marq-track" id="marqTrack">
+        <div class="marq-group">
+          <figure><img src="https://images.unsplash.com/photo-1536627217140-899b0bc9d881?auto=format&fit=crop&w=700&q=80" alt="Sample photo: camera resting on a map during a road trip" width="700" height="490"><figcaption>50mm · f/1.8 · 1/250</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1516724562728-afc824a36e84?auto=format&fit=crop&w=700&q=80" alt="Sample photo: photographer framing a shot at golden hour" width="700" height="490"><figcaption>35mm · f/2 · 1/1000</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1517956050595-8932d6d6b740?auto=format&fit=crop&w=700&q=80" alt="Sample photo: machined camera dials in low light" width="700" height="490"><figcaption>85mm · f/1.4 · 1/60</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1533746228171-962520811097?auto=format&fit=crop&w=700&q=80" alt="Sample photo: hands adjusting a camera lens" width="700" height="490"><figcaption>24mm · f/4 · 1/500</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1580852300513-9b50125bf293?auto=format&fit=crop&w=700&q=80" alt="Sample photo: lens barrel engraving, macro detail" width="700" height="490"><figcaption>90mm macro · f/2.8</figcaption></figure>
+        </div>
+        <div class="marq-group" aria-hidden="true">
+          <figure><img src="https://images.unsplash.com/photo-1536627217140-899b0bc9d881?auto=format&fit=crop&w=700&q=80" alt="" width="700" height="490"><figcaption>50mm · f/1.8 · 1/250</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1516724562728-afc824a36e84?auto=format&fit=crop&w=700&q=80" alt="" width="700" height="490"><figcaption>35mm · f/2 · 1/1000</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1517956050595-8932d6d6b740?auto=format&fit=crop&w=700&q=80" alt="" width="700" height="490"><figcaption>85mm · f/1.4 · 1/60</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1533746228171-962520811097?auto=format&fit=crop&w=700&q=80" alt="" width="700" height="490"><figcaption>24mm · f/4 · 1/500</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1580852300513-9b50125bf293?auto=format&fit=crop&w=700&q=80" alt="" width="700" height="490"><figcaption>90mm macro · f/2.8</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVE -->
+  <section class="reserve" id="reserve">
+    <div class="wrap">
+      <p class="eyebrow rv">Reserve now</p>
+      <h2 class="rv">The moment won't wait.<br>Neither should you.</h2>
+      <p class="sub rv">Zenith S1, $3,999 body only. Reservations are fully refundable until your unit ships — first allocation leaves the line in March.</p>
+      <a class="btn btn-solid rv" href="#top" style="font-size:16px;padding:14px 30px">Reserve yours — $3,999</a>
+      <p class="fineprint rv">Zenith Optics is a fictional brand. Photography via Unsplash. This page is a configurable template by Kiln Studio.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><a class="brand" href="#top" style="font-size:13px">ZENITH<em>.</em></a></p>
+    <p>© 2026 Zenith Optics — a <a href="../">Kiln template</a>. Fictional product; photography via Unsplash.</p>
+  </div>
+</footer>
+
+<div class="kw" id="kw">
+  <button class="kw-fab" id="kwFab" aria-expanded="false" aria-controls="kwPanel">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.5 1.5M16.9 16.9l1.5 1.5M5.6 18.4l1.5-1.5M16.9 7.1l1.5-1.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+    Make it yours
+  </button>
+  <div class="kw-panel" id="kwPanel" role="dialog" aria-label="Customize this template" hidden>
+    <div class="kw-row kw-head">
+      <strong>Customize</strong>
+      <span class="kw-note">live — this whole site is tokens</span>
+    </div>
+    <div class="kw-row">
+      <label for="kwHue">Brand hue</label>
+      <input type="range" id="kwHue" min="0" max="360" step="1">
+      <div class="kw-swatches" id="kwSwatches"></div>
+    </div>
+    <div class="kw-row">
+      <label>Type pairing</label>
+      <div class="kw-seg" id="kwFonts" role="radiogroup" aria-label="Font pairing"></div>
+    </div>
+    <div class="kw-row">
+      <label>Corners</label>
+      <div class="kw-seg" id="kwRadius" role="radiogroup" aria-label="Corner radius">
+        <button data-r="2px" role="radio">Sharp</button>
+        <button data-r="14px" role="radio">Soft</button>
+        <button data-r="26px" role="radio">Round</button>
+      </div>
+    </div>
+    <div class="kw-row">
+      <label>Mode</label>
+      <div class="kw-seg" id="kwTheme" role="radiogroup" aria-label="Color mode">
+        <button data-t="dark" role="radio">Dark</button>
+        <button data-t="light" role="radio">Light</button>
+      </div>
+    </div>
+    <button class="kw-reset" id="kwReset">Reset to default</button>
+  </div>
+</div>
+
+<style>
+.kw{position:fixed;right:18px;bottom:18px;z-index:999;font-family:var(--font-body);}
+.kw-fab{display:flex;align-items:center;gap:8px;border:1px solid hsl(var(--hue) var(--sat) 60% / .5);
+  background:hsl(var(--hue) var(--sat) 55% / .14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:inherit;font:inherit;font-size:13px;font-weight:600;letter-spacing:.02em;
+  padding:10px 16px;border-radius:999px;cursor:pointer;box-shadow:0 6px 24px hsl(var(--hue) var(--sat) 40% / .25);}
+.kw-fab:hover{background:hsl(var(--hue) var(--sat) 55% / .24);}
+.kw-fab:focus-visible,.kw-panel :focus-visible{outline:2px solid hsl(var(--hue) var(--sat) 60%);outline-offset:2px;}
+.kw-panel{position:absolute;right:0;bottom:52px;width:264px;padding:16px;border-radius:calc(var(--radius)*1.1);
+  border:1px solid hsl(var(--hue) 20% 50% / .25);background:var(--kw-bg,hsl(var(--hue) 15% 10% / .92));
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 50px rgb(0 0 0/.35);}
+html[data-theme="light"] .kw-panel{--kw-bg:hsl(var(--hue) 30% 98% / .92);}
+.kw-row{margin-bottom:14px;display:flex;flex-direction:column;gap:7px;}
+.kw-head{flex-direction:row;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+.kw-note{font-size:10.5px;opacity:.6;}
+.kw-row label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;opacity:.65;}
+.kw-row input[type=range]{width:100%;accent-color:hsl(var(--hue) var(--sat) 55%);}
+.kw-swatches{display:flex;gap:6px;}
+.kw-swatches button{width:22px;height:22px;border-radius:50%;border:1px solid rgb(128 128 128/.35);cursor:pointer;padding:0;}
+.kw-seg{display:flex;gap:4px;background:rgb(128 128 128/.12);padding:3px;border-radius:calc(var(--radius)*.6);}
+.kw-seg button{flex:1;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:600;
+  padding:6px 4px;border-radius:calc(var(--radius)*.45);cursor:pointer;opacity:.7;}
+.kw-seg button[aria-checked="true"]{background:hsl(var(--hue) var(--sat) 55% / .25);opacity:1;
+  box-shadow:inset 0 0 0 1px hsl(var(--hue) var(--sat) 60% / .5);}
+.kw-reset{width:100%;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;
+  opacity:.6;cursor:pointer;padding:6px;text-decoration:underline;}
+.kw-reset:hover{opacity:1;}
+@media (max-width:560px){.kw{right:12px;bottom:12px}.kw-panel{width:min(264px,calc(100vw - 24px))}}
+</style>
+
+<script>
+(() => {
+  const KEY = "kiln.tpl.zenith.v1";
+  const DEFAULTS = { hue: 42, sat: "70%", radius: "14px", theme: "dark", font: 0 };
+  const SWATCH_HUES = [42, 210, 262, 330, 145, 20];
+  const FONTS = [
+    ["Modern", "'Sora',sans-serif", "'Inter',sans-serif"],
+    ["Editorial", "'Fraunces',serif", "'Inter',sans-serif"],
+    ["Technical", "'Space Grotesk',sans-serif", "'Space Grotesk',sans-serif"],
+  ];
+
+  const root = document.documentElement;
+  const $ = id => document.getElementById(id);
+  let s = { ...DEFAULTS };
+  try { s = { ...DEFAULTS, ...JSON.parse(localStorage.getItem(KEY) || "{}") }; } catch {}
+
+  function apply() {
+    root.style.setProperty("--hue", s.hue);
+    root.style.setProperty("--radius", s.radius);
+    root.style.setProperty("--font-display", FONTS[s.font][1]);
+    root.style.setProperty("--font-body", FONTS[s.font][2]);
+    root.dataset.theme = s.theme;
+    $("kwHue").value = s.hue;
+    [...$("kwFonts").children].forEach((b, i) => b.setAttribute("aria-checked", i === s.font));
+    [...$("kwRadius").children].forEach(b => b.setAttribute("aria-checked", b.dataset.r === s.radius));
+    [...$("kwTheme").children].forEach(b => b.setAttribute("aria-checked", b.dataset.t === s.theme));
+    localStorage.setItem(KEY, JSON.stringify(s));
+    document.dispatchEvent(new CustomEvent("kiln:theme", { detail: s }));
+  }
+  FONTS.forEach((f, i) => {
+    const b = document.createElement("button");
+    b.role = "radio"; b.textContent = f[0];
+    b.onclick = () => { s.font = i; apply(); };
+    $("kwFonts").appendChild(b);
+  });
+  SWATCH_HUES.forEach(h => {
+    const b = document.createElement("button");
+    b.style.background = `hsl(${h} 70% 55%)`;
+    b.setAttribute("aria-label", `Hue ${h}`);
+    b.onclick = () => { s.hue = h; apply(); };
+    $("kwSwatches").appendChild(b);
+  });
+  $("kwHue").oninput = e => { s.hue = +e.target.value; apply(); };
+  [...$("kwRadius").children].forEach(b => b.onclick = () => { s.radius = b.dataset.r; apply(); });
+  [...$("kwTheme").children].forEach(b => b.onclick = () => { s.theme = b.dataset.t; apply(); });
+  $("kwReset").onclick = () => { s = { ...DEFAULTS }; apply(); };
+  $("kwFab").onclick = () => {
+    const open = $("kwPanel").hidden;
+    $("kwPanel").hidden = !open;
+    $("kwFab").setAttribute("aria-expanded", open);
+  };
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !$("kwPanel").hidden) { $("kwPanel").hidden = true; $("kwFab").setAttribute("aria-expanded", "false"); }
+  });
+  apply();
+})();
+
+/* ================= scroll choreography ================= */
+(() => {
+  const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const SDA = CSS.supports("animation-timeline: view()"); // native scroll-driven animations
+
+  /* nav frost */
+  const nav = document.getElementById("nav");
+  const frost = () => nav.classList.toggle("scrolled", scrollY > 24);
+  addEventListener("scroll", frost, { passive: true }); frost();
+
+  /* reveals */
+  const rvs = document.querySelectorAll(".rv");
+  if (RM || !("IntersectionObserver" in window)) {
+    rvs.forEach(el => el.classList.add("in"));
+  } else {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    }), { threshold: .14 });
+    rvs.forEach(el => io.observe(el));
+  }
+
+  /* count-up stats */
+  const counts = document.querySelectorAll("[data-count]");
+  const setFinal = el => { el.textContent = el.dataset.count; };
+  if (RM || !("IntersectionObserver" in window)) {
+    counts.forEach(setFinal);
+  } else {
+    const cio = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      cio.unobserve(e.target);
+      const el = e.target, target = parseFloat(el.dataset.count), dec = +(el.dataset.dec || 0);
+      const t0 = performance.now(), dur = 1200;
+      const tick = now => {
+        const p = Math.min((now - t0) / dur, 1), ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = (target * ease).toFixed(dec);
+        if (p < 1) requestAnimationFrame(tick); else el.textContent = target.toFixed(dec).replace(/\.00$/, "");
+      };
+      requestAnimationFrame(tick);
+    }), { threshold: .5 });
+    counts.forEach(el => cio.observe(el));
+  }
+
+  if (RM) return; // everything below is motion
+
+  /* sticky image-stack scene — rAF everywhere (caption logic needs JS anyway) */
+  const scene = document.querySelector(".scene");
+  const frames = [...document.querySelectorAll(".frame")];
+  const caps = [...document.querySelectorAll(".scap")];
+  const dots = [...document.querySelectorAll(".sdots i")];
+
+  /* hero + parallax fallback targets (skipped when native CSS path is active) */
+  const heroMedia = document.getElementById("heroMedia");
+  const heroShade = document.getElementById("heroShade");
+  const pxMedias = [...document.querySelectorAll(".px-media img")];
+
+  let ticking = false;
+  const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
+
+  function frame() {
+    ticking = false;
+    const vh = innerHeight;
+
+    /* scene progress */
+    if (scene) {
+      const r = scene.getBoundingClientRect();
+      const total = r.height - vh;
+      const p = clamp(-r.top / total, 0, 1);
+      const t = p * (frames.length - 1);
+      frames.forEach((f, i) => {
+        const d = Math.abs(t - i);
+        const op = clamp(1.25 - d * 1.25, 0, 1);
+        f.style.opacity = op;
+        f.style.transform = `scale(${1.06 - 0.06 * op})`;
+      });
+      const active = Math.round(t);
+      caps.forEach((c, i) => c.classList.toggle("on", i === active));
+      dots.forEach((d, i) => d.classList.toggle("on", i === active));
+    }
+
+    if (!SDA) {
+      /* hero zoom + darken fallback */
+      const hp = clamp(scrollY / vh, 0, 1);
+      if (heroMedia) heroMedia.style.transform = `scale(${1 + hp * 0.16})`;
+      if (heroShade) heroShade.style.opacity = hp * 0.6;
+      /* parallax fallback */
+      pxMedias.forEach(img => {
+        const r = img.parentElement.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const p = clamp((vh - r.top) / (vh + r.height), 0, 1);
+        img.style.transform = `translateY(${(p * 2 - 1) * 6.5}%)`;
+      });
+    }
+  }
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll, { passive: true });
+  frame();
+})();
+</script>
+</body>
+</html>

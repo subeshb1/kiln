@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumen Dental Studio — dentistry for people who dread the dentist</title>
+<meta name="description" content="A calm, modern dental practice in Leeds. Transparent prices on the wall, same-day emergency slots, and a gentle-by-design approach for nervous patients.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%232a7ca5'/%3E%3Cpath d='M16 6c4 0 7 2.6 7 6.4 0 4.8-2.4 7.8-3.4 12-.3 1.1-1 1.6-1.7 1.6-.8 0-1.3-.6-1.4-1.5-.2-1.6-.2-3.5-.5-3.5s-.3 1.9-.5 3.5c-.1.9-.6 1.5-1.4 1.5-.7 0-1.4-.5-1.7-1.6-1-4.2-3.4-7.2-3.4-12C9 8.6 12 6 16 6Z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --hue:200; --sat:60%;
+  --font-display:'Sora',sans-serif; --font-body:'Inter',sans-serif;
+  --radius:14px;
+}
+html[data-theme="light"]{
+  --bg:hsl(var(--hue) 32% 98%);
+  --bg-2:hsl(var(--hue) 28% 94%);
+  --surface:hsl(var(--hue) 30% 100%);
+  --ink:hsl(var(--hue) 35% 11%);
+  --ink-2:hsl(var(--hue) 14% 33%);
+  --line:hsl(var(--hue) 25% 30% / .15);
+  --glass:hsl(var(--hue) 30% 98% / .8);
+  --accent-ink:hsl(var(--hue) var(--sat) 30%);       /* text on background */
+  --accent-soft:hsl(var(--hue) var(--sat) 45% / .1); /* tint fills */
+  --btn-bg:hsl(var(--hue) var(--sat) 32%);
+  --btn-bg-hover:hsl(var(--hue) var(--sat) 26%);
+  --btn-ink:hsl(var(--hue) 30% 98%);
+  --shadow:0 18px 44px hsl(var(--hue) 40% 40% / .13);
+  color-scheme:light;
+}
+html[data-theme="dark"]{
+  --bg:hsl(var(--hue) 22% 7%);
+  --bg-2:hsl(var(--hue) 18% 10%);
+  --surface:hsl(var(--hue) 16% 11%);
+  --ink:hsl(var(--hue) 20% 95%);
+  --ink-2:hsl(var(--hue) 10% 72%);
+  --line:hsl(var(--hue) 28% 60% / .17);
+  --glass:hsl(var(--hue) 20% 8% / .75);
+  --accent-ink:hsl(var(--hue) var(--sat) 68%);
+  --accent-soft:hsl(var(--hue) var(--sat) 55% / .13);
+  --btn-bg:hsl(var(--hue) var(--sat) 58%);
+  --btn-bg-hover:hsl(var(--hue) var(--sat) 66%);
+  --btn-ink:hsl(var(--hue) 30% 8%);
+  --shadow:0 18px 44px hsl(var(--hue) 40% 2% / .5);
+  color-scheme:dark;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--font-body);font-size:16.5px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.eyebrow{
+  font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent-ink);margin-bottom:12px;
+}
+h1,h2,h3{font-family:var(--font-display);letter-spacing:-.015em;text-wrap:balance}
+h2{font-size:clamp(1.7rem,3.6vw,2.5rem);line-height:1.12;margin-bottom:14px}
+.sub{color:var(--ink-2);max-width:58ch}
+section{padding:78px 0}
+
+/* back chip */
+.kiln-chip{
+  position:fixed;top:14px;left:14px;z-index:1000;
+  font-size:12.5px;font-weight:600;text-decoration:none;
+  padding:8px 14px;border-radius:999px;border:1px solid var(--line);
+  background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:var(--ink-2);transition:color .2s;
+}
+.kiln-chip:hover{color:var(--ink)}
+@media (max-width:760px){.kiln-chip{top:auto;bottom:14px;left:14px}}
+
+/* nav */
+.nav{
+  position:sticky;top:0;z-index:60;border-bottom:1px solid var(--line);
+  background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
+.nav .wrap{display:flex;align-items:center;gap:26px;height:66px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:17px;text-decoration:none;margin-right:auto}
+.logo .mark{width:28px;height:28px;border-radius:9px;background:var(--btn-bg);color:var(--btn-ink);display:grid;place-items:center}
+.logo .mark svg{width:16px;height:16px}
+.nav a.nl{font-size:14px;font-weight:500;text-decoration:none;color:var(--ink-2)}
+.nav a.nl:hover{color:var(--ink)}
+@media (max-width:760px){.nav a.nl{display:none}}
+.btn{
+  display:inline-block;font-family:var(--font-body);font-size:14.5px;font-weight:600;
+  text-decoration:none;border:0;cursor:pointer;
+  padding:12px 22px;border-radius:999px;transition:background .2s,transform .2s;
+}
+.btn-primary{background:var(--btn-bg);color:var(--btn-ink)}
+.btn-primary:hover{background:var(--btn-bg-hover);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--accent-ink);color:var(--accent-ink)}
+.nav .btn{padding:9px 18px}
+
+/* hero */
+.hero{padding:64px 0 78px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center}
+@media (max-width:880px){.hero .wrap{grid-template-columns:1fr;gap:34px}}
+.hero h1{font-size:clamp(2.3rem,5.2vw,3.7rem);line-height:1.06;margin-bottom:18px}
+.hero h1 em{font-style:normal;color:var(--accent-ink)}
+.hero .lede{font-size:clamp(1.02rem,1.5vw,1.16rem);color:var(--ink-2);max-width:52ch;margin-bottom:26px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:999px;
+  background:var(--accent-soft);color:var(--accent-ink);border:1px solid var(--line);
+}
+.hero-photo{position:relative}
+.hero-photo img{width:100%;height:auto;border-radius:calc(var(--radius)*1.6);box-shadow:var(--shadow)}
+.hero-badge{
+  position:absolute;left:18px;bottom:18px;max-width:270px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:13px 16px;box-shadow:var(--shadow);
+}
+.hero-badge b{display:block;font-size:14px;font-family:var(--font-display)}
+.hero-badge span{font-size:12.5px;color:var(--ink-2)}
+
+/* services */
+#services{background:var(--bg-2)}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:36px}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:calc(var(--radius)*1.2);
+  padding:24px 22px;
+}
+.card h3{font-size:17px;margin-bottom:8px}
+.card p{font-size:14.5px;color:var(--ink-2)}
+.price{
+  display:inline-block;margin-top:14px;font-family:var(--font-display);font-weight:700;
+  font-size:15px;color:var(--accent-ink);background:var(--accent-soft);
+  padding:5px 12px;border-radius:999px;
+}
+.svc-note{margin-top:26px;font-size:14.5px;color:var(--ink-2);max-width:62ch}
+.svc-note strong{color:var(--ink)}
+
+/* gentle */
+#gentle .wrap{display:grid;grid-template-columns:.95fr 1.05fr;gap:52px;align-items:center}
+@media (max-width:880px){#gentle .wrap{grid-template-columns:1fr;gap:34px}}
+#gentle figure img{width:100%;height:auto;border-radius:calc(var(--radius)*1.6);box-shadow:var(--shadow)}
+.gentle-list{display:grid;gap:14px;margin-top:28px}
+.g-item{display:flex;gap:14px;align-items:flex-start}
+.g-item .ic{
+  flex:none;width:38px;height:38px;border-radius:calc(var(--radius)*.8);
+  background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center;
+}
+.g-item .ic svg{width:18px;height:18px}
+.g-item b{display:block;font-size:15px;font-family:var(--font-display)}
+.g-item p{font-size:14px;color:var(--ink-2)}
+
+/* team */
+.team-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:36px}
+.tcard{background:var(--surface);border:1px solid var(--line);border-radius:calc(var(--radius)*1.2);padding:26px 22px;text-align:left}
+.avatar{
+  width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
+  background:var(--btn-bg);color:var(--btn-ink);
+  font-family:var(--font-display);font-weight:700;font-size:19px;margin-bottom:16px;
+}
+.tcard h3{font-size:16.5px}
+.tcard .role{font-size:13px;color:var(--accent-ink);font-weight:600;margin:3px 0 10px}
+.tcard p{font-size:14px;color:var(--ink-2)}
+.tcard .gdc{display:block;margin-top:12px;font-size:12px;color:var(--ink-2);letter-spacing:.04em}
+
+/* stories */
+#stories{background:var(--bg-2)}
+.stars{color:var(--accent-ink);letter-spacing:3px;font-size:14px;margin-bottom:12px}
+.q-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:36px}
+.quote{background:var(--surface);border:1px solid var(--line);border-radius:calc(var(--radius)*1.2);padding:24px 22px}
+.quote p{font-size:15px}
+.quote footer{margin-top:14px;font-size:13px;color:var(--ink-2)}
+
+/* journey */
+.steps{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:36px;counter-reset:step}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:calc(var(--radius)*1.2);padding:24px 22px}
+.step .n{font-family:var(--font-display);font-weight:800;font-size:13px;letter-spacing:.12em;color:var(--accent-ink)}
+.step h3{font-size:16px;margin:8px 0 6px}
+.step p{font-size:14px;color:var(--ink-2)}
+
+/* faq */
+.faq{max-width:720px;margin-top:30px}
+.faq details{border-bottom:1px solid var(--line);padding:4px 0}
+.faq summary{
+  cursor:pointer;font-family:var(--font-display);font-weight:600;font-size:16px;
+  padding:16px 30px 16px 0;list-style:none;position:relative;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{
+  content:"+";position:absolute;right:4px;top:50%;translate:0 -50%;
+  font-size:20px;color:var(--accent-ink);transition:rotate .2s;
+}
+.faq details[open] summary::after{rotate:45deg}
+.faq details p{padding:0 0 18px;font-size:15px;color:var(--ink-2);max-width:60ch}
+
+/* booking */
+#book{background:var(--bg-2)}
+.book-card{
+  margin-top:34px;background:var(--surface);border:1px solid var(--line);
+  border-radius:calc(var(--radius)*1.4);padding:32px;max-width:620px;box-shadow:var(--shadow);
+}
+.f-row{display:grid;gap:16px;grid-template-columns:1fr 1fr;margin-bottom:16px}
+@media (max-width:600px){.f-row{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:13px;font-weight:600}
+.field input,.field select{
+  font:inherit;font-size:15px;color:var(--ink);
+  background:var(--bg);border:1px solid var(--line);border-radius:calc(var(--radius)*.7);
+  padding:11px 13px;
+}
+.field input:focus-visible,.field select:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
+.book-note{margin-top:16px;font-size:12.5px;color:var(--ink-2)}
+.success{
+  display:none;text-align:center;padding:26px 10px;
+}
+.success .tick{
+  width:52px;height:52px;margin:0 auto 16px;border-radius:50%;
+  background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center;
+}
+.success .tick svg{width:26px;height:26px}
+.success b{font-family:var(--font-display);font-size:18px;display:block;margin-bottom:6px}
+.success p{font-size:14.5px;color:var(--ink-2)}
+.book-card.sent form{display:none}
+.book-card.sent .success{display:block}
+
+/* footer */
+footer.ft{border-top:1px solid var(--line);padding:44px 0 56px}
+.ft-grid{display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.ft h3{font-size:14px;margin-bottom:10px}
+.ft p,.ft a{font-size:14px;color:var(--ink-2)}
+.ft .em{color:var(--accent-ink);font-weight:600}
+.ft .fine{margin-top:34px;font-size:12.5px;color:var(--ink-2)}
+
+/* reveals */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none;transition:none}
+  .btn,.btn:hover{transition:none;transform:none}
+}
+</style>
+</head>
+<body>
+
+<a class="kiln-chip" href="../">← Kiln templates</a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c3.3 0 5.8 2.1 5.8 5.2 0 3.9-2 6.4-2.8 9.8-.2.9-.8 1.3-1.4 1.3-.6 0-1-.5-1.1-1.2-.2-1.3-.2-2.9-.5-2.9s-.3 1.6-.5 2.9c-.1.7-.5 1.2-1.1 1.2-.6 0-1.2-.4-1.4-1.3-.8-3.4-2.8-5.9-2.8-9.8C6.2 5.1 8.7 3 12 3Z"/></svg></span>
+      Lumen Dental
+    </a>
+    <a class="nl" href="#services">Prices</a>
+    <a class="nl" href="#gentle">Nervous?</a>
+    <a class="nl" href="#team">Team</a>
+    <a class="nl" href="#faq">FAQ</a>
+    <a class="btn btn-primary" href="#book">Book a visit</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Lumen Dental Studio · Leeds</p>
+        <h1>Dentistry for people who <em>dread</em> the dentist.</h1>
+        <p class="lede">No lectures, no surprises, no mystery bills. Tell us how you'd like your visit to go — slower, quieter, fully explained — and that's exactly how it goes.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#book">Book a visit</a>
+          <a class="btn btn-ghost" href="#services">See our prices</a>
+        </div>
+        <div class="chips" role="list">
+          <span class="chip" role="listitem">CQC registered</span>
+          <span class="chip" role="listitem">4.9★ · 300+ reviews</span>
+          <span class="chip" role="listitem">0% finance available</span>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <img src="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&w=1400&q=80"
+             alt="A calm, daylit treatment room at Lumen Dental Studio" width="1400" height="1050" fetchpriority="high">
+        <div class="hero-badge">
+          <b>Same-day emergency slots</b>
+          <span>We hold space every morning for people in pain.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <p class="eyebrow rv">What it costs</p>
+      <h2 class="rv">Prices on the wall, not in the small print.</h2>
+      <p class="sub rv">Every price below is the real one — quoted before treatment, in writing, and it doesn't change in the chair. If we recommend something, we'll tell you what happens if you'd rather wait.</p>
+      <div class="grid">
+        <article class="card rv">
+          <h3>Check-up &amp; hygiene</h3>
+          <p>A full exam, X-rays if needed, and a proper clean — with time to actually talk.</p>
+          <span class="price">£65</span>
+        </article>
+        <article class="card rv">
+          <h3>Whitening</h3>
+          <p>Custom trays and clinical-grade gel you use at home, checked by us at each step.</p>
+          <span class="price">£295</span>
+        </article>
+        <article class="card rv">
+          <h3>Clear aligners</h3>
+          <p>Straighten quietly over 6–18 months. Free scan first, so you know if it'll work before paying.</p>
+          <span class="price">from £1,900</span>
+        </article>
+        <article class="card rv">
+          <h3>Implants</h3>
+          <p>A fixed replacement tooth, planned in 3D. Includes the crown — the price is the whole job.</p>
+          <span class="price">from £2,400</span>
+        </article>
+        <article class="card rv">
+          <h3>Emergency, same day</h3>
+          <p>In pain now? Call before 10am and we'll see you today. Assessment plus immediate relief.</p>
+          <span class="price">£95</span>
+        </article>
+      </div>
+      <p class="svc-note rv"><strong>Why we publish prices:</strong> because the scariest part of dentistry is often the bill you can't predict. 0% finance over 12 months is available on treatment over £500.</p>
+    </div>
+  </section>
+
+  <section id="gentle">
+    <div class="wrap">
+      <figure class="rv">
+        <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=1200&q=80"
+             alt="Dental tools laid out neatly in a bright, modern clinic" width="1200" height="900" loading="lazy">
+      </figure>
+      <div>
+        <p class="eyebrow rv">Nervous patients</p>
+        <h2 class="rv">Gentle by design, not by slogan.</h2>
+        <p class="sub rv">About a third of our patients arrive anxious. These aren't perks — they're standard procedure at Lumen.</p>
+        <div class="gentle-list">
+          <div class="g-item rv">
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/></svg></span>
+            <div><b>Numb first, always</b><p>Topical numbing gel before any needle, and we wait until it's working — not until we're ready.</p></div>
+          </div>
+          <div class="g-item rv">
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8l5-5Z"/><path d="M9 12h6"/></svg></span>
+            <div><b>The hand rule</b><p>Raise your hand and everything stops. Immediately, every time, no questions. You're in charge of the pace.</p></div>
+          </div>
+          <div class="g-item rv">
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="4" y="14" width="4" height="6" rx="1.5"/><rect x="16" y="14" width="4" height="6" rx="1.5"/></svg></span>
+            <div><b>Noise-cancelling headphones</b><p>Bring your own playlist or borrow ours. Most people say the sound is worse than the feeling — so we remove it.</p></div>
+          </div>
+          <div class="g-item rv">
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 12.5l2 2 4-5"/></svg></span>
+            <div><b>Sedation options</b><p>For longer treatment, IV sedation with a dedicated sedationist. You'll remember almost none of it.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="team">
+    <div class="wrap">
+      <p class="eyebrow rv">Who you'll meet</p>
+      <h2 class="rv">Three people, no rotating strangers.</h2>
+      <p class="sub rv">You see the same clinician every visit. They know your history, your sore spots, and how you take your appointments.</p>
+      <div class="team-grid">
+        <article class="tcard rv">
+          <span class="avatar" aria-hidden="true">AO</span>
+          <h3>Dr. Amara Okafor</h3>
+          <p class="role">Principal dentist</p>
+          <p>Fifteen years in restorative dentistry. Chose the practice name because "lumen" is the unit of light, and she over-explains with a mirror in your hand.</p>
+          <span class="gdc">GDC 245119</span>
+        </article>
+        <article class="tcard rv">
+          <span class="avatar" aria-hidden="true">JH</span>
+          <h3>Dr. James Whitlow</h3>
+          <p class="role">Dentist · sedation lead</p>
+          <p>Special interest in anxious and phobic patients. Half his week is people who hadn't seen a dentist in ten years — his favourite half.</p>
+          <span class="gdc">GDC 271846</span>
+        </article>
+        <article class="tcard rv">
+          <span class="avatar" aria-hidden="true">SB</span>
+          <h3>Sofia Brandt</h3>
+          <p class="role">Hygienist</p>
+          <p>Runs the £65 hygiene visits and the "haven't been in years" first appointments. Genuinely will not lecture you about flossing.</p>
+          <span class="gdc">GDC 298433</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <div class="wrap">
+      <p class="eyebrow rv">Patient stories</p>
+      <h2 class="rv">People who dreaded it, afterwards.</h2>
+      <div class="q-grid">
+        <blockquote class="quote rv">
+          <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <p>"I hadn't been to a dentist in nine years and I was braced for a telling-off. Instead: 'You're here now, let's make a plan.' I nearly cried."</p>
+          <footer>Rachel M. · new patient, 2025</footer>
+        </blockquote>
+        <blockquote class="quote rv">
+          <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <p>"Used the hand signal twice during my filling. Both times everything stopped instantly. That single thing fixed twenty years of fear."</p>
+          <footer>Daniel K. · nervous patient</footer>
+        </blockquote>
+        <blockquote class="quote rv">
+          <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <p>"The implant quote was the implant price. No 'from', no extras appearing later. I didn't know dentistry could work like that."</p>
+          <footer>Priya S. · implant patient</footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section id="journey">
+    <div class="wrap">
+      <p class="eyebrow rv">Your first visit</p>
+      <h2 class="rv">What actually happens.</h2>
+      <div class="steps">
+        <div class="step rv">
+          <p class="n">STEP 01</p>
+          <h3>Talk first, chair later</h3>
+          <p>We start in a normal room, sitting in normal chairs. Tell us your history, your worries, and what you want — or don't want — to happen today.</p>
+        </div>
+        <div class="step rv">
+          <p class="n">STEP 02</p>
+          <h3>Look, then explain</h3>
+          <p>A gentle exam and photos of your own teeth on the big screen. You see what we see. Nothing is done without you agreeing to it.</p>
+        </div>
+        <div class="step rv">
+          <p class="n">STEP 03</p>
+          <h3>A written plan with real prices</h3>
+          <p>You leave with a plan, exact costs, and zero obligation. Some people book treatment that day; some think for a month. Both are fine.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <p class="eyebrow rv">Honest answers</p>
+      <h2 class="rv">The questions people actually ask.</h2>
+      <div class="faq rv">
+        <details>
+          <summary>Does it hurt?</summary>
+          <p>Sometimes dentistry involves discomfort — we won't pretend otherwise. What we promise: you'll be properly numb before anything sharp, you can stop us at any moment, and we'll tell you honestly what each step feels like before it happens. Most patients say the fear was worse than the visit.</p>
+        </details>
+        <details>
+          <summary>I haven't been in years. Will I get judged?</summary>
+          <p>No. Around a third of our new patients haven't seen a dentist in five-plus years. You'll get a plan, not a lecture — we're glad you came, and we'll say so.</p>
+        </details>
+        <details>
+          <summary>How much will my first visit cost?</summary>
+          <p>£65 for the new-patient exam, including X-rays and photos. If you need treatment, you'll get exact written prices before anything is booked. Emergencies are £95 including immediate relief.</p>
+        </details>
+        <details>
+          <summary>Do you take NHS patients?</summary>
+          <p>We're a private practice, so no — but our prices are published, our plans are itemised, and 0% finance spreads anything over £500 across 12 months. No hidden costs is the whole point of how we work.</p>
+        </details>
+        <details>
+          <summary>What if I'm too anxious to even book?</summary>
+          <p>Book a free 15-minute chat instead — no chair, no exam, just a conversation with Dr. Whitlow about what would make a visit possible for you. Several patients started with two or three of these.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section id="book">
+    <div class="wrap">
+      <p class="eyebrow rv">Book a visit</p>
+      <h2 class="rv">We'll call you back within one working hour.</h2>
+      <p class="sub rv">Or call us directly on <strong>0113 496 0221</strong> — a person answers, not a menu.</p>
+      <div class="book-card rv" id="bookCard">
+        <form id="bookForm">
+          <div class="f-row">
+            <div class="field">
+              <label for="fName">Your name</label>
+              <input id="fName" name="name" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="fPhone">Phone number</label>
+              <input id="fPhone" name="phone" type="tel" autocomplete="tel" required>
+            </div>
+          </div>
+          <div class="f-row">
+            <div class="field">
+              <label for="fReason">What do you need?</label>
+              <select id="fReason" name="reason">
+                <option>Check-up &amp; hygiene</option>
+                <option>I'm in pain — emergency</option>
+                <option>Whitening</option>
+                <option>Clear aligners</option>
+                <option>Implants</option>
+                <option>Just a chat first (nervous patient)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="fTime">Best time to call</label>
+              <select id="fTime" name="time">
+                <option>Morning (8–12)</option>
+                <option>Afternoon (12–5)</option>
+                <option>Early evening (5–7)</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Request a callback</button>
+          <p class="book-note">Demo form — in production this wires straight into the practice management system and sends a confirmation text.</p>
+        </form>
+        <div class="success" role="status" aria-live="polite">
+          <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg></span>
+          <b>Request received.</b>
+          <p>We'll call you back within one working hour (Mon–Fri, 8am–7pm). If it's urgent, ring 0113 496 0221 now.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft-grid">
+      <div>
+        <h3>Lumen Dental Studio</h3>
+        <p>14 Calls Wharf, The Calls<br>Leeds LS2 7EY</p>
+      </div>
+      <div>
+        <h3>Hours</h3>
+        <p>Mon–Fri · 8am–7pm<br>Sat · 9am–1pm</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <p><a href="tel:+441134960221">0113 496 0221</a><br>
+        <span class="em">In pain? Call before 10am for a same-day slot.</span></p>
+      </div>
+    </div>
+    <p class="fine">Lumen Dental Studio is a fictional practice — this page is a configurable template by Kiln Studio. Photography via Unsplash.</p>
+  </div>
+</footer>
+
+<div class="kw" id="kw">
+  <button class="kw-fab" id="kwFab" aria-expanded="false" aria-controls="kwPanel">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.5 1.5M16.9 16.9l1.5 1.5M5.6 18.4l1.5-1.5M16.9 7.1l1.5-1.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+    Make it yours
+  </button>
+  <div class="kw-panel" id="kwPanel" role="dialog" aria-label="Customize this template" hidden>
+    <div class="kw-row kw-head">
+      <strong>Customize</strong>
+      <span class="kw-note">live — this whole site is tokens</span>
+    </div>
+    <div class="kw-row">
+      <label for="kwHue">Brand hue</label>
+      <input type="range" id="kwHue" min="0" max="360" step="1">
+      <div class="kw-swatches" id="kwSwatches"></div>
+    </div>
+    <div class="kw-row">
+      <label>Type pairing</label>
+      <div class="kw-seg" id="kwFonts" role="radiogroup" aria-label="Font pairing"></div>
+    </div>
+    <div class="kw-row">
+      <label>Corners</label>
+      <div class="kw-seg" id="kwRadius" role="radiogroup" aria-label="Corner radius">
+        <button data-r="2px" role="radio">Sharp</button>
+        <button data-r="14px" role="radio">Soft</button>
+        <button data-r="26px" role="radio">Round</button>
+      </div>
+    </div>
+    <div class="kw-row">
+      <label>Mode</label>
+      <div class="kw-seg" id="kwTheme" role="radiogroup" aria-label="Color mode">
+        <button data-t="dark" role="radio">Dark</button>
+        <button data-t="light" role="radio">Light</button>
+      </div>
+    </div>
+    <button class="kw-reset" id="kwReset">Reset to default</button>
+  </div>
+</div>
+
+<style>
+.kw{position:fixed;right:18px;bottom:18px;z-index:999;font-family:var(--font-body);}
+.kw-fab{display:flex;align-items:center;gap:8px;border:1px solid hsl(var(--hue) var(--sat) 60% / .5);
+  background:hsl(var(--hue) var(--sat) 55% / .14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:inherit;font:inherit;font-size:13px;font-weight:600;letter-spacing:.02em;
+  padding:10px 16px;border-radius:999px;cursor:pointer;box-shadow:0 6px 24px hsl(var(--hue) var(--sat) 40% / .25);}
+.kw-fab:hover{background:hsl(var(--hue) var(--sat) 55% / .24);}
+.kw-fab:focus-visible,.kw-panel :focus-visible{outline:2px solid hsl(var(--hue) var(--sat) 60%);outline-offset:2px;}
+.kw-panel{position:absolute;right:0;bottom:52px;width:264px;padding:16px;border-radius:calc(var(--radius)*1.1);
+  border:1px solid hsl(var(--hue) 20% 50% / .25);background:var(--kw-bg,hsl(var(--hue) 15% 10% / .92));
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 50px rgb(0 0 0/.35);}
+html[data-theme="light"] .kw-panel{--kw-bg:hsl(var(--hue) 30% 98% / .92);}
+.kw-row{margin-bottom:14px;display:flex;flex-direction:column;gap:7px;}
+.kw-head{flex-direction:row;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+.kw-note{font-size:10.5px;opacity:.6;}
+.kw-row label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;opacity:.65;}
+.kw-row input[type=range]{width:100%;accent-color:hsl(var(--hue) var(--sat) 55%);}
+.kw-swatches{display:flex;gap:6px;}
+.kw-swatches button{width:22px;height:22px;border-radius:50%;border:1px solid rgb(128 128 128/.35);cursor:pointer;padding:0;}
+.kw-seg{display:flex;gap:4px;background:rgb(128 128 128/.12);padding:3px;border-radius:calc(var(--radius)*.6);}
+.kw-seg button{flex:1;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:600;
+  padding:6px 4px;border-radius:calc(var(--radius)*.45);cursor:pointer;opacity:.7;}
+.kw-seg button[aria-checked="true"]{background:hsl(var(--hue) var(--sat) 55% / .25);opacity:1;
+  box-shadow:inset 0 0 0 1px hsl(var(--hue) var(--sat) 60% / .5);}
+.kw-reset{width:100%;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;
+  opacity:.6;cursor:pointer;padding:6px;text-decoration:underline;}
+.kw-reset:hover{opacity:1;}
+@media (max-width:560px){.kw{right:12px;bottom:12px}.kw-panel{width:min(264px,calc(100vw - 24px))}}
+</style>
+
+<script>
+(() => {
+  /* ==== CONFIG — the only part a template changes ==== */
+  const KEY = "kiln.tpl.lumen.v1";
+  const DEFAULTS = { hue: 200, sat: "60%", radius: "14px", theme: "light", font: 0 };
+  const SWATCH_HUES = [200, 160, 262, 330, 20, 45];
+  const FONTS = [
+    ["Modern", "'Sora',sans-serif", "'Inter',sans-serif"],
+    ["Editorial", "'Fraunces',serif", "'Inter',sans-serif"],
+    ["Mono", "'Space Grotesk',sans-serif", "'Space Grotesk',sans-serif"],
+  ];
+  /* ==== END CONFIG ==== */
+
+  const root = document.documentElement;
+  const $ = id => document.getElementById(id);
+  let s = { ...DEFAULTS };
+  try { s = { ...DEFAULTS, ...JSON.parse(localStorage.getItem(KEY) || "{}") }; } catch {}
+
+  function apply() {
+    root.style.setProperty("--hue", s.hue);
+    root.style.setProperty("--radius", s.radius);
+    root.style.setProperty("--font-display", FONTS[s.font][1]);
+    root.style.setProperty("--font-body", FONTS[s.font][2]);
+    root.dataset.theme = s.theme;
+    $("kwHue").value = s.hue;
+    [...$("kwFonts").children].forEach((b, i) => b.setAttribute("aria-checked", i === s.font));
+    [...$("kwRadius").children].forEach(b => b.setAttribute("aria-checked", b.dataset.r === s.radius));
+    [...$("kwTheme").children].forEach(b => b.setAttribute("aria-checked", b.dataset.t === s.theme));
+    localStorage.setItem(KEY, JSON.stringify(s));
+    document.dispatchEvent(new CustomEvent("kiln:theme", { detail: s }));
+  }
+  FONTS.forEach((f, i) => {
+    const b = document.createElement("button");
+    b.role = "radio"; b.textContent = f[0];
+    b.onclick = () => { s.font = i; apply(); };
+    $("kwFonts").appendChild(b);
+  });
+  SWATCH_HUES.forEach(h => {
+    const b = document.createElement("button");
+    b.style.background = `hsl(${h} 70% 55%)`;
+    b.setAttribute("aria-label", `Hue ${h}`);
+    b.onclick = () => { s.hue = h; apply(); };
+    $("kwSwatches").appendChild(b);
+  });
+  $("kwHue").oninput = e => { s.hue = +e.target.value; apply(); };
+  [...$("kwRadius").children].forEach(b => b.onclick = () => { s.radius = b.dataset.r; apply(); });
+  [...$("kwTheme").children].forEach(b => b.onclick = () => { s.theme = b.dataset.t; apply(); });
+  $("kwReset").onclick = () => { s = { ...DEFAULTS }; apply(); };
+  $("kwFab").onclick = () => {
+    const open = $("kwPanel").hidden;
+    $("kwPanel").hidden = !open;
+    $("kwFab").setAttribute("aria-expanded", open);
+  };
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !$("kwPanel").hidden) { $("kwPanel").hidden = true; $("kwFab").setAttribute("aria-expanded", "false"); }
+  });
+  apply();
+
+  // booking demo form
+  const form = $("bookForm");
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+    $("bookCard").classList.add("sent");
+  });
+
+  // scroll reveals
+  const io = ("IntersectionObserver" in window) && !matchMedia("(prefers-reduced-motion: reduce)").matches
+    ? new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }), { threshold: .12 })
+    : null;
+  document.querySelectorAll(".rv").forEach(el => io ? io.observe(el) : el.classList.add("in"));
+})();
+</script>
+</body>
+</html>

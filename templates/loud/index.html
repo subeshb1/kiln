@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loud Club — a creative studio for brands tired of beige</title>
+<meta name="description" content="Loud Club is a creative studio for brands tired of beige. Identity, campaigns, websites, and absurd ideas that work. We make the thing your competitors screenshot into their Slack.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23e33030'/%3E%3Cpath d='M10 6h5l-1.5 14h-2L10 6zm1 16h3v4h-3v-4zM19 6h5l-1.5 14h-2L19 6zm1 16h3v4h-3v-4z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --hue:0; --sat:85%;
+  --font-display:'Sora',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --f-mono:'Space Grotesk',ui-monospace,Menlo,monospace;
+  --radius:2px;
+  --bw:5px; /* the border weight everything hangs off */
+}
+html[data-theme="light"]{
+  --paper:hsl(var(--hue) 12% 96%);
+  --paper-2:hsl(var(--hue) 14% 91%);
+  --ink:hsl(var(--hue) 14% 9%);
+  --ink-2:hsl(var(--hue) 8% 28%);
+  --accent:hsl(var(--hue) var(--sat) 47%);
+  --accent-text:hsl(var(--hue) var(--sat) 33%);
+  --accent-ink:hsl(var(--hue) 20% 98%);
+  --shadow-c:var(--ink);
+  color-scheme:light;
+}
+html[data-theme="dark"]{
+  --paper:hsl(var(--hue) 12% 7%);
+  --paper-2:hsl(var(--hue) 10% 11%);
+  --ink:hsl(var(--hue) 12% 94%);
+  --ink-2:hsl(var(--hue) 6% 70%);
+  --accent:hsl(var(--hue) var(--sat) 55%);
+  --accent-text:hsl(var(--hue) calc(var(--sat) - 10%) 66%);
+  --accent-ink:hsl(var(--hue) 30% 6%);
+  --shadow-c:var(--accent);
+  color-scheme:dark;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);font-size:16.5px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+a{color:inherit}
+:focus-visible{outline:var(--bw) solid var(--accent);outline-offset:3px}
+img{max-width:100%}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,48px)}
+section{padding:clamp(70px,10vw,130px) 0;position:relative}
+
+/* ---------- kiln chip ---------- */
+.kiln-chip{
+  position:fixed;top:14px;left:14px;z-index:1000;
+  font-family:var(--f-mono);font-size:12px;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--ink);background:var(--paper);
+  border:3px solid var(--ink);box-shadow:4px 4px 0 var(--shadow-c);
+  padding:7px 12px;border-radius:var(--radius);
+}
+.kiln-chip:hover{translate:-2px -2px;box-shadow:6px 6px 0 var(--shadow-c)}
+@media (max-width:760px){.kiln-chip{top:auto;bottom:14px;left:14px}}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding:90px 0 60px;border-bottom:var(--bw) solid var(--ink)}
+.hero h1{
+  font-family:var(--font-display);font-weight:800;line-height:.82;
+  font-size:clamp(84px,19vw,270px);letter-spacing:-.03em;text-transform:uppercase;
+  text-shadow:var(--sx,10px) var(--sy,10px) 0 var(--accent);
+  transition:text-shadow .08s linear;
+}
+.hero h1 span{display:block}
+.hero h1 .club{color:var(--accent-text);text-shadow:var(--sx,10px) var(--sy,10px) 0 var(--ink)}
+.hero-sub{
+  margin-top:clamp(26px,4vw,48px);display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap;
+}
+.hero-sub p{max-width:44ch;font-size:clamp(16px,1.6vw,19px);font-weight:500}
+.hero-sub p b{background:var(--accent);color:var(--accent-ink);padding:0 6px;font-weight:700}
+.btn{
+  display:inline-block;font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:.04em;
+  font-size:15px;text-decoration:none;color:var(--ink);background:var(--paper);
+  border:var(--bw) solid var(--ink);box-shadow:8px 8px 0 var(--shadow-c);
+  padding:16px 26px;border-radius:var(--radius);
+}
+.btn:hover{translate:-3px -3px;box-shadow:11px 11px 0 var(--shadow-c)}
+.btn:active{translate:4px 4px;box-shadow:2px 2px 0 var(--shadow-c)}
+.btn-solid{background:var(--accent);color:var(--accent-ink);border-color:var(--ink)}
+/* stickers */
+.sticker{
+  position:absolute;font-family:var(--f-mono);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--paper);border:3px solid var(--ink);padding:8px 12px;border-radius:var(--radius);
+  box-shadow:5px 5px 0 var(--shadow-c);pointer-events:none;z-index:2;
+}
+.sticker.alt{background:var(--accent);color:var(--accent-ink)}
+.st-1{top:16%;right:8%;rotate:8deg}
+.st-2{bottom:26%;right:22%;rotate:-6deg}
+.burst{position:absolute;top:12%;left:56%;width:92px;height:92px;pointer-events:none}
+.burst path{fill:var(--accent)}
+.burst text{font-family:var(--f-mono);font-weight:700;font-size:13px;fill:var(--accent-ink)}
+@media (prefers-reduced-motion:no-preference){
+  .spin-slow{animation:spin 24s linear infinite}
+  @keyframes spin{to{rotate:360deg}}
+}
+@media (max-width:900px){.st-2{display:none}.burst{left:auto;right:4%;top:6%}}
+
+/* ---------- marquee ---------- */
+.tape{
+  border-top:var(--bw) solid var(--ink);border-bottom:var(--bw) solid var(--ink);
+  background:var(--accent);color:var(--accent-ink);
+  overflow:hidden;white-space:nowrap;padding:12px 0;
+  rotate:-1.2deg;scale:1.02;margin:clamp(30px,5vw,54px) -2% 0;
+}
+.tape-track{display:inline-flex;gap:0;will-change:transform}
+.tape span{
+  font-family:var(--font-display);font-weight:800;text-transform:uppercase;font-size:17px;letter-spacing:.1em;
+  padding-right:18px;
+}
+.tape span::after{content:"✱";padding-left:18px}
+@media (prefers-reduced-motion:no-preference){
+  .tape-track{animation:tape 22s linear infinite}
+}
+@keyframes tape{to{transform:translateX(-50%)}}
+.tape-footer{rotate:0deg;background:var(--paper-2);color:var(--ink);border-bottom:0;margin:0}
+
+/* ---------- section headers ---------- */
+.kicker{
+  display:inline-block;font-family:var(--f-mono);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--ink);color:var(--paper);padding:6px 12px;margin-bottom:26px;border-radius:var(--radius);
+}
+h2{
+  font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:-.02em;
+  font-size:clamp(38px,6.5vw,84px);line-height:.95;margin-bottom:20px;
+}
+h2 em{font-style:normal;color:var(--accent-text)}
+.sub{max-width:56ch;color:var(--ink-2);font-size:17px}
+
+/* ---------- what we do ---------- */
+.rows{margin-top:44px;border-top:var(--bw) solid var(--ink);list-style:none}
+.row{
+  display:grid;grid-template-columns:clamp(60px,9vw,120px) 1fr auto;gap:18px;align-items:center;
+  border-bottom:var(--bw) solid var(--ink);padding:clamp(20px,3.4vw,38px) 8px;
+}
+.row .no{font-family:var(--f-mono);font-weight:700;font-size:clamp(15px,2vw,20px);color:var(--accent-text)}
+.row h3{font-family:var(--font-display);font-weight:800;text-transform:uppercase;font-size:clamp(24px,4.6vw,56px);line-height:1;letter-spacing:-.02em}
+.row p{grid-column:2/4;max-width:60ch;color:var(--ink-2);font-size:15.5px}
+.row .arrow{font-size:clamp(24px,3.4vw,42px);font-weight:800}
+.row:hover,.row:focus-within{background:var(--ink);color:var(--paper)}
+.row:hover .no,.row:focus-within .no{color:var(--accent)}
+.row:hover p,.row:focus-within p{color:var(--paper)}
+@media (prefers-reduced-motion:no-preference){
+  .row:hover h3{translate:10px 0}
+  .row h3{transition:translate .15s ease}
+}
+
+/* ---------- work collage ---------- */
+.collage{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(16px,2.4vw,28px);margin-top:52px}
+.job{
+  border:var(--bw) solid var(--ink);border-radius:var(--radius);background:var(--paper);
+  box-shadow:10px 10px 0 var(--shadow-c);overflow:hidden;position:relative;
+}
+.job:nth-child(1){grid-column:1/7;rotate:-1deg}
+.job:nth-child(2){grid-column:7/13;rotate:1.2deg;translate:0 26px}
+.job:nth-child(3){grid-column:1/7;rotate:.8deg}
+.job:nth-child(4){grid-column:7/13;rotate:-1.4deg;translate:0 18px}
+@media (max-width:860px){
+  .job{grid-column:1/13 !important;translate:0 0 !important}
+}
+@media (prefers-reduced-motion:no-preference){
+  .job{transition:translate .18s ease,box-shadow .18s ease,rotate .18s ease}
+  .job:hover{rotate:0deg;translate:-4px -4px !important;box-shadow:15px 15px 0 var(--shadow-c)}
+}
+.job-art{height:210px;border-bottom:var(--bw) solid var(--ink);position:relative;overflow:hidden}
+/* art blocks are theme-static compositions so contrast holds in both modes */
+.ja-1{background:repeating-linear-gradient(-45deg,hsl(var(--hue) var(--sat) 50%) 0 26px,hsl(var(--hue) 15% 95%) 26px 52px)}
+.ja-1 i{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--font-display);font-style:normal;font-weight:800;font-size:74px;color:hsl(var(--hue) 20% 8%);text-transform:uppercase}
+.ja-2{background:var(--paper-2)}
+.ja-2 i{position:absolute;width:120px;height:120px;border-radius:50%;border:var(--bw) solid var(--ink)}
+.ja-2 i:nth-child(1){left:8%;top:18%;background:var(--accent)}
+.ja-2 i:nth-child(2){left:34%;top:32%}
+.ja-2 i:nth-child(3){left:60%;top:12%;background:var(--ink)}
+.ja-3{background:hsl(var(--hue) 12% 9%)}
+.ja-3 i{position:absolute;font-family:var(--f-mono);font-style:normal;font-weight:700;color:hsl(var(--hue) 10% 94%);font-size:15px;white-space:nowrap}
+.ja-3 i.hl{color:hsl(var(--hue) var(--sat) 64%)}
+.ja-3 i:nth-child(1){top:18px;left:14px}
+.ja-3 i:nth-child(2){top:58px;left:44px;color:hsl(var(--hue) var(--sat) 64%)}
+.ja-3 i:nth-child(3){top:98px;left:14px}
+.ja-3 i:nth-child(4){top:138px;left:64px}
+.ja-3 i:nth-child(5){top:178px;left:24px;color:hsl(var(--hue) var(--sat) 64%)}
+.ja-4{background:var(--accent)}
+.ja-4 svg{position:absolute;inset:0;margin:auto}
+.job-body{padding:22px 24px 26px}
+.job-body .client{font-family:var(--f-mono);font-weight:700;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-text)}
+.job-body h3{font-family:var(--font-display);font-weight:800;font-size:24px;text-transform:uppercase;margin:6px 0 8px}
+.job-body p{color:var(--ink-2);font-size:14.5px}
+.job-body p b{color:var(--ink)}
+
+/* ---------- manifesto ---------- */
+.manifesto{border-top:var(--bw) solid var(--ink);background:var(--paper-2)}
+.shout{list-style:none;margin-top:34px}
+.shout li{
+  font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:-.02em;
+  font-size:clamp(34px,7vw,92px);line-height:1.04;
+}
+.shout li:nth-child(odd){color:var(--ink)}
+.shout li:nth-child(even){color:var(--accent-text)}
+.shout li small{display:block;font-family:var(--font-body);font-weight:500;text-transform:none;letter-spacing:0;font-size:15.5px;color:var(--ink-2);max-width:52ch;margin:6px 0 22px}
+
+/* ---------- club ---------- */
+.club-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(16px,2.4vw,26px);margin-top:48px}
+.member{
+  border:var(--bw) solid var(--ink);border-radius:var(--radius);background:var(--paper);
+  box-shadow:8px 8px 0 var(--shadow-c);padding:20px;font-family:var(--f-mono);
+}
+.member h3{font-size:19px;font-weight:700;margin-bottom:10px}
+.member h3::before{content:"~/";color:var(--accent-text)}
+.member p{font-size:13.5px;color:var(--ink-2);line-height:1.75}
+.member p b{color:var(--accent-text);font-weight:700}
+
+/* ---------- contact ---------- */
+.contact{text-align:center;border-top:var(--bw) solid var(--ink)}
+.bigmail{
+  display:inline-block;margin-top:44px;
+  font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:-.01em;
+  font-size:clamp(22px,4.6vw,54px);line-height:1.1;text-decoration:none;
+  color:var(--accent-ink);background:var(--accent);
+  border:var(--bw) solid var(--ink);border-radius:var(--radius);
+  box-shadow:12px 12px 0 var(--shadow-c);
+  padding:clamp(20px,3.4vw,40px) clamp(26px,5vw,64px);
+}
+@media (prefers-reduced-motion:no-preference){
+  .bigmail:hover{animation:wobble .5s ease-in-out infinite}
+  @keyframes wobble{0%,100%{rotate:0deg}25%{rotate:1.2deg}75%{rotate:-1.2deg}}
+}
+.contact .small{margin-top:26px;font-family:var(--f-mono);font-size:13.5px;color:var(--ink-2)}
+.contact .small a{color:var(--accent-text);font-weight:700}
+
+/* ---------- footer ---------- */
+footer{border-top:var(--bw) solid var(--ink)}
+.foot-meta{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between;padding:26px clamp(18px,4vw,48px);font-family:var(--f-mono);font-size:12.5px;color:var(--ink-2)}
+.foot-meta b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<a class="kiln-chip" href="../">&larr; Kiln templates</a>
+
+<header class="hero" id="top">
+  <div class="wrap" style="position:relative">
+    <span class="sticker st-1" aria-hidden="true">Est. 2024 · No beige</span>
+    <span class="sticker alt st-2" aria-hidden="true">100% decaf-free</span>
+    <svg class="burst spin-slow" viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M50 0 58 34 88 12 66 42 100 50 66 58 88 88 58 66 50 100 42 66 12 88 34 58 0 50 34 42 12 12 42 34Z"/>
+    </svg>
+    <h1 aria-label="Loud Club" id="shoutname">
+      <span aria-hidden="true">Loud</span>
+      <span class="club" aria-hidden="true">Club</span>
+    </h1>
+    <div class="hero-sub">
+      <p>A creative studio for brands tired of beige. We make the thing your
+         competitors <b>screenshot into their Slack</b> with the message
+         “why isn’t ours like this”.</p>
+      <a class="btn btn-solid" href="#contact">Start something loud</a>
+    </div>
+  </div>
+  <div class="tape" aria-hidden="true">
+    <div class="tape-track">
+      <span>Identity</span><span>Campaigns</span><span>Websites</span><span>Absurd ideas that work</span><span>No beige</span><span>No lorem</span>
+      <span>Identity</span><span>Campaigns</span><span>Websites</span><span>Absurd ideas that work</span><span>No beige</span><span>No lorem</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="services">
+    <div class="wrap">
+      <span class="kicker">What we do</span>
+      <h2>Four things. <em>Zero autopilot.</em></h2>
+      <ul class="rows">
+        <li class="row" tabindex="0">
+          <span class="no" aria-hidden="true">01</span>
+          <h3>Identity</h3>
+          <span class="arrow" aria-hidden="true">→</span>
+          <p>Logos, systems, voices. Built so strong you could pick your brand out of a police lineup with the logo covered.</p>
+        </li>
+        <li class="row" tabindex="0">
+          <span class="no" aria-hidden="true">02</span>
+          <h3>Campaigns</h3>
+          <span class="arrow" aria-hidden="true">→</span>
+          <p>Launches, stunts, seasonal noise. The kind people repost without being paid to.</p>
+        </li>
+        <li class="row" tabindex="0">
+          <span class="no" aria-hidden="true">03</span>
+          <h3>Websites</h3>
+          <span class="arrow" aria-hidden="true">→</span>
+          <p>Fast, accessible, and impossible to confuse with a template — ironic, given where you're reading this.</p>
+        </li>
+        <li class="row" tabindex="0">
+          <span class="no" aria-hidden="true">04</span>
+          <h3>Absurd ideas that work</h3>
+          <span class="arrow" aria-hidden="true">→</span>
+          <p>The pitch that makes legal nervous and the CFO smile three months later. Our favourite deliverable.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="work" style="padding-top:0">
+    <div class="wrap">
+      <span class="kicker">Selected work</span>
+      <h2>Proof, not <em>promises.</em></h2>
+      <div class="collage">
+        <article class="job">
+          <div class="job-art ja-1" aria-hidden="true"><i>SOUR</i></div>
+          <div class="job-body">
+            <span class="client">Sour Milk · oat drink</span>
+            <h3>The un-beige rebrand</h3>
+            <p>Shelf test after relaunch: <b>+312% first-glance pickups</b>. The carton now argues with you, politely.</p>
+          </div>
+        </article>
+        <article class="job">
+          <div class="job-art ja-2" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="job-body">
+            <span class="client">Hotel Norma · identity</span>
+            <h3>A hotel with a wink</h3>
+            <p>Signage, keycards, and do-not-disturb copy people steal on purpose. <b>Direct bookings up 41%</b>.</p>
+          </div>
+        </article>
+        <article class="job">
+          <div class="job-art ja-3" aria-hidden="true">
+            <i>$ blip pay --rent</i><i>&gt; sent. remaining: joy</i><i>$ blip roast --spending</i><i>&gt; four coffees? bold.</i><i>$ blip savings +12%</i>
+          </div>
+          <div class="job-body">
+            <span class="client">Blip · budgeting app</span>
+            <h3>The roast-mode campaign</h3>
+            <p>A budgeting app that teases you gently. <b>2.1M organic views</b>, zero ad spend, one apology to a barista.</p>
+          </div>
+        </article>
+        <article class="job">
+          <div class="job-art ja-4" aria-hidden="true">
+            <svg width="150" height="150" viewBox="0 0 100 100"><path d="M50 4 61 36 95 36 68 56 78 90 50 70 22 90 32 56 5 36 39 36Z" fill="var(--ink)"/></svg>
+          </div>
+          <div class="job-body">
+            <span class="client">Gum Club · website</span>
+            <h3>A site you can chew on</h3>
+            <p>Product pages with actual personality. <b>Cart conversion doubled</b>; bounce rate now mostly people’s jaws.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="manifesto">
+    <div class="wrap">
+      <span class="kicker">The manifesto</span>
+      <h2>Read this <em>out loud.</em></h2>
+      <ul class="shout">
+        <li>Safe is expensive.
+          <small>Blending in costs more than any agency ever will — you just pay for it in being forgotten.</small></li>
+        <li>Taste is a strategy.
+          <small>“Data-driven” and “gorgeous” are not opposites. We ship both or we don’t ship.</small></li>
+        <li>Funny is serious work.
+          <small>Making someone feel something in 1.5 seconds is the hardest brief in business.</small></li>
+        <li>Loud ≠ shouting.
+          <small>Loud is being impossible to mistake for anyone else — at any volume.</small></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="club" style="border-top:var(--bw) solid var(--ink)">
+    <div class="wrap">
+      <span class="kicker">The club</span>
+      <h2>Four humans. <em>No suits.</em></h2>
+      <div class="club-grid">
+        <div class="member">
+          <h3>mo</h3>
+          <p>$ role: <b>creative director</b><br>$ previously: big agencies, bigger regrets<br>$ known for: killing beige on sight</p>
+        </div>
+        <div class="member">
+          <h3>tash</h3>
+          <p>$ role: <b>design lead</b><br>$ previously: editorial, type foundry<br>$ known for: kerning your tattoo from across the room</p>
+        </div>
+        <div class="member">
+          <h3>rj</h3>
+          <p>$ role: <b>engineer</b><br>$ previously: fintech (recovered)<br>$ known for: 100 Lighthouse scores as a personality</p>
+        </div>
+        <div class="member">
+          <h3>petra</h3>
+          <p>$ role: <b>strategy</b><br>$ previously: brand consultancy<br>$ known for: asking “but why” until it gets good</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <span class="kicker">Say it</span>
+      <h2>Got something <em>worth shouting?</em></h2>
+      <p class="sub" style="margin:0 auto">One email. Tell us what you make and what you’re tired of.
+         We reply to every message that isn’t beige.</p>
+      <a class="bigmail" href="mailto:uproar.creations.sb@gmail.com?subject=Something%20loud">Email the club →</a>
+      <p class="small">Allergic to email? Fine: <a href="mailto:uproar.creations.sb@gmail.com">uproar.creations.sb@gmail.com</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="tape tape-footer" aria-hidden="true">
+    <div class="tape-track">
+      <span>Loud</span><span>Loud</span><span>Loud</span><span>Loud</span><span>Loud</span><span>Loud</span><span>Loud</span><span>Loud</span>
+      <span>Loud</span><span>Loud</span><span>Loud</span><span>Loud</span><span>Loud</span><span>Loud</span><span>Loud</span><span>Loud</span>
+    </div>
+  </div>
+  <div class="foot-meta">
+    <span><b>Loud Club</b> is a fictional studio — this page is a configurable template by <a href="../" style="color:inherit"><b>Kiln Studio</b></a>.</span>
+    <span>No photography. Type did all of this.</span>
+  </div>
+</footer>
+
+<div class="kw" id="kw">
+  <button class="kw-fab" id="kwFab" aria-expanded="false" aria-controls="kwPanel">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.5 1.5M16.9 16.9l1.5 1.5M5.6 18.4l1.5-1.5M16.9 7.1l1.5-1.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+    Make it yours
+  </button>
+  <div class="kw-panel" id="kwPanel" role="dialog" aria-label="Customize this template" hidden>
+    <div class="kw-row kw-head">
+      <strong>Customize</strong>
+      <span class="kw-note">live — this whole site is tokens</span>
+    </div>
+    <div class="kw-row">
+      <label for="kwHue">Brand hue</label>
+      <input type="range" id="kwHue" min="0" max="360" step="1">
+      <div class="kw-swatches" id="kwSwatches"></div>
+    </div>
+    <div class="kw-row">
+      <label>Type pairing</label>
+      <div class="kw-seg" id="kwFonts" role="radiogroup" aria-label="Font pairing"></div>
+    </div>
+    <div class="kw-row">
+      <label>Corners</label>
+      <div class="kw-seg" id="kwRadius" role="radiogroup" aria-label="Corner radius">
+        <button data-r="2px" role="radio">Sharp</button>
+        <button data-r="14px" role="radio">Soft</button>
+        <button data-r="26px" role="radio">Round</button>
+      </div>
+    </div>
+    <div class="kw-row">
+      <label>Mode</label>
+      <div class="kw-seg" id="kwTheme" role="radiogroup" aria-label="Color mode">
+        <button data-t="dark" role="radio">Dark</button>
+        <button data-t="light" role="radio">Light</button>
+      </div>
+    </div>
+    <button class="kw-reset" id="kwReset">Reset to default</button>
+  </div>
+</div>
+
+<style>
+.kw{position:fixed;right:18px;bottom:18px;z-index:999;font-family:var(--font-body);}
+.kw-fab{display:flex;align-items:center;gap:8px;border:1px solid hsl(var(--hue) var(--sat) 60% / .5);
+  background:hsl(var(--hue) var(--sat) 55% / .14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:inherit;font:inherit;font-size:13px;font-weight:600;letter-spacing:.02em;
+  padding:10px 16px;border-radius:999px;cursor:pointer;box-shadow:0 6px 24px hsl(var(--hue) var(--sat) 40% / .25);}
+.kw-fab:hover{background:hsl(var(--hue) var(--sat) 55% / .24);}
+.kw-fab:focus-visible,.kw-panel :focus-visible{outline:2px solid hsl(var(--hue) var(--sat) 60%);outline-offset:2px;}
+.kw-panel{position:absolute;right:0;bottom:52px;width:264px;padding:16px;border-radius:calc(var(--radius)*1.1);
+  border:1px solid hsl(var(--hue) 20% 50% / .25);background:var(--kw-bg,hsl(var(--hue) 15% 10% / .92));
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 50px rgb(0 0 0/.35);}
+html[data-theme="light"] .kw-panel{--kw-bg:hsl(var(--hue) 30% 98% / .92);}
+.kw-row{margin-bottom:14px;display:flex;flex-direction:column;gap:7px;}
+.kw-head{flex-direction:row;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+.kw-note{font-size:10.5px;opacity:.6;}
+.kw-row label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;opacity:.65;}
+.kw-row input[type=range]{width:100%;accent-color:hsl(var(--hue) var(--sat) 55%);}
+.kw-swatches{display:flex;gap:6px;}
+.kw-swatches button{width:22px;height:22px;border-radius:50%;border:1px solid rgb(128 128 128/.35);cursor:pointer;padding:0;}
+.kw-seg{display:flex;gap:4px;background:rgb(128 128 128/.12);padding:3px;border-radius:calc(var(--radius)*.6);}
+.kw-seg button{flex:1;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:600;
+  padding:6px 4px;border-radius:calc(var(--radius)*.45);cursor:pointer;opacity:.7;}
+.kw-seg button[aria-checked="true"]{background:hsl(var(--hue) var(--sat) 55% / .25);opacity:1;
+  box-shadow:inset 0 0 0 1px hsl(var(--hue) var(--sat) 60% / .5);}
+.kw-reset{width:100%;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;
+  opacity:.6;cursor:pointer;padding:6px;text-decoration:underline;}
+.kw-reset:hover{opacity:1;}
+@media (max-width:560px){.kw{right:12px;bottom:12px}.kw-panel{width:min(264px,calc(100vw - 24px))}}
+</style>
+
+<script>
+(() => {
+  /* ==== CONFIG — the only part a template changes ==== */
+  const KEY = "kiln.tpl.loud.v1";
+  const DEFAULTS = { hue: 0, sat: "85%", radius: "2px", theme: "light", font: 0 };
+  const SWATCH_HUES = [0, 210, 262, 330, 45, 145];
+  const FONTS = [
+    ["Modern", "'Sora',sans-serif", "'Inter',sans-serif"],
+    ["Editorial", "'Fraunces',serif", "'Inter',sans-serif"],
+    ["Mono", "'Space Grotesk',sans-serif", "'Space Grotesk',sans-serif"],
+  ];
+  /* ==== END CONFIG ==== */
+
+  const root = document.documentElement;
+  const $ = id => document.getElementById(id);
+  let s = { ...DEFAULTS };
+  try { s = { ...DEFAULTS, ...JSON.parse(localStorage.getItem(KEY) || "{}") }; } catch {}
+
+  function apply() {
+    root.style.setProperty("--hue", s.hue);
+    root.style.setProperty("--radius", s.radius);
+    root.style.setProperty("--font-display", FONTS[s.font][1]);
+    root.style.setProperty("--font-body", FONTS[s.font][2]);
+    root.dataset.theme = s.theme;
+    $("kwHue").value = s.hue;
+    [...$("kwFonts").children].forEach((b, i) => b.setAttribute("aria-checked", i === s.font));
+    [...$("kwRadius").children].forEach(b => b.setAttribute("aria-checked", b.dataset.r === s.radius));
+    [...$("kwTheme").children].forEach(b => b.setAttribute("aria-checked", b.dataset.t === s.theme));
+    localStorage.setItem(KEY, JSON.stringify(s));
+    document.dispatchEvent(new CustomEvent("kiln:theme", { detail: s }));
+  }
+  FONTS.forEach((f, i) => {
+    const b = document.createElement("button");
+    b.role = "radio"; b.textContent = f[0];
+    b.onclick = () => { s.font = i; apply(); };
+    $("kwFonts").appendChild(b);
+  });
+  SWATCH_HUES.forEach(h => {
+    const b = document.createElement("button");
+    b.style.background = `hsl(${h} 70% 55%)`;
+    b.setAttribute("aria-label", `Hue ${h}`);
+    b.onclick = () => { s.hue = h; apply(); };
+    $("kwSwatches").appendChild(b);
+  });
+  $("kwHue").oninput = e => { s.hue = +e.target.value; apply(); };
+  [...$("kwRadius").children].forEach(b => b.onclick = () => { s.radius = b.dataset.r; apply(); });
+  [...$("kwTheme").children].forEach(b => b.onclick = () => { s.theme = b.dataset.t; apply(); });
+  $("kwReset").onclick = () => { s = { ...DEFAULTS }; apply(); };
+  $("kwFab").onclick = () => {
+    const open = $("kwPanel").hidden;
+    $("kwPanel").hidden = !open;
+    $("kwFab").setAttribute("aria-expanded", open);
+  };
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !$("kwPanel").hidden) { $("kwPanel").hidden = true; $("kwFab").setAttribute("aria-expanded", "false"); }
+  });
+  apply();
+})();
+</script>
+
+<script>
+(() => {
+  // cursor-reactive offset shadow on the hero name
+  if (!matchMedia("(prefers-reduced-motion: no-preference)").matches) return;
+  if (!matchMedia("(hover: hover)").matches) return;
+  const hero = document.querySelector(".hero");
+  const name = document.getElementById("shoutname");
+  let raf = 0, ev = null;
+  const update = () => {
+    raf = 0;
+    const r = hero.getBoundingClientRect();
+    const px = (ev.clientX - r.left) / r.width - .5;
+    const py = (ev.clientY - r.top) / r.height - .5;
+    name.style.setProperty("--sx", (10 - px * 22).toFixed(1) + "px");
+    name.style.setProperty("--sy", (10 - py * 22).toFixed(1) + "px");
+  };
+  hero.addEventListener("pointermove", e => { ev = e; if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+  hero.addEventListener("pointerleave", () => { name.style.setProperty("--sx", "10px"); name.style.setProperty("--sy", "10px"); });
+})();
+</script>
+
+</body>
+</html>

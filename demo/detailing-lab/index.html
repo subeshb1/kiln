@@ -1,195 +1,285 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en-GB" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <meta name="description" content="Redesign concept for the Detailing Lab Yorkshire landing page — proposed by Subesh Bhandari. Demonstrates a conversion-first layout: inquiry form above the fold, anchor pricing, real work up front.">
 <title>Detailing Lab Yorkshire — Redesign Concept</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0f16'/%3E%3Cpath d='M16 5c4 5.4 7 8.8 7 12.6A7 7 0 0 1 9 17.6C9 13.8 12 10.4 16 5z' fill='%234da3ff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0d0c0a; --bg2:#141210; --panel:#1a1815; --line:#2a261f;
-  --ink:#f4f0e8; --ink2:#b3aa9b; --ink3:#7d7568;
-  --amber:#f0a028; --amber-deep:#c77f12; --amber-ink:#1d1304;
-  --green:#4ade80;
-  --r:14px; --r-lg:20px;
-  --f:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;
+  --hue:210; --sat:70%;
+  --font-display:'Sora',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --radius:14px;
+  --wa:#1faa53; /* WhatsApp brand green — fixed by identity, not themed */
+}
+html[data-theme="dark"]{
+  --bg:hsl(var(--hue) 20% 6%);
+  --bg2:hsl(var(--hue) 17% 8%);
+  --panel:hsl(var(--hue) 15% 10%);
+  --panel-2:hsl(var(--hue) 14% 13%);
+  --ink:hsl(var(--hue) 15% 95%);
+  --ink2:hsl(var(--hue) 10% 72%);
+  --ink3:hsl(var(--hue) 8% 60%);
+  --line:hsl(var(--hue) 35% 62% / .16);
+  --accent:hsl(var(--hue) var(--sat) 58%);
+  --accent-strong:hsl(var(--hue) var(--sat) 68%);
+  --accent-ink:hsl(var(--hue) 45% 7%);
+  --accent-soft:hsl(var(--hue) var(--sat) 55% / .13);
+  --glass:hsl(var(--hue) 20% 7% / .72);
+  --glow:hsl(var(--hue) 80% 50% / .16);
+  --shadow:0 24px 60px hsl(var(--hue) 50% 2% / .55);
+  --ok:hsl(145 55% 55%);
+  --grain-alpha:.05;
+  color-scheme:dark;
+}
+html[data-theme="light"]{
+  --bg:hsl(var(--hue) 30% 97%);
+  --bg2:hsl(var(--hue) 26% 94%);
+  --panel:hsl(var(--hue) 32% 99.4%);
+  --panel-2:hsl(var(--hue) 26% 95%);
+  --ink:hsl(var(--hue) 35% 10%);
+  --ink2:hsl(var(--hue) 12% 31%);
+  --ink3:hsl(var(--hue) 9% 39%);
+  --line:hsl(var(--hue) 30% 25% / .15);
+  --accent:hsl(var(--hue) var(--sat) 33%);
+  --accent-strong:hsl(var(--hue) var(--sat) 27%);
+  --accent-ink:hsl(var(--hue) 30% 98%);
+  --accent-soft:hsl(var(--hue) var(--sat) 40% / .1);
+  --glass:hsl(var(--hue) 30% 97% / .75);
+  --glow:hsl(var(--hue) 75% 55% / .14);
+  --shadow:0 24px 50px hsl(var(--hue) 40% 30% / .16);
+  --ok:hsl(145 60% 26%);
+  --grain-alpha:.035;
+  color-scheme:light;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--font-body);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{ /* ambient field */
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(56rem 38rem at 88% -10%, var(--glow), transparent 68%),
+    radial-gradient(46rem 34rem at -12% 70%, var(--glow), transparent 70%);
+}
+.grain{
+  position:fixed;inset:0;z-index:2147483000;pointer-events:none;opacity:var(--grain-alpha);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 img{max-width:100%;display:block}
 a{color:inherit}
-:is(a,button,input,select):focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:4px}
-.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+:is(a,button,input,select):focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* reveal on scroll */
+@media (prefers-reduced-motion:no-preference){
+  html.js [data-reveal]{opacity:0;translate:0 20px;transition:opacity .7s ease,translate .7s cubic-bezier(.2,.75,.2,1)}
+  html.js [data-reveal].in{opacity:1;translate:0 0}
+}
 
 /* concept ribbon */
 .ribbon{
-  background:var(--amber);color:var(--amber-ink);
+  background:var(--accent);color:var(--accent-ink);
   font-size:12.5px;font-weight:700;text-align:center;padding:8px 14px;letter-spacing:.02em;
+  position:relative;z-index:60;
 }
-.ribbon a{color:inherit}
 
 /* header */
 header.top{
-  position:sticky;top:0;z-index:40;
-  background:rgba(13,12,10,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:50;
+  background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border-bottom:1px solid var(--line);
 }
 .top .wrap{display:flex;align-items:center;gap:18px;padding-top:13px;padding-bottom:13px}
-.brand{font-weight:800;letter-spacing:.12em;font-size:14px;text-transform:uppercase}
-.brand em{font-style:normal;color:var(--amber)}
+.brand{font-family:var(--font-display);font-weight:800;letter-spacing:.12em;font-size:14px;text-transform:uppercase}
+.brand em{font-style:normal;color:var(--accent-strong)}
 .top nav{margin-left:auto;display:flex;gap:20px;align-items:center}
-.top nav a{font-size:13.5px;color:var(--ink2);text-decoration:none}
-.top nav a:hover{color:var(--ink)}
+.top nav a.navlink{font-size:13.5px;color:var(--ink2);text-decoration:none}
+.top nav a.navlink:hover{color:var(--ink)}
 .btn{
   display:inline-block;text-decoration:none;text-align:center;cursor:pointer;
-  font-family:var(--f);font-weight:700;font-size:15px;border:0;
-  padding:13px 24px;border-radius:12px;transition:transform .12s,filter .2s;
+  font-family:var(--font-display);font-weight:700;font-size:15px;border:0;
+  padding:13px 24px;border-radius:calc(var(--radius) * .85);
+  transition:transform .12s,filter .2s,box-shadow .3s;
 }
 .btn:active{transform:scale(.97)}
-.btn-amber{background:linear-gradient(180deg,var(--amber),var(--amber-deep));color:var(--amber-ink)}
-.btn-amber:hover{filter:brightness(1.07)}
-.btn-ghost{border:1.5px solid #ffffff33;color:var(--ink)}
-.btn-ghost:hover{border-color:#ffffff66}
-.btn-wa{background:#1faa53;color:#fff}
+.btn-accent{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 26px hsl(var(--hue) var(--sat) 45% / .35)}
+.btn-accent:hover{filter:brightness(1.08)}
+.btn-ghost{border:1.5px solid var(--line);color:var(--ink);background:var(--glass)}
+.btn-ghost:hover{border-color:var(--ink3)}
+.btn-wa{background:var(--wa);color:#fff}
 .btn-wa:hover{filter:brightness(1.08)}
 .top .btn{padding:9px 16px;font-size:13.5px}
 @media(max-width:760px){.top nav a.navlink{display:none}}
 
-/* hero */
+/* hero — always a dark veiled photo, in both themes */
 .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
 .hero-bg{position:absolute;inset:0;z-index:0}
-.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 62%;opacity:.42}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 55%}
 .hero-bg::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(100deg,rgba(13,12,10,.96) 30%,rgba(13,12,10,.55) 65%,rgba(13,12,10,.85)),
-             linear-gradient(0deg,var(--bg) 0%,transparent 30%)}
-.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:44px;padding-top:72px;padding-bottom:72px;align-items:center}
-@media(max-width:880px){.hero .wrap{grid-template-columns:1fr;gap:30px;padding-top:44px;padding-bottom:44px}}
-.kicker{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
-h1{font-size:clamp(34px,5.4vw,56px);line-height:1.06;font-weight:800;letter-spacing:-.015em;margin-bottom:16px;text-wrap:balance}
-h1 em{font-style:normal;color:var(--amber)}
-.hero p.sub{color:var(--ink2);font-size:17.5px;max-width:44ch;margin-bottom:22px}
-.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
-.chip{font-size:12.5px;font-weight:600;color:var(--ink2);border:1px solid var(--line);background:rgba(26,24,21,.6);border-radius:999px;padding:6px 13px}
-.chip b{color:var(--amber)}
+  background:linear-gradient(100deg,hsl(var(--hue) 25% 5% / .94) 26%,hsl(var(--hue) 25% 5% / .55) 62%,hsl(var(--hue) 25% 5% / .85)),
+             linear-gradient(0deg,hsl(var(--hue) 25% 5% / .85) 0%,transparent 34%)}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.12fr .88fr;gap:46px;padding-top:84px;padding-bottom:84px;align-items:center}
+@media(max-width:880px){.hero .wrap{grid-template-columns:1fr;gap:32px;padding-top:46px;padding-bottom:46px}}
+/* hero text sits on the photo veil — theme-independent light ink */
+.hero-copy{color:hsl(var(--hue) 12% 95%)}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(var(--hue) var(--sat) 70%);margin-bottom:16px}
+.kicker::before{content:"";width:22px;height:2px;background:hsl(var(--hue) var(--sat) 70%)}
+h1{font-family:var(--font-display);font-size:clamp(38px,5.8vw,64px);line-height:1.02;font-weight:800;letter-spacing:-.02em;margin-bottom:18px;text-wrap:balance}
+h1 em{font-style:normal;color:hsl(var(--hue) var(--sat) 70%)}
+.hero p.sub{color:hsl(var(--hue) 10% 82%);font-size:17.5px;max-width:44ch;margin-bottom:22px}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.chip{font-size:12.5px;font-weight:600;color:hsl(var(--hue) 10% 88%);border:1px solid hsl(var(--hue) 30% 70% / .3);background:hsl(var(--hue) 25% 8% / .55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:6px 13px}
+.chip b{color:hsl(var(--hue) var(--sat) 72%)}
 .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.hero .btn-accent{background:hsl(var(--hue) var(--sat) 58%);color:hsl(var(--hue) 45% 7%)}
+.hero .btn-ghost{border-color:hsl(var(--hue) 30% 70% / .4);color:hsl(var(--hue) 12% 95%);background:hsl(var(--hue) 25% 8% / .4)}
 
 /* quote form card */
 .quote{
-  background:linear-gradient(180deg,#1c1a16,#161411);
-  border:1px solid var(--line);border-radius:var(--r-lg);
-  padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.5);
+  background:var(--panel);
+  border:1px solid var(--line);border-radius:calc(var(--radius) * 1.5);
+  padding:28px;box-shadow:var(--shadow);
 }
-.quote h2{font-size:19px;margin-bottom:4px}
+.quote h2{font-family:var(--font-display);font-size:19px;margin-bottom:4px}
 .quote .hint{font-size:13px;color:var(--ink3);margin-bottom:18px}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
 .field input,.field select{
-  width:100%;padding:12px 14px;border-radius:10px;font:inherit;font-size:15px;
+  width:100%;padding:12px 14px;border-radius:calc(var(--radius) * .7);font:inherit;font-size:15px;
   background:var(--bg);border:1px solid var(--line);color:var(--ink);
 }
 .field input::placeholder{color:var(--ink3)}
-.field input:focus,.field select:focus{outline:none;border-color:var(--amber)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .quote .btn{width:100%;margin-top:6px}
 .alt{margin-top:12px;text-align:center;font-size:13px;color:var(--ink3)}
-.alt a{color:#3ecf74;font-weight:700;text-decoration:none}
+.alt a{color:var(--ok);font-weight:700;text-decoration:none}
 .done{display:none;text-align:center;padding:26px 6px}
-.done .tick{width:52px;height:52px;border-radius:50%;background:rgba(74,222,128,.14);color:var(--green);display:grid;place-items:center;margin:0 auto 14px;font-size:24px}
-.done h3{margin-bottom:6px}
+.done .tick{width:52px;height:52px;border-radius:50%;background:hsl(145 55% 45% / .15);color:var(--ok);display:grid;place-items:center;margin:0 auto 14px;font-size:24px}
+.done h3{font-family:var(--font-display);margin-bottom:6px}
 .done p{font-size:14px;color:var(--ink2)}
+.done a{color:var(--ok);font-weight:700}
 .demo-note{margin-top:14px;font-size:11.5px;color:var(--ink3);text-align:center;border-top:1px dashed var(--line);padding-top:12px}
 
 /* sections */
-section{padding:72px 0}
+section{padding:78px 0}
 section+section{border-top:1px solid var(--line)}
-.eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
-.eyebrow::after{content:".";color:var(--amber)}
-h2.sec{font-size:clamp(24px,3.4vw,36px);font-weight:800;letter-spacing:-.01em;margin-bottom:10px;text-wrap:balance}
-.lede{color:var(--ink2);max-width:56ch}
+.eyebrow{font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.eyebrow::after{content:".";color:var(--accent-strong)}
+h2.sec{font-family:var(--font-display);font-size:clamp(26px,3.8vw,42px);font-weight:800;letter-spacing:-.015em;margin-bottom:12px;text-wrap:balance}
+.lede{color:var(--ink2);max-width:58ch}
 
 /* reviews */
-.stars{color:var(--amber);letter-spacing:2px}
-.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.stars{color:var(--accent-strong);letter-spacing:2px}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
 @media(max-width:760px){.rev-grid{grid-template-columns:1fr}}
-.rev{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.rev{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;transition:translate .3s ease,box-shadow .3s ease}
+.rev:hover{translate:0 -3px;box-shadow:var(--shadow)}
 .rev p{font-size:14.5px;color:var(--ink2);margin:10px 0 12px}
 .rev b{font-size:13.5px}
 .rev span{font-size:12.5px;color:var(--ink3)}
 
 /* gallery */
-.gal{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:32px}
+.gal{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:34px}
 @media(max-width:760px){.gal{grid-template-columns:1fr}}
-.shot{position:relative;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);background:var(--panel)}
+.shot{position:relative;border-radius:calc(var(--radius) * 1.4);overflow:hidden;border:1px solid var(--line);background:var(--panel)}
 .shot img{width:100%;height:100%;object-fit:cover;aspect-ratio:16/10;transition:transform .5s ease}
-.shot:hover img{transform:scale(1.03)}
-.shot .cap{position:absolute;left:0;right:0;bottom:0;padding:30px 18px 14px;font-size:13px;font-weight:600;
-  background:linear-gradient(0deg,rgba(10,9,7,.88),transparent)}
+@media (prefers-reduced-motion:no-preference){.shot:hover img{transform:scale(1.03)}}
+.shot .cap{position:absolute;left:0;right:0;bottom:0;padding:34px 18px 14px;font-size:13px;font-weight:600;
+  color:hsl(var(--hue) 10% 95%);
+  background:linear-gradient(0deg,hsl(var(--hue) 30% 4% / .9),transparent)}
 .gal .side{display:grid;gap:16px}
 .gal .side .shot img{aspect-ratio:16/9.4}
+.own-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:760px){.own-row{grid-template-columns:1fr}}
+.own-row .shot img{aspect-ratio:16/8.5}
+.img-note{margin-top:14px;font-size:12px;color:var(--ink3)}
 
-/* pricing */
-.price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
-@media(max-width:980px){.price-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.price-grid{grid-template-columns:1fr}}
-.pkg{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px;display:flex;flex-direction:column;gap:10px}
-.pkg.hot{border-color:var(--amber);box-shadow:inset 0 0 0 1px var(--amber)}
-.pkg .tag{align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);background:rgba(240,160,40,.12);border-radius:999px;padding:3px 10px}
-.pkg h3{font-size:17px}
+/* pricing bento */
+.price-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:34px}
+.pkg{background:var(--panel);border:1px solid var(--line);border-radius:calc(var(--radius) * 1.4);padding:26px;display:flex;flex-direction:column;gap:10px;grid-column:span 2;transition:translate .3s ease,box-shadow .3s ease}
+.pkg:hover{translate:0 -3px;box-shadow:var(--shadow)}
+.pkg.hot{
+  grid-column:span 4;grid-row:span 1;
+  border-color:hsl(var(--hue) var(--sat) 50% / .5);
+  background:linear-gradient(135deg,var(--accent-soft),transparent 55%),var(--panel);
+}
+@media(max-width:980px){.pkg,.pkg.hot{grid-column:span 3}}
+@media(max-width:640px){.pkg,.pkg.hot{grid-column:span 6}}
+.pkg .tag{align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-strong);background:var(--accent-soft);border-radius:999px;padding:3px 10px}
+.pkg h3{font-family:var(--font-display);font-size:17px}
 .pkg .time{font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em}
 .pkg p{font-size:13.5px;color:var(--ink2);flex:1}
-.pkg .from{font-size:24px;font-weight:800}
+.pkg .from{font-family:var(--font-display);font-size:26px;font-weight:800}
 .pkg .from small{font-size:12px;color:var(--ink3);font-weight:600}
 .pkg .btn{width:100%;padding:11px;font-size:14px}
 .price-note{margin-top:14px;font-size:12px;color:var(--ink3)}
 
 /* faq */
-.faq{max-width:720px;margin-top:26px}
-details{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:10px}
+.faq{max-width:720px;margin-top:28px}
+details{border:1px solid var(--line);border-radius:calc(var(--radius) * .85);background:var(--panel);margin-bottom:10px}
 summary{cursor:pointer;list-style:none;padding:16px 18px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;gap:12px}
-summary::after{content:"+";color:var(--amber);font-size:19px;font-weight:400}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--accent-strong);font-size:19px;font-weight:400}
 details[open] summary::after{content:"–"}
 details div{padding:0 18px 16px;font-size:14.5px;color:var(--ink2)}
 
 /* footer */
-footer{border-top:1px solid var(--line);padding:40px 0 110px;background:var(--bg2)}
+footer{border-top:1px solid var(--line);padding:42px 0 118px;background:var(--bg2)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;font-size:13.5px;color:var(--ink3)}
 footer a{color:var(--ink2)}
+footer b{color:var(--ink)}
+.foot-note{width:100%;font-size:12px;margin-top:6px}
 
 /* sticky mobile bar */
 .bar{
-  position:fixed;left:0;right:0;bottom:0;z-index:50;display:none;
+  position:fixed;left:0;right:0;bottom:0;z-index:55;display:none;
   gap:8px;padding:10px 12px calc(env(safe-area-inset-bottom) + 10px);
-  background:rgba(13,12,10,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border-top:1px solid var(--line);
 }
 .bar .btn{flex:1;padding:12px 8px;font-size:14px}
 @media(max-width:760px){.bar{display:flex}}
 
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* customizer fab must clear the sticky mobile bar */
+@media(max-width:760px){.kw{bottom:calc(env(safe-area-inset-bottom) + 74px) !important}}
 </style>
 </head>
 <body>
+
+<div class="grain" aria-hidden="true"></div>
 
 <div class="ribbon">Redesign concept for Detailing Lab Yorkshire — proposed by Subesh Bhandari. This is a demonstration, not the live site.</div>
 
 <header class="top">
   <div class="wrap">
     <div class="brand">Detailing <em>Lab</em> Yorkshire</div>
-    <nav>
+    <nav aria-label="Main">
       <a class="navlink" href="#results">Results</a>
       <a class="navlink" href="#pricing">Pricing</a>
       <a class="navlink" href="#faq">FAQ</a>
-      <a class="btn btn-amber" href="#quote">Get a quote</a>
+      <a class="btn btn-accent" href="#quote">Get a quote</a>
     </nav>
   </div>
 </header>
 
+<main>
 <section class="hero" style="padding:0;border-top:0">
-  <div class="hero-bg"><img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/xP6BElg81fF4LMpxumdh/media/6a698e87b7fe5a8e31a717c0.jpg" alt="" fetchpriority="high"></div>
+  <div class="hero-bg" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1605164598708-25701594473e?auto=format&fit=crop&w=2200&q=80" alt="" width="2200" height="1467" fetchpriority="high">
+  </div>
   <div class="wrap">
-    <div>
+    <div class="hero-copy">
       <span class="kicker">Mobile &amp; indoor studio · Yorkshire</span>
       <h1>Your car, back to <em>showroom finish</em> — at your door.</h1>
       <p class="sub">Paint correction, ceramic coating and deep cleans by a fully insured detailer. We come to your home or workplace, or you visit our indoor studio.</p>
@@ -200,7 +290,7 @@ footer a{color:var(--ink2)}
         <span class="chip">Satisfaction promise</span>
       </div>
       <div class="cta-row">
-        <a class="btn btn-amber" href="#quote">Get my free quote</a>
+        <a class="btn btn-accent" href="#quote">Get my free quote</a>
         <a class="btn btn-ghost" href="#results">See real results</a>
       </div>
     </div>
@@ -226,57 +316,68 @@ footer a{color:var(--ink2)}
             <option>Multi stage correction + ceramic</option>
           </select>
         </div>
-        <button class="btn btn-amber" type="submit">Send my quote request</button>
+        <button class="btn btn-accent" type="submit">Send my quote request</button>
         <p class="alt">Prefer to chat? <a href="https://wa.me/447873533081" rel="noopener">WhatsApp us directly →</a></p>
       </div>
       <div class="done" id="qDone">
-        <div class="tick">✓</div>
+        <div class="tick" aria-hidden="true">✓</div>
         <h3>Request sent</h3>
-        <p>We'll come back to you shortly with a personalised quote. Want it faster? <a href="https://wa.me/447873533081" style="color:#3ecf74;font-weight:700">Message us on WhatsApp</a>.</p>
+        <p>We'll come back to you shortly with a personalised quote. Want it faster? <a href="https://wa.me/447873533081" rel="noopener">Message us on WhatsApp</a>.</p>
       </div>
       <p class="demo-note">Concept note: in the live build this form feeds your GoHighLevel pipeline with instant notification + auto-reply, so every inquiry is captured and tracked.</p>
     </form>
   </div>
 </section>
 
-<section id="reviews" style="padding:52px 0">
-  <div class="wrap">
+<section id="reviews" style="padding:56px 0">
+  <div class="wrap" data-reveal>
     <div class="eyebrow">Trusted locally</div>
-    <h2 class="sec"><span class="stars">★★★★★</span>&nbsp; Rated 5.0 by Yorkshire owners</h2>
+    <h2 class="sec"><span class="stars" aria-hidden="true">★★★★★</span>&nbsp; Rated 5.0 by Yorkshire owners</h2>
     <div class="rev-grid">
-      <div class="rev"><span class="stars">★★★★★</span><p>"The paint looks better than the day I bought it. Turned up on time, worked on my drive, spotless."</p><b>BMW 4 Series</b> <span>· Leeds</span></div>
-      <div class="rev"><span class="stars">★★★★★</span><p>"Booked the ceramic coating — water just falls off it months later. Worth every penny."</p><b>Audi A5</b> <span>· Wakefield</span></div>
-      <div class="rev"><span class="stars">★★★★★</span><p>"Interior deep clean brought a 7-year-old family car back to life. Genuinely shocked."</p><b>Nissan Qashqai</b> <span>· York</span></div>
+      <div class="rev"><span class="stars" aria-hidden="true">★★★★★</span><p>"The paint looks better than the day I bought it. Turned up on time, worked on my drive, spotless."</p><b>BMW 4 Series</b> <span>· Leeds</span></div>
+      <div class="rev"><span class="stars" aria-hidden="true">★★★★★</span><p>"Booked the ceramic coating — water just falls off it months later. Worth every penny."</p><b>Audi A5</b> <span>· Wakefield</span></div>
+      <div class="rev"><span class="stars" aria-hidden="true">★★★★★</span><p>"Interior deep clean brought a 7-year-old family car back to life. Genuinely shocked."</p><b>Nissan Qashqai</b> <span>· York</span></div>
     </div>
   </div>
 </section>
 
 <section id="results">
-  <div class="wrap">
-    <div class="eyebrow">Real results</div>
+  <div class="wrap" data-reveal>
+    <div class="eyebrow">The finish we chase</div>
     <h2 class="sec">The difference speaks for itself.</h2>
-    <p class="lede">Every photo below is our own work on real customers' cars — right here in Yorkshire.</p>
+    <p class="lede">This is the standard: deep gloss, sealed protection, interiors reset to day one. Your own before-and-after photos drop straight into this layout — two of Detailing Lab's real results are below.</p>
     <div class="gal">
       <div class="shot">
-        <img loading="lazy" src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/xP6BElg81fF4LMpxumdh/media/6a69eb920aea34991eb669af.png" alt="Black BMW 4 Series after full paint enhancement, deep gloss finish">
-        <div class="cap">Full enhancement — BMW 4 Series, Leeds</div>
+        <img loading="lazy" src="https://images.unsplash.com/photo-1554294314-80a5fb7e6bd5?auto=format&fit=crop&w=1600&q=80" alt="Dark sports car under studio lighting with a mirror-deep gloss finish" width="1600" height="1000">
+        <div class="cap">Multi-stage correction — the mirror finish</div>
       </div>
       <div class="side">
         <div class="shot">
-          <img loading="lazy" src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/xP6BElg81fF4LMpxumdh/media/6a69eb92eb781ab2623c4770.png" alt="Water beading on ceramic coated paintwork">
-          <div class="cap">Ceramic protection — beading months later</div>
+          <img loading="lazy" src="https://images.unsplash.com/photo-1610631902892-5be58875af96?auto=format&fit=crop&w=1200&q=80" alt="Ceramic coating being applied to paintwork panel by panel" width="1200" height="705">
+          <div class="cap">Ceramic protection — applied panel by panel</div>
         </div>
         <div class="shot">
-          <img loading="lazy" src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/xP6BElg81fF4LMpxumdh/media/6a69eb927d99a22464d8bd3d.png" alt="Snow foam pre-wash in progress">
-          <div class="cap">Safe wash process — every single time</div>
+          <img loading="lazy" src="https://images.unsplash.com/photo-1599912027667-755b68b4dd3b?auto=format&fit=crop&w=1200&q=80" alt="Detailed leather car interior, cleaned and conditioned" width="1200" height="705">
+          <div class="cap">Interior detail — leather cleaned &amp; fed</div>
         </div>
       </div>
     </div>
+    <div class="own-row">
+      <div class="shot">
+        <img loading="lazy" src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/xP6BElg81fF4LMpxumdh/media/6a69eb920aea34991eb669af.png" alt="Black BMW 4 Series after full paint enhancement, deep gloss finish">
+        <div class="cap">Detailing Lab's own work — BMW 4 Series, Leeds</div>
+      </div>
+      <div class="shot">
+        <img loading="lazy" src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/xP6BElg81fF4LMpxumdh/media/6a69eb92eb781ab2623c4770.png" alt="Water beading on ceramic coated paintwork">
+        <div class="cap">Detailing Lab's own work — beading months later</div>
+      </div>
+    </div>
+    <p class="img-note">Concept photography (top row) is illustrative, via Unsplash — in the live build every slot is your own work.</p>
   </div>
 </section>
 
 <section id="pricing">
-  <div class="wrap">
+  <div class="wrap" data-reveal>
     <div class="eyebrow">Pricing</div>
     <h2 class="sec">Honest packages. Clear starting prices.</h2>
     <p class="lede">Every vehicle is different — send us a photo on WhatsApp or use the form and we'll confirm an exact price, fast and with no obligation.</p>
@@ -290,9 +391,9 @@ footer a{color:var(--ink2)}
       <div class="pkg hot">
         <span class="tag">Most popular</span>
         <h3>Single Stage Enhancement</h3><span class="time">8–12 hours</span>
-        <p>Machine polish to remove light swirls and restore deep gloss across the paintwork.</p>
+        <p>Machine polish to remove light swirls and restore deep gloss across the paintwork. The biggest visual jump for the money — most first-time customers start here.</p>
         <div class="from">From £220<small>*</small></div>
-        <a class="btn btn-amber" href="#quote">Get exact price</a>
+        <a class="btn btn-accent" href="#quote">Get exact price</a>
       </div>
       <div class="pkg">
         <h3>Two Stage Correction</h3><span class="time">~2 days</span>
@@ -306,42 +407,200 @@ footer a{color:var(--ink2)}
         <div class="from">From £680<small>*</small></div>
         <a class="btn btn-ghost" href="#quote">Get exact price</a>
       </div>
+      <div class="pkg">
+        <h3>Maintenance Wash</h3><span class="time">1–2 hours</span>
+        <p>Safe two-bucket wash for cars we've corrected or coated — keeps the finish at its best.</p>
+        <div class="from">From £45<small>*</small></div>
+        <a class="btn btn-ghost" href="#quote">Get exact price</a>
+      </div>
     </div>
     <p class="price-note">* Example anchor prices for this concept — set to your real rates. Anchors reduce drop-off versus quote-only pages while WhatsApp/form still confirms the exact figure.</p>
   </div>
 </section>
 
 <section id="faq">
-  <div class="wrap">
+  <div class="wrap" data-reveal>
     <div class="eyebrow">Questions</div>
     <h2 class="sec">Before you book</h2>
     <div class="faq">
       <details open><summary>How do I know which package I need?</summary><div>Send a couple of photos through the form or WhatsApp and we'll recommend the right package for your car's condition — no obligation, no upsell.</div></details>
       <details><summary>Do you guarantee the results?</summary><div>Yes — we're fully insured and we don't leave until you're happy. If something isn't right, we make it right.</div></details>
       <details><summary>How long will the ceramic coating last?</summary><div>With sensible maintenance washing, our ceramic coatings protect and bead for years, not months. We'll give you a simple aftercare guide.</div></details>
+      <details><summary>Do you really come to me?</summary><div>Yes — we're fully mobile across Yorkshire with our own power and water, or you can book into the indoor studio for correction and ceramic work.</div></details>
     </div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="wrap">
-    <div><b style="color:var(--ink)">Detailing Lab Yorkshire</b> · mobile &amp; indoor studio</div>
+    <div><b>Detailing Lab Yorkshire</b> · mobile &amp; indoor studio</div>
     <div><a href="https://wa.me/447873533081" rel="noopener">WhatsApp 07873 533081</a> · <a href="mailto:info@detailinglabyorkshire.co.uk">info@detailinglabyorkshire.co.uk</a></div>
-    <div style="width:100%;font-size:12px;margin-top:6px">Design concept by Subesh Bhandari — photographs are Detailing Lab Yorkshire's own work, used here solely to demonstrate a proposed redesign of their page.</div>
+    <div class="foot-note">Design concept by Subesh Bhandari — the two "own work" photographs are Detailing Lab Yorkshire's, used solely to demonstrate a proposed redesign of their page; remaining photography is illustrative (Unsplash). Example prices marked * are placeholders.</div>
   </div>
 </footer>
 
 <div class="bar">
   <a class="btn btn-wa" href="https://wa.me/447873533081" rel="noopener">WhatsApp</a>
-  <a class="btn btn-amber" href="#quote">Get a quote</a>
+  <a class="btn btn-accent" href="#quote">Get a quote</a>
 </div>
 
+<!-- ============================================================
+KILN CUSTOMIZE WIDGET — canonical snippet, inline verbatim into every
+template. Adapt ONLY the CONFIG block (storage key, default hue, font
+pairings). The page MUST derive every color from --hue/--sat, every font
+from --font-display/--font-body, every corner from --radius-*, and style
+both html[data-theme="dark"] and html[data-theme="light"].
+============================================================= -->
+
+<div class="kw" id="kw">
+  <button class="kw-fab" id="kwFab" aria-expanded="false" aria-controls="kwPanel">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.5 1.5M16.9 16.9l1.5 1.5M5.6 18.4l1.5-1.5M16.9 7.1l1.5-1.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+    Make it yours
+  </button>
+  <div class="kw-panel" id="kwPanel" role="dialog" aria-label="Customize this template" hidden>
+    <div class="kw-row kw-head">
+      <strong>Customize</strong>
+      <span class="kw-note">live — this whole site is tokens</span>
+    </div>
+    <div class="kw-row">
+      <label for="kwHue">Brand hue</label>
+      <input type="range" id="kwHue" min="0" max="360" step="1">
+      <div class="kw-swatches" id="kwSwatches"></div>
+    </div>
+    <div class="kw-row">
+      <label>Type pairing</label>
+      <div class="kw-seg" id="kwFonts" role="radiogroup" aria-label="Font pairing"></div>
+    </div>
+    <div class="kw-row">
+      <label>Corners</label>
+      <div class="kw-seg" id="kwRadius" role="radiogroup" aria-label="Corner radius">
+        <button data-r="2px" role="radio">Sharp</button>
+        <button data-r="14px" role="radio">Soft</button>
+        <button data-r="26px" role="radio">Round</button>
+      </div>
+    </div>
+    <div class="kw-row">
+      <label>Mode</label>
+      <div class="kw-seg" id="kwTheme" role="radiogroup" aria-label="Color mode">
+        <button data-t="dark" role="radio">Dark</button>
+        <button data-t="light" role="radio">Light</button>
+      </div>
+    </div>
+    <button class="kw-reset" id="kwReset">Reset to default</button>
+  </div>
+</div>
+
+<style>
+.kw{position:fixed;right:18px;bottom:18px;z-index:999;font-family:var(--font-body);}
+.kw-fab{display:flex;align-items:center;gap:8px;border:1px solid hsl(var(--hue) var(--sat) 60% / .5);
+  background:hsl(var(--hue) var(--sat) 55% / .14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:inherit;font:inherit;font-size:13px;font-weight:600;letter-spacing:.02em;
+  padding:10px 16px;border-radius:999px;cursor:pointer;box-shadow:0 6px 24px hsl(var(--hue) var(--sat) 40% / .25);}
+.kw-fab:hover{background:hsl(var(--hue) var(--sat) 55% / .24);}
+.kw-fab:focus-visible,.kw-panel :focus-visible{outline:2px solid hsl(var(--hue) var(--sat) 60%);outline-offset:2px;}
+.kw-panel{position:absolute;right:0;bottom:52px;width:264px;padding:16px;border-radius:calc(var(--radius)*1.1);
+  border:1px solid hsl(var(--hue) 20% 50% / .25);background:var(--kw-bg,hsl(var(--hue) 15% 10% / .92));
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 50px rgb(0 0 0/.35);}
+html[data-theme="light"] .kw-panel{--kw-bg:hsl(var(--hue) 30% 98% / .92);}
+.kw-row{margin-bottom:14px;display:flex;flex-direction:column;gap:7px;}
+.kw-head{flex-direction:row;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+.kw-note{font-size:10.5px;opacity:.6;}
+.kw-row label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;opacity:.65;}
+.kw-row input[type=range]{width:100%;accent-color:hsl(var(--hue) var(--sat) 55%);}
+.kw-swatches{display:flex;gap:6px;}
+.kw-swatches button{width:22px;height:22px;border-radius:50%;border:1px solid rgb(128 128 128/.35);cursor:pointer;padding:0;}
+.kw-seg{display:flex;gap:4px;background:rgb(128 128 128/.12);padding:3px;border-radius:calc(var(--radius)*.6);}
+.kw-seg button{flex:1;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:600;
+  padding:6px 4px;border-radius:calc(var(--radius)*.45);cursor:pointer;opacity:.7;}
+.kw-seg button[aria-checked="true"]{background:hsl(var(--hue) var(--sat) 55% / .25);opacity:1;
+  box-shadow:inset 0 0 0 1px hsl(var(--hue) var(--sat) 60% / .5);}
+.kw-reset{width:100%;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;
+  opacity:.6;cursor:pointer;padding:6px;text-decoration:underline;}
+.kw-reset:hover{opacity:1;}
+@media (max-width:560px){.kw{right:12px}.kw-panel{width:min(264px,calc(100vw - 24px))}}
+</style>
+
 <script>
-document.querySelector(".quote").addEventListener("submit", e => {
-  e.preventDefault();
-  document.getElementById("qFields").style.display = "none";
-  document.getElementById("qDone").style.display = "block";
-});
+(() => {
+  /* ==== CONFIG — the only part a template changes ==== */
+  const KEY = "kiln.demo.detailinglab.v1";
+  const DEFAULTS = { hue: 210, sat: "70%", radius: "14px", theme: "dark", font: 0 };
+  const SWATCH_HUES = [210, 42, 262, 330, 150, 20];
+  const FONTS = [ // [label, display stack, body stack] — families must be in the <link> preload
+    ["Modern", "'Sora',sans-serif", "'Inter',sans-serif"],
+    ["Editorial", "'Fraunces',serif", "'Inter',sans-serif"],
+    ["Mono", "'Space Grotesk',sans-serif", "'Space Grotesk',sans-serif"],
+  ];
+  /* ==== END CONFIG ==== */
+
+  const root = document.documentElement;
+  const $ = id => document.getElementById(id);
+  let s = { ...DEFAULTS };
+  try { s = { ...DEFAULTS, ...JSON.parse(localStorage.getItem(KEY) || "{}") }; } catch {}
+
+  function apply() {
+    root.style.setProperty("--hue", s.hue);
+    root.style.setProperty("--radius", s.radius);
+    root.style.setProperty("--font-display", FONTS[s.font][1]);
+    root.style.setProperty("--font-body", FONTS[s.font][2]);
+    root.dataset.theme = s.theme;
+    $("kwHue").value = s.hue;
+    [...$("kwFonts").children].forEach((b, i) => b.setAttribute("aria-checked", i === s.font));
+    [...$("kwRadius").children].forEach(b => b.setAttribute("aria-checked", b.dataset.r === s.radius));
+    [...$("kwTheme").children].forEach(b => b.setAttribute("aria-checked", b.dataset.t === s.theme));
+    localStorage.setItem(KEY, JSON.stringify(s));
+    document.dispatchEvent(new CustomEvent("kiln:theme", { detail: s }));
+  }
+  FONTS.forEach((f, i) => {
+    const b = document.createElement("button");
+    b.role = "radio"; b.textContent = f[0];
+    b.onclick = () => { s.font = i; apply(); };
+    $("kwFonts").appendChild(b);
+  });
+  SWATCH_HUES.forEach(h => {
+    const b = document.createElement("button");
+    b.style.background = `hsl(${h} 70% 55%)`;
+    b.setAttribute("aria-label", `Hue ${h}`);
+    b.onclick = () => { s.hue = h; apply(); };
+    $("kwSwatches").appendChild(b);
+  });
+  $("kwHue").oninput = e => { s.hue = +e.target.value; apply(); };
+  [...$("kwRadius").children].forEach(b => b.onclick = () => { s.radius = b.dataset.r; apply(); });
+  [...$("kwTheme").children].forEach(b => b.onclick = () => { s.theme = b.dataset.t; apply(); });
+  $("kwReset").onclick = () => { s = { ...DEFAULTS }; apply(); };
+  $("kwFab").onclick = () => {
+    const open = $("kwPanel").hidden;
+    $("kwPanel").hidden = !open;
+    $("kwFab").setAttribute("aria-expanded", open);
+  };
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !$("kwPanel").hidden) { $("kwPanel").hidden = true; $("kwFab").setAttribute("aria-expanded", "false"); }
+  });
+  apply();
+})();
+</script>
+
+<script>
+(() => {
+  document.documentElement.classList.add("js");
+  const form = document.querySelector(".quote");
+  if (form) form.addEventListener("submit", e => {
+    e.preventDefault();
+    document.getElementById("qFields").style.display = "none";
+    document.getElementById("qDone").style.display = "block";
+  });
+  const motionOK = matchMedia("(prefers-reduced-motion: no-preference)").matches;
+  const targets = document.querySelectorAll("[data-reveal]");
+  if (motionOK && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver(entries => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    targets.forEach(t => io.observe(t));
+  } else {
+    targets.forEach(t => t.classList.add("in"));
+  }
+})();
 </script>
 </body>
 </html>
