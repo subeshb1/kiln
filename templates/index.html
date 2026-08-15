@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiln Templates</title>
+<meta name="description" content="Production-grade website templates by Kiln Studio. Every template is fully configurable — hue, typography, corners, and color mode — live in the browser.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23177268'/%3E%3Cpath d='M10 7v18M10 16l9-9M10 16l10 9' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Sora:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --hue: 173; --sat: 65%;
+  --font-display: 'Sora',sans-serif; --font-body: 'Inter',sans-serif;
+  --radius: 14px;
+  --accent: hsl(var(--hue) var(--sat) 42%);
+  --accent-bright: hsl(var(--hue) var(--sat) 58%);
+}
+html[data-theme="dark"]{
+  --bg: hsl(var(--hue) 22% 7%);
+  --bg-2: hsl(var(--hue) 18% 10%);
+  --panel: hsl(var(--hue) 16% 12% / .7);
+  --ink: hsl(var(--hue) 15% 94%);
+  --ink-2: hsl(var(--hue) 10% 72%);
+  --line: hsl(var(--hue) 20% 60% / .16);
+  --glow: hsl(var(--hue) var(--sat) 45% / .22);
+  color-scheme: dark;
+}
+html[data-theme="light"]{
+  --bg: hsl(var(--hue) 30% 98%);
+  --bg-2: hsl(var(--hue) 25% 95%);
+  --panel: hsl(var(--hue) 30% 100% / .75);
+  --ink: hsl(var(--hue) 30% 12%);
+  --ink-2: hsl(var(--hue) 12% 34%);
+  --line: hsl(var(--hue) 25% 30% / .16);
+  --glow: hsl(var(--hue) var(--sat) 55% / .16);
+  --accent-bright: hsl(var(--hue) var(--sat) 30%);
+  color-scheme: light;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{ /* ambient field */
+  content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background:
+    radial-gradient(50rem 34rem at 85% -8%, var(--glow), transparent 60%),
+    radial-gradient(40rem 30rem at -10% 65%, var(--glow), transparent 65%);
+}
+body::after{ /* grain */
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent-bright); outline-offset:3px; border-radius:4px}
+.wrap{max-width:1080px; margin:0 auto; padding:0 24px}
+
+header.top{
+  position:sticky; top:0; z-index:50;
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  background:linear-gradient(var(--panel), transparent 250%);
+  border-bottom:1px solid var(--line);
+}
+.top .wrap{display:flex; align-items:center; justify-content:space-between; height:60px}
+.wordmark{display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; letter-spacing:.02em; text-decoration:none; font-size:15px}
+.wordmark .k{width:24px;height:24px;border-radius:7px;background:var(--accent);display:grid;place-items:center;color:#fff;font-size:13px}
+.back{font-size:13.5px; color:var(--ink-2); text-decoration:none}
+.back:hover{color:var(--ink)}
+
+.hero{padding:88px 0 40px}
+.eyebrow{font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-bright)}
+.hero h1{
+  font-family:var(--font-display); font-weight:800;
+  font-size:clamp(3rem, 8vw, 6.5rem); line-height:1.02; letter-spacing:-.02em;
+  margin:14px 0 20px;
+}
+.hero h1 em{font-style:normal; color:var(--accent-bright)}
+.lede{max-width:56ch; color:var(--ink-2); font-size:clamp(1rem, 1.4vw, 1.15rem)}
+.lede strong{color:var(--ink); font-weight:600}
+
+.grid{display:grid; gap:22px; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); padding:44px 0 20px}
+.card{
+  display:flex; flex-direction:column; text-decoration:none;
+  border:1px solid var(--line); border-radius:calc(var(--radius) * 1.4);
+  background:var(--panel); overflow:hidden;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), border-color .35s, box-shadow .35s;
+}
+.card:hover{transform:translateY(-5px); border-color:hsl(var(--hue) var(--sat) 55% / .5); box-shadow:0 24px 60px -20px var(--glow)}
+.prev{aspect-ratio:16/10.4; position:relative; overflow:hidden; border-bottom:1px solid var(--line)}
+.chrome{position:absolute; top:10px; left:12px; display:flex; gap:5px; z-index:2}
+.chrome i{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.28}
+/* Nocturne preview — cinematic dark */
+.p-noc{background:radial-gradient(120% 130% at 70% 115%, hsl(190 70% 40% / .55), transparent 55%), hsl(200 25% 6%); color:hsl(190 20% 92%)}
+.p-noc .big{position:absolute; left:16px; bottom:2px; font-family:var(--font-display); font-weight:800; font-size:clamp(4rem,9vw,6rem); letter-spacing:-.04em; line-height:1; background:linear-gradient(hsl(190 30% 95%), hsl(190 40% 60% / .25)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.p-noc .tag{position:absolute; right:14px; top:34px; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; opacity:.75}
+.p-noc .ring{position:absolute; right:-34px; bottom:-52px; width:150px; height:150px; border-radius:50%; border:1px solid hsl(190 60% 60% / .5); box-shadow:0 0 60px hsl(190 70% 45% / .5), inset 0 0 40px hsl(190 70% 45% / .35)}
+/* Meridian preview — airy light */
+.p-mer{background:linear-gradient(160deg, hsl(160 45% 97%), hsl(160 35% 90%)); color:hsl(165 40% 18%)}
+.p-mer .big{position:absolute; left:16px; top:38px; font-family:var(--font-display); font-weight:700; font-size:1.5rem; letter-spacing:-.02em; max-width:12ch; line-height:1.2}
+.p-mer .rings{position:absolute; right:16px; bottom:14px}
+.p-mer .pill{position:absolute; left:16px; bottom:16px; font-size:9.5px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; padding:5px 10px; border-radius:999px; background:hsl(160 45% 30%); color:hsl(160 40% 96%)}
+/* Atelier preview — editorial paper */
+.p-ate{background:hsl(40 25% 96%); color:hsl(220 15% 14%)}
+.p-ate .rows{position:absolute; inset:38px 16px 12px; font-family:'Fraunces',serif; font-size:12.5px}
+.p-ate .row{display:flex; justify-content:space-between; align-items:baseline; padding:7px 0; border-bottom:1px solid hsl(220 15% 14% / .18)}
+.p-ate .row b{font-weight:600; font-size:14.5px}
+.p-ate .row span{font-size:9px; letter-spacing:.14em; text-transform:uppercase; opacity:.75; font-family:var(--font-body)}
+.p-ate .no{opacity:.62; font-size:9.5px; margin-right:8px}
+.meta{padding:20px 20px 22px; display:flex; flex-direction:column; gap:8px}
+.meta h2{font-family:var(--font-display); font-size:1.25rem; font-weight:700; letter-spacing:-.01em; display:flex; align-items:center; gap:10px}
+.meta h2 .go{margin-left:auto; color:var(--accent-bright); font-size:1rem; transition:transform .3s}
+.card:hover .go{transform:translateX(4px)}
+.meta p{color:var(--ink-2); font-size:14px}
+.tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px}
+.tags span{font-size:11px; font-weight:600; letter-spacing:.04em; padding:4px 10px; border-radius:999px; border:1px solid var(--line); color:var(--ink-2)}
+
+.how{margin:56px 0 30px; padding:34px 0 8px; border-top:1px solid var(--line)}
+.how h2{font-family:var(--font-display); font-size:1.6rem; font-weight:700; letter-spacing:-.01em; margin-bottom:26px}
+.steps{display:grid; gap:18px; grid-template-columns:repeat(auto-fit, minmax(240px,1fr))}
+.step{border:1px solid var(--line); border-radius:var(--radius); padding:20px; background:var(--panel)}
+.step .n{font-family:var(--font-display); font-weight:800; color:var(--accent-bright); font-size:13px; letter-spacing:.1em}
+.step h3{font-size:15px; margin:8px 0 6px; font-weight:600}
+.step p{font-size:13.5px; color:var(--ink-2)}
+
+footer.ft{border-top:1px solid var(--line); margin-top:64px}
+.ft .wrap{display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; padding-top:26px; padding-bottom:30px}
+.ft p{font-size:13px; color:var(--ink-2)}
+.ft a{color:var(--ink)}
+
+.reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1; transform:none}
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1; transform:none; transition:none}
+  .card, .card:hover{transition:none; transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="wordmark" href="../"><span class="k" aria-hidden="true">K</span>Kiln Templates</a>
+    <a class="back" href="../">← Back to Kiln</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Template library</p>
+    <h1>One template.<br><em>Any brand.</em></h1>
+    <p class="lede">Every template below is a finished, production-grade site — and every one of them is <strong>configurable live</strong>. Open one, hit “Make it yours”, and change the hue, type, corners, and color mode in seconds. That’s the Kiln thesis: brand lives in tokens, never in the code.</p>
+  </section>
+
+  <section class="grid" aria-label="Templates">
+    <a class="card reveal" href="nocturne/">
+      <div class="prev p-noc" aria-hidden="true">
+        <div class="chrome"><i></i><i></i><i></i></div>
+        <span class="tag">Adaptive ANC</span>
+        <span class="big">N1</span>
+        <span class="ring"></span>
+      </div>
+      <div class="meta">
+        <h2>Nocturne <span class="go" aria-hidden="true">→</span></h2>
+        <p>A cinematic, launch-day product page. Full-bleed photography, specs bento, dark-first glow. For hardware, audio, anything premium.</p>
+        <div class="tags"><span>Product launch</span><span>Dark-first</span><span>Photography</span></div>
+      </div>
+    </a>
+
+    <a class="card reveal" href="meridian/">
+      <div class="prev p-mer" aria-hidden="true">
+        <div class="chrome"><i></i><i></i><i></i></div>
+        <span class="big">Know how ready you are.</span>
+        <svg class="rings" width="86" height="86" viewBox="0 0 86 86" fill="none">
+          <circle cx="43" cy="43" r="38" stroke="hsl(160 30% 55% / .3)" stroke-width="7"/>
+          <circle cx="43" cy="43" r="38" stroke="hsl(160 55% 35%)" stroke-width="7" stroke-linecap="round" stroke-dasharray="180 240" transform="rotate(-90 43 43)"/>
+          <circle cx="43" cy="43" r="26" stroke="hsl(160 30% 55% / .3)" stroke-width="7"/>
+          <circle cx="43" cy="43" r="26" stroke="hsl(85 55% 45%)" stroke-width="7" stroke-linecap="round" stroke-dasharray="120 170" transform="rotate(-90 43 43)"/>
+        </svg>
+        <span class="pill">Readiness 82</span>
+      </div>
+      <div class="meta">
+        <h2>Meridian <span class="go" aria-hidden="true">→</span></h2>
+        <p>Light, warm, and human — a wellness-product page with live SVG data visuals and an honest voice. For health, lifestyle, and DTC.</p>
+        <div class="tags"><span>Wellness</span><span>Light &amp; airy</span><span>Data visuals</span></div>
+      </div>
+    </a>
+
+    <a class="card reveal" href="atelier/">
+      <div class="prev p-ate" aria-hidden="true">
+        <div class="chrome"><i></i><i></i><i></i></div>
+        <div class="rows">
+          <div class="row"><b><span class="no">01</span>Fold House</b><span>Oslo · 2025</span></div>
+          <div class="row"><b><span class="no">02</span>Harbour Loft</b><span>Bergen · 2024</span></div>
+          <div class="row"><b><span class="no">03</span>North Annex</b><span>Tromsø · 2024</span></div>
+          <div class="row"><b><span class="no">04</span>Clay Pavilion</b><span>Malmö · 2023</span></div>
+        </div>
+      </div>
+      <div class="meta">
+        <h2>Atelier <span class="go" aria-hidden="true">→</span></h2>
+        <p>Editorial restraint — ink, paper, serif, whitespace. A studio portfolio that lets the work speak. For architects, designers, consultancies.</p>
+        <div class="tags"><span>Portfolio</span><span>Editorial</span><span>Minimal</span></div>
+      </div>
+    </a>
+  </section>
+
+  <section class="how reveal">
+    <h2>How this becomes your site</h2>
+    <div class="steps">
+      <div class="step"><p class="n">01</p><h3>Pick a template</h3><p>Each one is a real, finished site — performance, accessibility, and both color modes included. Not a mockup.</p></div>
+      <div class="step"><p class="n">02</p><h3>Make it yours</h3><p>Use the customizer on any template to try your brand hue, type pairing, and corner style. What you see is exactly what ships.</p></div>
+      <div class="step"><p class="n">03</p><h3>We productionize</h3><p>Kiln swaps in your content, photography, and domain, locks your tokens as the house theme, and hands you the keys.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="ft">
+  <div class="wrap">
+    <p>Built by <a href="../">Kiln Studio</a> — everything is configurable.</p>
+    <p>Photography via Unsplash. Product names are fictional demos.</p>
+  </div>
+</footer>
+
+<div class="kw" id="kw">
+  <button class="kw-fab" id="kwFab" aria-expanded="false" aria-controls="kwPanel">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.5 1.5M16.9 16.9l1.5 1.5M5.6 18.4l1.5-1.5M16.9 7.1l1.5-1.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+    Make it yours
+  </button>
+  <div class="kw-panel" id="kwPanel" role="dialog" aria-label="Customize this template" hidden>
+    <div class="kw-row kw-head">
+      <strong>Customize</strong>
+      <span class="kw-note">live — this whole site is tokens</span>
+    </div>
+    <div class="kw-row">
+      <label for="kwHue">Brand hue</label>
+      <input type="range" id="kwHue" min="0" max="360" step="1">
+      <div class="kw-swatches" id="kwSwatches"></div>
+    </div>
+    <div class="kw-row">
+      <label>Type pairing</label>
+      <div class="kw-seg" id="kwFonts" role="radiogroup" aria-label="Font pairing"></div>
+    </div>
+    <div class="kw-row">
+      <label>Corners</label>
+      <div class="kw-seg" id="kwRadius" role="radiogroup" aria-label="Corner radius">
+        <button data-r="2px" role="radio">Sharp</button>
+        <button data-r="14px" role="radio">Soft</button>
+        <button data-r="26px" role="radio">Round</button>
+      </div>
+    </div>
+    <div class="kw-row">
+      <label>Mode</label>
+      <div class="kw-seg" id="kwTheme" role="radiogroup" aria-label="Color mode">
+        <button data-t="dark" role="radio">Dark</button>
+        <button data-t="light" role="radio">Light</button>
+      </div>
+    </div>
+    <button class="kw-reset" id="kwReset">Reset to default</button>
+  </div>
+</div>
+
+<style>
+.kw{position:fixed;right:18px;bottom:18px;z-index:999;font-family:var(--font-body);}
+.kw-fab{display:flex;align-items:center;gap:8px;border:1px solid hsl(var(--hue) var(--sat) 60% / .5);
+  background:hsl(var(--hue) var(--sat) 55% / .14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:inherit;font:inherit;font-size:13px;font-weight:600;letter-spacing:.02em;
+  padding:10px 16px;border-radius:999px;cursor:pointer;box-shadow:0 6px 24px hsl(var(--hue) var(--sat) 40% / .25);}
+.kw-fab:hover{background:hsl(var(--hue) var(--sat) 55% / .24);}
+.kw-fab:focus-visible,.kw-panel :focus-visible{outline:2px solid hsl(var(--hue) var(--sat) 60%);outline-offset:2px;}
+.kw-panel{position:absolute;right:0;bottom:52px;width:264px;padding:16px;border-radius:calc(var(--radius)*1.1);
+  border:1px solid hsl(var(--hue) 20% 50% / .25);background:var(--kw-bg,hsl(var(--hue) 15% 10% / .92));
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 50px rgb(0 0 0/.35);}
+html[data-theme="light"] .kw-panel{--kw-bg:hsl(var(--hue) 30% 98% / .92);}
+.kw-row{margin-bottom:14px;display:flex;flex-direction:column;gap:7px;}
+.kw-head{flex-direction:row;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+.kw-note{font-size:10.5px;opacity:.6;}
+.kw-row label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;opacity:.65;}
+.kw-row input[type=range]{width:100%;accent-color:hsl(var(--hue) var(--sat) 55%);}
+.kw-swatches{display:flex;gap:6px;}
+.kw-swatches button{width:22px;height:22px;border-radius:50%;border:1px solid rgb(128 128 128/.35);cursor:pointer;padding:0;}
+.kw-seg{display:flex;gap:4px;background:rgb(128 128 128/.12);padding:3px;border-radius:calc(var(--radius)*.6);}
+.kw-seg button{flex:1;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:600;
+  padding:6px 4px;border-radius:calc(var(--radius)*.45);cursor:pointer;opacity:.7;}
+.kw-seg button[aria-checked="true"]{background:hsl(var(--hue) var(--sat) 55% / .25);opacity:1;
+  box-shadow:inset 0 0 0 1px hsl(var(--hue) var(--sat) 60% / .5);}
+.kw-reset{width:100%;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;
+  opacity:.6;cursor:pointer;padding:6px;text-decoration:underline;}
+.kw-reset:hover{opacity:1;}
+@media (max-width:560px){.kw{right:12px;bottom:12px}.kw-panel{width:min(264px,calc(100vw - 24px))}}
+</style>
+
+<script>
+(() => {
+  const KEY = "kiln.tpl.gallery.v1";
+  const DEFAULTS = { hue: 173, sat: "65%", radius: "14px", theme: "dark", font: 0 };
+  const SWATCH_HUES = [173, 262, 330, 20, 145, 45];
+  const FONTS = [
+    ["Modern", "'Sora',sans-serif", "'Inter',sans-serif"],
+    ["Editorial", "'Fraunces',serif", "'Inter',sans-serif"],
+    ["Mono", "'Space Grotesk',sans-serif", "'Space Grotesk',sans-serif"],
+  ];
+
+  const root = document.documentElement;
+  const $ = id => document.getElementById(id);
+  let s = { ...DEFAULTS };
+  try { s = { ...DEFAULTS, ...JSON.parse(localStorage.getItem(KEY) || "{}") }; } catch {}
+
+  function apply() {
+    root.style.setProperty("--hue", s.hue);
+    root.style.setProperty("--radius", s.radius);
+    root.style.setProperty("--font-display", FONTS[s.font][1]);
+    root.style.setProperty("--font-body", FONTS[s.font][2]);
+    root.dataset.theme = s.theme;
+    $("kwHue").value = s.hue;
+    [...$("kwFonts").children].forEach((b, i) => b.setAttribute("aria-checked", i === s.font));
+    [...$("kwRadius").children].forEach(b => b.setAttribute("aria-checked", b.dataset.r === s.radius));
+    [...$("kwTheme").children].forEach(b => b.setAttribute("aria-checked", b.dataset.t === s.theme));
+    localStorage.setItem(KEY, JSON.stringify(s));
+    document.dispatchEvent(new CustomEvent("kiln:theme", { detail: s }));
+  }
+  FONTS.forEach((f, i) => {
+    const b = document.createElement("button");
+    b.role = "radio"; b.textContent = f[0];
+    b.onclick = () => { s.font = i; apply(); };
+    $("kwFonts").appendChild(b);
+  });
+  SWATCH_HUES.forEach(h => {
+    const b = document.createElement("button");
+    b.style.background = `hsl(${h} 70% 55%)`;
+    b.setAttribute("aria-label", `Hue ${h}`);
+    b.onclick = () => { s.hue = h; apply(); };
+    $("kwSwatches").appendChild(b);
+  });
+  $("kwHue").oninput = e => { s.hue = +e.target.value; apply(); };
+  [...$("kwRadius").children].forEach(b => b.onclick = () => { s.radius = b.dataset.r; apply(); });
+  [...$("kwTheme").children].forEach(b => b.onclick = () => { s.theme = b.dataset.t; apply(); });
+  $("kwReset").onclick = () => { s = { ...DEFAULTS }; apply(); };
+  $("kwFab").onclick = () => {
+    const open = $("kwPanel").hidden;
+    $("kwPanel").hidden = !open;
+    $("kwFab").setAttribute("aria-expanded", open);
+  };
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !$("kwPanel").hidden) { $("kwPanel").hidden = true; $("kwFab").setAttribute("aria-expanded", "false"); }
+  });
+  apply();
+
+  // scroll reveals
+  const io = ("IntersectionObserver" in window) && !matchMedia("(prefers-reduced-motion: reduce)").matches
+    ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 })
+    : null;
+  document.querySelectorAll(".reveal").forEach(el => io ? io.observe(el) : el.classList.add("in"));
+})();
+</script>
+</body>
+</html>

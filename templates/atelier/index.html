@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atelier North — Architecture &amp; Interiors</title>
+<meta name="description" content="Atelier North is a small architecture and interiors practice in Edinburgh. Quiet buildings, careful rooms — feasibility studies, full architectural design, and interiors.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a2230'/%3E%3Cpath d='M9 24 16 8l7 16h-3.2l-3.8-9.2L12.2 24z' fill='%23f2f0eb'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500;600&family=Sora:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --hue:220; --sat:70%;
+  --font-display:'Fraunces',serif;
+  --font-body:'Inter',sans-serif;
+  --radius:2px;
+}
+html[data-theme="light"]{
+  --paper:hsl(var(--hue) 22% 97%);
+  --paper-2:hsl(var(--hue) 18% 94%);
+  --ink:hsl(var(--hue) 28% 11%);
+  --ink-2:hsl(var(--hue) 12% 33%);
+  --hairline:hsl(var(--hue) 20% 11% / .16);
+  --accent:hsl(var(--hue) var(--sat) 36%);
+  color-scheme:light;
+}
+html[data-theme="dark"]{
+  --paper:hsl(var(--hue) 14% 9%);
+  --paper-2:hsl(var(--hue) 12% 12%);
+  --ink:hsl(var(--hue) 18% 93%);
+  --ink-2:hsl(var(--hue) 8% 66%);
+  --hairline:hsl(var(--hue) 20% 90% / .16);
+  --accent:hsl(var(--hue) calc(var(--sat) - 10%) 68%);
+  color-scheme:dark;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);font-size:16px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  transition:background-color .35s ease,color .35s ease;
+}
+::selection{background:hsl(var(--hue) var(--sat) 50% / .25)}
+img{max-width:100%;display:block}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,56px)}
+
+/* ---- back chip ---- */
+.kiln-chip{
+  position:fixed;top:14px;left:14px;z-index:998;
+  font-size:12px;font-weight:600;letter-spacing:.02em;text-decoration:none;
+  color:var(--ink);background:var(--paper);border:1px solid var(--hairline);
+  padding:7px 13px;border-radius:999px;opacity:.85;
+}
+.kiln-chip:hover{opacity:1}
+@media (max-width:760px){.kiln-chip{top:auto;bottom:14px;left:14px}}
+
+/* ---- header ---- */
+header.site{padding:76px 0 0}
+.topline{
+  display:flex;justify-content:space-between;align-items:baseline;gap:24px;
+  padding-bottom:20px;border-bottom:1px solid var(--hairline);
+}
+.wordmark{font-family:var(--font-display);font-weight:500;font-size:20px;letter-spacing:.01em;color:var(--ink);text-decoration:none}
+nav.primary{display:flex;gap:clamp(14px,3vw,34px);flex-wrap:wrap}
+nav.primary a{
+  font-size:12.5px;font-weight:500;text-transform:uppercase;letter-spacing:.13em;
+  color:var(--ink-2);text-decoration:none;
+}
+nav.primary a:hover{color:var(--accent)}
+
+/* ---- shared section grammar ---- */
+section{padding:clamp(64px,9vw,120px) 0}
+.eyebrow{
+  font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.16em;
+  color:var(--ink-2);display:flex;align-items:center;gap:10px;margin-bottom:28px;
+}
+.eyebrow::before{content:"";width:7px;height:7px;background:var(--accent);border-radius:var(--radius)}
+.hairline-top{border-top:1px solid var(--hairline)}
+
+/* ---- hero ---- */
+.hero h1{
+  font-family:var(--font-display);font-weight:340;
+  font-size:clamp(2.4rem,6.2vw,4.9rem);line-height:1.06;letter-spacing:-.015em;
+  max-width:19ch;text-wrap:balance;
+}
+.hero .lede{max-width:56ch;color:var(--ink-2);margin-top:30px;font-size:clamp(1rem,1.4vw,1.13rem)}
+.hero figure{margin-top:clamp(40px,6vw,72px)}
+.hero img{width:100%;height:auto;border-radius:var(--radius)}
+.hero figcaption,figcaption{font-size:12px;color:var(--ink-2);margin-top:10px;letter-spacing:.03em}
+
+/* ---- projects index ---- */
+.projects-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(32px,5vw,72px);align-items:start}
+.rows{list-style:none}
+.row{
+  display:grid;grid-template-columns:3.2rem 1fr auto;gap:14px;align-items:baseline;
+  padding:22px 6px;border-bottom:1px solid var(--hairline);cursor:default;
+}
+.rows .row:first-child{border-top:1px solid var(--hairline)}
+.row .num{font-family:var(--font-body);font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--accent)}
+.row h3{font-family:var(--font-display);font-weight:420;font-size:clamp(1.25rem,2.4vw,1.7rem);letter-spacing:-.01em}
+.row .meta{font-size:12.5px;color:var(--ink-2);letter-spacing:.05em;white-space:nowrap}
+.row p{grid-column:2/4;font-size:14px;color:var(--ink-2);max-width:52ch}
+.row:hover h3,.row:focus-within h3,.row:focus h3{color:var(--accent)}
+.row-img{grid-column:1/4;margin-top:14px;display:none}
+.row-img img{width:100%;height:auto;border-radius:var(--radius)}
+.preview{position:sticky;top:8vh;margin:0}
+.preview img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius);transition:opacity .3s ease}
+.preview.fading img{opacity:0}
+@media (max-width:900px){
+  .projects-grid{grid-template-columns:1fr}
+  .preview{display:none}
+  .row-img{display:block}
+  .row{cursor:auto}
+}
+
+/* ---- services ---- */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(28px,4vw,56px)}
+.svc h3{font-family:var(--font-display);font-weight:450;font-size:1.35rem;margin-bottom:12px;letter-spacing:-.01em}
+.svc .n{font-size:11.5px;font-weight:600;letter-spacing:.12em;color:var(--accent);display:block;margin-bottom:16px}
+.svc p{font-size:14.5px;color:var(--ink-2)}
+@media (max-width:820px){.svc-grid{grid-template-columns:1fr;gap:36px}}
+
+/* ---- studio ---- */
+.studio-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,5vw,80px);align-items:start}
+.studio-grid img{width:100%;height:auto;border-radius:var(--radius)}
+.studio-copy p{color:var(--ink-2);max-width:54ch}
+.studio-copy p+p{margin-top:18px}
+.principals{margin-top:36px;display:grid;gap:20px}
+.principals div{border-top:1px solid var(--hairline);padding-top:16px}
+.principals strong{font-weight:600;font-size:15px;display:block}
+.principals span{font-size:13px;color:var(--ink-2)}
+.press{margin-top:44px}
+.press h3{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--ink-2);margin-bottom:14px}
+.press ul{list-style:none;display:flex;flex-wrap:wrap;gap:10px 26px}
+.press li{font-family:var(--font-display);font-style:italic;font-size:15px;color:var(--ink-2)}
+@media (max-width:820px){.studio-grid{grid-template-columns:1fr}}
+
+/* ---- contact ---- */
+.contact h2{
+  font-family:var(--font-display);font-weight:340;
+  font-size:clamp(1.9rem,4.5vw,3.4rem);line-height:1.12;letter-spacing:-.015em;max-width:22ch;
+}
+.contact .channels{margin-top:36px;display:flex;flex-wrap:wrap;gap:14px 44px}
+.contact .channels div span{display:block;font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-2);margin-bottom:6px}
+.contact .channels a{font-size:17px}
+.contact .channels em{font-style:normal;font-size:17px}
+
+/* ---- footer ---- */
+footer.site{border-top:1px solid var(--hairline);padding:clamp(40px,6vw,70px) 0 34px;overflow:hidden}
+.giant{
+  font-family:var(--font-display);font-weight:380;letter-spacing:-.02em;line-height:.95;
+  font-size:clamp(2.8rem,12.5vw,10.5rem);color:var(--ink);white-space:nowrap;
+}
+.foot-meta{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:34px;font-size:12.5px;color:var(--ink-2)}
+.foot-meta a{color:var(--ink-2)}
+
+/* ---- reveal (motion-safe only) ---- */
+@media (prefers-reduced-motion:no-preference){
+  .rv{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+  .rv.in{opacity:1;transform:none}
+}
+.skip{
+  position:absolute;left:-9999px;top:0;background:var(--accent);color:var(--paper);
+  padding:10px 16px;z-index:1000;font-weight:600;text-decoration:none;
+}
+.skip:focus{left:14px;top:60px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<a class="kiln-chip" href="../">&larr; Kiln templates</a>
+
+<header class="site wrap">
+  <div class="topline">
+    <a class="wordmark" href="#top" id="top">Atelier North</a>
+    <nav class="primary" aria-label="Primary">
+      <a href="#projects">Projects</a>
+      <a href="#services">Services</a>
+      <a href="#studio">Studio</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero wrap" aria-labelledby="hero-h">
+    <p class="eyebrow rv">Architecture &amp; Interiors · Edinburgh</p>
+    <h1 id="hero-h" class="rv">Quiet buildings, careful rooms.</h1>
+    <p class="lede rv">Atelier North is a small practice working across Scotland and the north of England. We design homes, studios and galleries that hold light well, age slowly, and ask for very little attention — so that life inside them can have all of it.</p>
+    <figure class="rv">
+      <img src="https://images.unsplash.com/photo-1422818159909-e2fc50042acb?auto=format&amp;fit=crop&amp;w=2400&amp;h=1500&amp;q=80" width="2400" height="1500" alt="Daylit room in a residential project, tall windows casting soft light across a plain plastered wall" fetchpriority="high">
+      <figcaption>Fold House — morning light in the long room, 2025</figcaption>
+    </figure>
+  </section>
+
+  <section id="projects" class="wrap hairline-top" aria-labelledby="projects-h">
+    <p class="eyebrow rv">Selected work</p>
+    <h2 class="visually-hidden" id="projects-h" style="position:absolute;left:-9999px">Selected projects</h2>
+    <div class="projects-grid">
+      <ul class="rows">
+        <li class="row rv" tabindex="0" data-img="https://images.unsplash.com/photo-1451438143976-4e1aa4f7f153?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" data-alt="Fold House — timber-lined interior with framed view of a birch courtyard">
+          <span class="num">01</span><h3>Fold House</h3><span class="meta">Kinross · 2025</span>
+          <p>A courtyard home folded around a single birch, timber-lined and top-lit.</p>
+          <figure class="row-img"><img loading="lazy" src="https://images.unsplash.com/photo-1451438143976-4e1aa4f7f153?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" width="900" height="1125" alt="Fold House — timber-lined interior with framed view of a birch courtyard"></figure>
+        </li>
+        <li class="row rv" tabindex="0" data-img="https://images.unsplash.com/photo-1492400661951-bda5c7066b10?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" data-alt="Harbour Loft — converted warehouse space with exposed structure and long shared table">
+          <span class="num">02</span><h3>Harbour Loft</h3><span class="meta">Leith · 2024</span>
+          <p>A whisky bond turned five-metre-tall apartment; new steel touches old brick lightly.</p>
+          <figure class="row-img"><img loading="lazy" src="https://images.unsplash.com/photo-1492400661951-bda5c7066b10?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" width="900" height="1125" alt="Harbour Loft — converted warehouse space with exposed structure and long shared table"></figure>
+        </li>
+        <li class="row rv" tabindex="0" data-img="https://images.unsplash.com/photo-1497366412874-3415097a27e7?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" data-alt="Slate Rooms — calm guesthouse interior with soft furnishings and stone tones">
+          <span class="num">03</span><h3>Slate Rooms</h3><span class="meta">Ambleside · 2024</span>
+          <p>Nine guest rooms for a Lakeland inn — local slate, sheep's-wool insulation, no televisions.</p>
+          <figure class="row-img"><img loading="lazy" src="https://images.unsplash.com/photo-1497366412874-3415097a27e7?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" width="900" height="1125" alt="Slate Rooms — calm guesthouse interior with soft furnishings and stone tones"></figure>
+        </li>
+        <li class="row rv" tabindex="0" data-img="https://images.unsplash.com/photo-1500004621732-74cd4ad4d53e?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" data-alt="North Gallery — white gallery volume washed with diffuse rooflight">
+          <span class="num">04</span><h3>North Gallery</h3><span class="meta">Dundee · 2023</span>
+          <p>A sawtooth-roofed extension that lights the collection with north sky alone.</p>
+          <figure class="row-img"><img loading="lazy" src="https://images.unsplash.com/photo-1500004621732-74cd4ad4d53e?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" width="900" height="1125" alt="North Gallery — white gallery volume washed with diffuse rooflight"></figure>
+        </li>
+        <li class="row rv" tabindex="0" data-img="https://images.unsplash.com/photo-1502005097973-6a7082348e28?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" data-alt="Garden Studio — small timber writing room opening onto planting">
+          <span class="num">05</span><h3>Garden Studio</h3><span class="meta">St Andrews · 2023</span>
+          <p>A one-room larch writing studio at the end of a walled garden, built in eleven weeks.</p>
+          <figure class="row-img"><img loading="lazy" src="https://images.unsplash.com/photo-1502005097973-6a7082348e28?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" width="900" height="1125" alt="Garden Studio — small timber writing room opening onto planting"></figure>
+        </li>
+        <li class="row rv" tabindex="0" data-img="https://images.unsplash.com/photo-1506749547535-fe88ffa57a7a?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" data-alt="Mercer Street — renovated tenement apartment, pale joinery and original cornicing">
+          <span class="num">06</span><h3>Mercer Street</h3><span class="meta">Glasgow · 2022</span>
+          <p>A tenement flat re-planned around one long oak wall that hides everything.</p>
+          <figure class="row-img"><img loading="lazy" src="https://images.unsplash.com/photo-1506749547535-fe88ffa57a7a?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" width="900" height="1125" alt="Mercer Street — renovated tenement apartment, pale joinery and original cornicing"></figure>
+        </li>
+      </ul>
+      <figure class="preview" id="preview" aria-hidden="true">
+        <img id="pvImg" loading="lazy" src="https://images.unsplash.com/photo-1451438143976-4e1aa4f7f153?auto=format&amp;fit=crop&amp;w=900&amp;h=1125&amp;q=80" width="900" height="1125" alt="">
+      </figure>
+    </div>
+  </section>
+
+  <section id="services" class="wrap hairline-top" aria-labelledby="services-h">
+    <p class="eyebrow rv">What we do</p>
+    <h2 id="services-h" style="position:absolute;left:-9999px">Services</h2>
+    <div class="svc-grid">
+      <div class="svc rv">
+        <span class="n">S.1</span>
+        <h3>Feasibility studies</h3>
+        <p>Before you buy, or before you commit — we test what a site or building can honestly become. Two to four weeks, sketch options, planning read, budget ranges. Most studies pay for themselves in avoided mistakes.</p>
+      </div>
+      <div class="svc rv">
+        <span class="n">S.2</span>
+        <h3>Architectural design</h3>
+        <p>Full service, concept to completion: planning, listed building consent, technical design and contract administration. We take on six projects a year so each one gets a principal's attention throughout.</p>
+      </div>
+      <div class="svc rv">
+        <span class="n">S.3</span>
+        <h3>Interiors</h3>
+        <p>Rooms, joinery, light and loose furniture — as part of a building project or on their own. We draw the cabinetry ourselves and stay through installation, because the last five percent is the interior.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="studio" class="wrap hairline-top" aria-labelledby="studio-h">
+    <p class="eyebrow rv">The studio</p>
+    <h2 id="studio-h" style="position:absolute;left:-9999px">About the studio</h2>
+    <div class="studio-grid">
+      <img class="rv" loading="lazy" src="https://images.unsplash.com/photo-1520587393050-c5298e1a8486?auto=format&amp;fit=crop&amp;w=1100&amp;h=800&amp;q=80" width="1100" height="800" alt="The Atelier North workroom — drawings and material samples on a long table">
+      <div class="studio-copy rv">
+        <p>Atelier North was founded in 2017 by Eilidh Marr and Jonas Keel, who met restoring a category-A listed bank nobody else wanted. The practice has stayed deliberately small: two principals, four architects, one workroom above a printmaker in Stockbridge.</p>
+        <p>We believe restraint is a discipline, not an absence. Our buildings tend to be simple in plan, generous in section, and particular about daylight. We reuse structure wherever it stands, and we detail for the person who will repaint the window in thirty years.</p>
+        <div class="principals">
+          <div><strong>Eilidh Marr</strong><span>Principal · ARB, RIAS — planning, conservation, client care</span></div>
+          <div><strong>Jonas Keel</strong><span>Principal · ARB — technical design, joinery, site</span></div>
+        </div>
+        <div class="press">
+          <h3>Seen in</h3>
+          <ul>
+            <li>Dezeen</li>
+            <li>The Modern House Journal</li>
+            <li>Architects' Journal</li>
+            <li>Dwell</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact wrap hairline-top" aria-labelledby="contact-h">
+    <p class="eyebrow rv">Contact</p>
+    <h2 id="contact-h" class="rv">We take on six projects a year. Tell us about yours.</h2>
+    <div class="channels rv">
+      <div><span>Email</span><a href="mailto:studio@ateliernorth.co">studio@ateliernorth.co</a></div>
+      <div><span>Studio</span><em>14 St Stephen Street, Edinburgh EH3</em></div>
+      <div><span>Hours</span><em>Mon–Thu, 9–6 · Fri by appointment</em></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p class="giant" aria-hidden="true">Atelier North</p>
+    <div class="foot-meta">
+      <span>© 2026 Atelier North Ltd · Registered in Scotland</span>
+      <span>A configurable template by <a href="../">Kiln</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+KILN CUSTOMIZE WIDGET
+============================================================= -->
+<div class="kw" id="kw">
+  <button class="kw-fab" id="kwFab" aria-expanded="false" aria-controls="kwPanel">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.5 1.5M16.9 16.9l1.5 1.5M5.6 18.4l1.5-1.5M16.9 7.1l1.5-1.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+    Make it yours
+  </button>
+  <div class="kw-panel" id="kwPanel" role="dialog" aria-label="Customize this template" hidden>
+    <div class="kw-row kw-head">
+      <strong>Customize</strong>
+      <span class="kw-note">live — this whole site is tokens</span>
+    </div>
+    <div class="kw-row">
+      <label for="kwHue">Brand hue</label>
+      <input type="range" id="kwHue" min="0" max="360" step="1">
+      <div class="kw-swatches" id="kwSwatches"></div>
+    </div>
+    <div class="kw-row">
+      <label>Type pairing</label>
+      <div class="kw-seg" id="kwFonts" role="radiogroup" aria-label="Font pairing"></div>
+    </div>
+    <div class="kw-row">
+      <label>Corners</label>
+      <div class="kw-seg" id="kwRadius" role="radiogroup" aria-label="Corner radius">
+        <button data-r="2px" role="radio">Sharp</button>
+        <button data-r="14px" role="radio">Soft</button>
+        <button data-r="26px" role="radio">Round</button>
+      </div>
+    </div>
+    <div class="kw-row">
+      <label>Mode</label>
+      <div class="kw-seg" id="kwTheme" role="radiogroup" aria-label="Color mode">
+        <button data-t="dark" role="radio">Dark</button>
+        <button data-t="light" role="radio">Light</button>
+      </div>
+    </div>
+    <button class="kw-reset" id="kwReset">Reset to default</button>
+  </div>
+</div>
+
+<style>
+.kw{position:fixed;right:18px;bottom:18px;z-index:999;font-family:var(--font-body);}
+.kw-fab{display:flex;align-items:center;gap:8px;border:1px solid hsl(var(--hue) var(--sat) 60% / .5);
+  background:hsl(var(--hue) var(--sat) 55% / .14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:inherit;font:inherit;font-size:13px;font-weight:600;letter-spacing:.02em;
+  padding:10px 16px;border-radius:999px;cursor:pointer;box-shadow:0 6px 24px hsl(var(--hue) var(--sat) 40% / .25);}
+.kw-fab:hover{background:hsl(var(--hue) var(--sat) 55% / .24);}
+.kw-fab:focus-visible,.kw-panel :focus-visible{outline:2px solid hsl(var(--hue) var(--sat) 60%);outline-offset:2px;}
+.kw-panel{position:absolute;right:0;bottom:52px;width:264px;padding:16px;border-radius:calc(var(--radius)*1.1);
+  border:1px solid hsl(var(--hue) 20% 50% / .25);background:var(--kw-bg,hsl(var(--hue) 15% 10% / .92));
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 50px rgb(0 0 0/.35);}
+html[data-theme="light"] .kw-panel{--kw-bg:hsl(var(--hue) 30% 98% / .92);}
+.kw-row{margin-bottom:14px;display:flex;flex-direction:column;gap:7px;}
+.kw-head{flex-direction:row;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+.kw-note{font-size:10.5px;opacity:.6;}
+.kw-row label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;opacity:.65;}
+.kw-row input[type=range]{width:100%;accent-color:hsl(var(--hue) var(--sat) 55%);}
+.kw-swatches{display:flex;gap:6px;}
+.kw-swatches button{width:22px;height:22px;border-radius:50%;border:1px solid rgb(128 128 128/.35);cursor:pointer;padding:0;}
+.kw-seg{display:flex;gap:4px;background:rgb(128 128 128/.12);padding:3px;border-radius:calc(var(--radius)*.6);}
+.kw-seg button{flex:1;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:600;
+  padding:6px 4px;border-radius:calc(var(--radius)*.45);cursor:pointer;opacity:.7;}
+.kw-seg button[aria-checked="true"]{background:hsl(var(--hue) var(--sat) 55% / .25);opacity:1;
+  box-shadow:inset 0 0 0 1px hsl(var(--hue) var(--sat) 60% / .5);}
+.kw-reset{width:100%;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;
+  opacity:.6;cursor:pointer;padding:6px;text-decoration:underline;}
+.kw-reset:hover{opacity:1;}
+@media (max-width:560px){.kw{right:12px;bottom:12px}.kw-panel{width:min(264px,calc(100vw - 24px))}}
+</style>
+
+<script>
+(() => {
+  /* ==== CONFIG — the only part a template changes ==== */
+  const KEY = "kiln.tpl.atelier.v1";
+  const DEFAULTS = { hue: 220, sat: "70%", radius: "2px", theme: "light", font: 1 };
+  const SWATCH_HUES = [220, 262, 330, 20, 145, 45];
+  const FONTS = [ // [label, display stack, body stack] — families must be in the <link> preload
+    ["Modern", "'Sora',sans-serif", "'Inter',sans-serif"],
+    ["Editorial", "'Fraunces',serif", "'Inter',sans-serif"],
+    ["Mono", "'Space Grotesk',sans-serif", "'Space Grotesk',sans-serif"],
+  ];
+  /* ==== END CONFIG ==== */
+
+  const root = document.documentElement;
+  const $ = id => document.getElementById(id);
+  let s = { ...DEFAULTS };
+  try { s = { ...DEFAULTS, ...JSON.parse(localStorage.getItem(KEY) || "{}") }; } catch {}
+
+  function apply() {
+    root.style.setProperty("--hue", s.hue);
+    root.style.setProperty("--radius", s.radius);
+    root.style.setProperty("--font-display", FONTS[s.font][1]);
+    root.style.setProperty("--font-body", FONTS[s.font][2]);
+    root.dataset.theme = s.theme;
+    $("kwHue").value = s.hue;
+    [...$("kwFonts").children].forEach((b, i) => b.setAttribute("aria-checked", i === s.font));
+    [...$("kwRadius").children].forEach(b => b.setAttribute("aria-checked", b.dataset.r === s.radius));
+    [...$("kwTheme").children].forEach(b => b.setAttribute("aria-checked", b.dataset.t === s.theme));
+    localStorage.setItem(KEY, JSON.stringify(s));
+    document.dispatchEvent(new CustomEvent("kiln:theme", { detail: s }));
+  }
+  FONTS.forEach((f, i) => {
+    const b = document.createElement("button");
+    b.role = "radio"; b.textContent = f[0];
+    b.onclick = () => { s.font = i; apply(); };
+    $("kwFonts").appendChild(b);
+  });
+  SWATCH_HUES.forEach(h => {
+    const b = document.createElement("button");
+    b.style.background = `hsl(${h} 70% 55%)`;
+    b.setAttribute("aria-label", `Hue ${h}`);
+    b.onclick = () => { s.hue = h; apply(); };
+    $("kwSwatches").appendChild(b);
+  });
+  $("kwHue").oninput = e => { s.hue = +e.target.value; apply(); };
+  [...$("kwRadius").children].forEach(b => b.onclick = () => { s.radius = b.dataset.r; apply(); });
+  [...$("kwTheme").children].forEach(b => b.onclick = () => { s.theme = b.dataset.t; apply(); });
+  $("kwReset").onclick = () => { s = { ...DEFAULTS }; apply(); };
+  $("kwFab").onclick = () => {
+    const open = $("kwPanel").hidden;
+    $("kwPanel").hidden = !open;
+    $("kwFab").setAttribute("aria-expanded", open);
+  };
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !$("kwPanel").hidden) { $("kwPanel").hidden = true; $("kwFab").setAttribute("aria-expanded", "false"); }
+  });
+  apply();
+})();
+</script>
+
+<script>
+(() => {
+  // Project index → sticky preview swap (desktop hover/focus)
+  const pv = document.getElementById("preview");
+  const pvImg = document.getElementById("pvImg");
+  document.querySelectorAll(".row[data-img]").forEach(row => {
+    const swap = () => {
+      const next = row.dataset.img;
+      if (pvImg.src === next) return;
+      pv.classList.add("fading");
+      setTimeout(() => {
+        pvImg.src = next;
+        pvImg.alt = "";
+        pv.classList.remove("fading");
+      }, 150);
+    };
+    row.addEventListener("mouseenter", swap);
+    row.addEventListener("focus", swap);
+  });
+
+  // Reveal on scroll — motion-safe only
+  if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll(".rv").forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll(".rv").forEach(el => el.classList.add("in"));
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian Band — know your body's rhythm</title>
+<meta name="description" content="Meridian Band is a screenless wellness wearable: continuous HRV, sleep staging, a readiness score every morning. 10-day battery, titanium clasp, no subscription. $299.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%232ba47a' stroke-width='4'/%3E%3Ccircle cx='16' cy='16' r='4.5' fill='%232ba47a'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ tokens — every color derives from --hue/--sat ============ */
+:root{
+  --hue:160; --sat:70%; --radius:14px;
+  --font-display:'Sora',sans-serif;
+  --font-body:'Inter',sans-serif;
+}
+html[data-theme="light"]{
+  --bg:hsl(var(--hue) 32% 98.4%);
+  --bg-2:hsl(var(--hue) 28% 95.5%);
+  --card:hsl(var(--hue) 30% 99.6%);
+  --ink:hsl(var(--hue) 30% 11%);
+  --ink-2:hsl(var(--hue) 10% 32%);
+  --line:hsl(var(--hue) 18% 87%);
+  --accent:hsl(var(--hue) var(--sat) 30%);
+  --accent-bright:hsl(var(--hue) var(--sat) 40%);
+  --accent-ink:hsl(var(--hue) 40% 98%);
+  --glow:hsl(var(--hue) var(--sat) 62% / .16);
+  --shadow:0 20px 50px hsl(var(--hue) 40% 30% / .10);
+  color-scheme:light;
+}
+html[data-theme="dark"]{
+  --bg:hsl(var(--hue) 24% 6.5%);
+  --bg-2:hsl(var(--hue) 22% 9.5%);
+  --card:hsl(var(--hue) 20% 10.5%);
+  --ink:hsl(var(--hue) 25% 95%);
+  --ink-2:hsl(var(--hue) 10% 70%);
+  --line:hsl(var(--hue) 14% 19%);
+  --accent:hsl(var(--hue) 62% 62%);
+  --accent-bright:hsl(var(--hue) 62% 55%);
+  --accent-ink:hsl(var(--hue) 50% 8%);
+  --glow:hsl(var(--hue) var(--sat) 45% / .18);
+  --shadow:0 20px 50px hsl(var(--hue) 60% 2% / .5);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  font-family:var(--font-body);background:var(--bg);color:var(--ink);
+  font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent-bright);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--font-display);line-height:1.08;letter-spacing:-.02em;font-weight:700}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+section{padding:96px 0}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;
+}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--accent);border-radius:2px}
+.sec-title{font-size:clamp(30px,4.4vw,48px);max-width:16ch;margin-bottom:16px}
+.sec-lede{color:var(--ink-2);max-width:56ch;font-size:18px}
+
+/* ============ kiln chip ============ */
+.kiln-chip{
+  position:fixed;top:14px;left:14px;z-index:998;font-size:12.5px;font-weight:600;
+  padding:8px 14px;border-radius:999px;text-decoration:none;
+  border:1px solid var(--line);background:hsl(var(--hue) 25% 98% / .75);color:var(--ink-2);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+html[data-theme="dark"] .kiln-chip{background:hsl(var(--hue) 20% 10% / .7)}
+.kiln-chip:hover{color:var(--ink);border-color:var(--accent-bright)}
+@media (max-width:760px){.kiln-chip{top:auto;bottom:16px;left:14px}}
+
+/* ============ nav ============ */
+.nav{
+  position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:997;
+  display:flex;align-items:center;gap:6px;padding:8px 10px 8px 16px;
+  border-radius:999px;border:1px solid var(--line);
+  background:hsl(var(--hue) 25% 98% / .78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:var(--shadow);
+}
+html[data-theme="dark"] .nav{background:hsl(var(--hue) 20% 9% / .78)}
+.nav .brand{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:700;font-size:15px;text-decoration:none;margin-right:8px}
+.brand svg{color:var(--accent)}
+.nav a.link{font-size:13.5px;font-weight:500;color:var(--ink-2);text-decoration:none;padding:7px 11px;border-radius:999px}
+.nav a.link:hover{color:var(--ink);background:hsl(var(--hue) 30% 50% / .08)}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;text-decoration:none;
+  font-family:var(--font-body);font-weight:600;font-size:14.5px;
+  background:var(--accent);color:var(--accent-ink);
+  padding:11px 22px;border-radius:999px;transition:transform .15s ease, box-shadow .15s ease;
+  box-shadow:0 6px 20px var(--glow);
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px var(--glow)}
+.btn.small{padding:8px 16px;font-size:13px}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none;border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--accent-bright)}
+@media (max-width:760px){.nav a.link{display:none}.nav{gap:4px}}
+
+/* ============ hero ============ */
+.hero{padding:170px 0 90px;position:relative;overflow:clip}
+.hero::before{
+  content:"";position:absolute;inset:-20% -10% auto;height:80%;pointer-events:none;
+  background:radial-gradient(46% 60% at 68% 34%, var(--glow), transparent 70%);
+}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;position:relative}
+.hero h1{font-size:clamp(42px,6.2vw,74px);font-weight:800;margin-bottom:22px;max-width:12ch}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p.lede{font-size:19px;color:var(--ink-2);max-width:46ch;margin-bottom:32px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.hero-ctas .price{font-size:14px;color:var(--ink-2)}
+.hero-ctas .price strong{color:var(--ink);font-size:16px}
+.hero-img{position:relative}
+.hero-img img{
+  border-radius:calc(var(--radius)*2.2);box-shadow:var(--shadow);
+  width:100%;height:auto;aspect-ratio:11/13;object-fit:cover;
+}
+.hero-badge{
+  position:absolute;left:-18px;bottom:34px;display:flex;gap:12px;align-items:center;
+  padding:13px 18px;border-radius:calc(var(--radius)*1.2);
+  background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);
+}
+.hero-badge .num{font-family:var(--font-display);font-weight:800;font-size:26px;color:var(--accent)}
+.hero-badge .lbl{font-size:12px;color:var(--ink-2);line-height:1.35}
+@media (max-width:880px){
+  .hero{padding-top:130px}
+  .hero .wrap{grid-template-columns:1fr}
+  .hero-badge{left:12px}
+}
+
+/* ============ stats strip ============ */
+.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-2);padding:34px 0}
+.strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+.strip .num{font-family:var(--font-display);font-weight:800;font-size:clamp(22px,3vw,32px)}
+.strip .lbl{font-size:13px;color:var(--ink-2)}
+@media (max-width:700px){.strip .wrap{grid-template-columns:repeat(2,1fr);gap:26px 12px}}
+
+/* ============ bento ============ */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;margin-top:52px}
+.cell{
+  grid-column:span 2;background:var(--card);border:1px solid var(--line);
+  border-radius:calc(var(--radius)*1.5);padding:26px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:12px;min-height:210px;
+}
+.cell.wide{grid-column:span 4}
+.cell.tall{grid-row:span 2}
+.cell h3{font-size:18px;font-weight:700}
+.cell .sub{font-size:14px;color:var(--ink-2)}
+.cell .fig{margin-top:auto}
+.cell .big{font-family:var(--font-display);font-weight:800;font-size:44px;line-height:1;color:var(--accent)}
+.chart{color:var(--accent)}
+.chart .grid-l{stroke:var(--line)}
+.chart .muted{fill:var(--ink-2)}
+.chart text{font-family:var(--font-body);font-size:10px}
+@media (max-width:900px){.cell,.cell.wide{grid-column:span 3}}
+@media (max-width:620px){.cell,.cell.wide{grid-column:span 6}}
+
+/* ============ full-bleed photo ============ */
+.bleed{position:relative;min-height:520px;display:flex;align-items:flex-end;overflow:hidden}
+.bleed img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bleed::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,hsl(var(--hue) 40% 6% / .72))}
+.bleed .wrap{position:relative;z-index:1;padding-bottom:56px;color:hsl(var(--hue) 30% 98%)}
+.bleed h2{font-size:clamp(28px,4vw,44px);max-width:18ch}
+.bleed p{max-width:52ch;color:hsl(var(--hue) 20% 88%);margin-top:12px}
+
+/* ============ timeline ============ */
+.timeline{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;margin-top:52px}
+.tl{list-style:none;position:relative;padding-left:34px}
+.tl::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl li{position:relative;padding:0 0 34px}
+.tl li:last-child{padding-bottom:0}
+.tl li::before{
+  content:"";position:absolute;left:-31px;top:6px;width:14px;height:14px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 0 5px var(--glow);
+}
+.tl time{font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--accent);letter-spacing:.02em}
+.tl h3{font-size:17px;margin:4px 0 6px}
+.tl p{font-size:14.5px;color:var(--ink-2);max-width:46ch}
+.timeline img{border-radius:calc(var(--radius)*2);box-shadow:var(--shadow);aspect-ratio:4/5;object-fit:cover;width:100%}
+@media (max-width:860px){.timeline{grid-template-columns:1fr}.timeline img{order:-1;aspect-ratio:16/10}}
+
+/* ============ materials ============ */
+.materials{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.materials .wrap{display:grid;grid-template-columns:.95fr 1.05fr;gap:56px;align-items:center}
+.materials img{border-radius:calc(var(--radius)*2);box-shadow:var(--shadow);aspect-ratio:1/1.05;object-fit:cover;width:100%}
+.spec{list-style:none;margin-top:30px;display:grid;gap:0}
+.spec li{display:flex;justify-content:space-between;gap:20px;padding:15px 2px;border-bottom:1px solid var(--line);font-size:15px}
+.spec li:first-child{border-top:1px solid var(--line)}
+.spec .k{color:var(--ink-2)}
+.spec .v{font-weight:600;text-align:right}
+@media (max-width:860px){.materials .wrap{grid-template-columns:1fr}}
+
+/* ============ waitlist ============ */
+.waitlist{text-align:center}
+.waitlist .card{
+  max-width:680px;margin:0 auto;background:var(--card);border:1px solid var(--line);
+  border-radius:calc(var(--radius)*2);padding:56px 32px;box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+}
+.waitlist .card::before{content:"";position:absolute;inset:-40% -20% auto;height:70%;background:radial-gradient(50% 60% at 50% 0%,var(--glow),transparent 70%);pointer-events:none}
+.waitlist h2{font-size:clamp(28px,4vw,40px);margin-bottom:12px;position:relative}
+.waitlist p{color:var(--ink-2);max-width:44ch;margin:0 auto 28px;position:relative}
+.wl-form{display:flex;gap:10px;max-width:440px;margin:0 auto;position:relative}
+.wl-form input{
+  flex:1;min-width:0;font:inherit;font-size:15px;color:var(--ink);
+  background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:12px 20px;
+}
+.wl-form input::placeholder{color:var(--ink-2)}
+.wl-ok{display:none;position:relative;font-weight:600;color:var(--accent);font-size:16px;padding:12px}
+.wl-note{font-size:12.5px;color:var(--ink-2);margin-top:16px;position:relative}
+@media (max-width:520px){.wl-form{flex-direction:column}}
+
+/* ============ faq ============ */
+.faq{max-width:760px;margin:52px auto 0}
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:first-child{border-top:1px solid var(--line)}
+.faq summary{
+  cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;
+  font-family:var(--font-display);font-weight:600;font-size:17px;padding:22px 2px;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:22px;color:var(--accent);font-weight:400;flex:none;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--ink-2);padding:0 2px 24px;max-width:62ch}
+
+/* ============ footer ============ */
+footer{border-top:1px solid var(--line);padding:44px 0 120px;background:var(--bg-2)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+footer .brand{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:700}
+footer .brand svg{color:var(--accent)}
+footer p,footer a{font-size:13px;color:var(--ink-2)}
+
+/* ============ reveals ============ */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .btn{transition:none}
+}
+</style>
+</head>
+<body>
+
+<a class="kiln-chip" href="../">← Kiln templates</a>
+
+<nav class="nav" aria-label="Main">
+  <a class="brand" href="#top" aria-label="Meridian home">
+    <svg width="20" height="20" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="currentColor" stroke-width="3.6"/><circle cx="16" cy="16" r="4.2" fill="currentColor"/></svg>
+    Meridian
+  </a>
+  <a class="link" href="#metrics">Metrics</a>
+  <a class="link" href="#day">A day</a>
+  <a class="link" href="#materials">Materials</a>
+  <a class="link" href="#faq">FAQ</a>
+  <a class="btn small" href="#waitlist">Join waitlist</a>
+</nav>
+
+<main id="top">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Meridian Band · screenless by design</span>
+      <h1>Know your body's <em>rhythm.</em></h1>
+      <p class="lede">Meridian reads your heart-rate variability and sleep all night, then hands you one honest number each morning: how ready you are. No screen. No feed. No subscription.</p>
+      <div class="hero-ctas">
+        <a class="btn" href="#waitlist">Join the waitlist</a>
+        <a class="btn ghost" href="#metrics">See what it tracks</a>
+        <span class="price"><strong>$299</strong> · one price, forever</span>
+      </div>
+    </div>
+    <div class="hero-img">
+      <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=1100&h=1300&q=80"
+           width="1100" height="1300" fetchpriority="high"
+           alt="Wellness band worn on a wrist, resting on a light surface in soft morning light">
+      <div class="hero-badge" aria-label="Readiness score example">
+        <span class="num">84</span>
+        <span class="lbl">This morning's<br>readiness score</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STATS STRIP -->
+<div class="strip reveal" role="list" aria-label="Key specs">
+  <div class="wrap">
+    <div role="listitem"><div class="num">10 days</div><div class="lbl">battery, real-world use</div></div>
+    <div role="listitem"><div class="num">24 / 7</div><div class="lbl">continuous HRV sampling</div></div>
+    <div role="listitem"><div class="num">4.2 g</div><div class="lbl">sensor pod, titanium clasp</div></div>
+    <div role="listitem"><div class="num">$0 / mo</div><div class="lbl">no subscription, ever</div></div>
+  </div>
+</div>
+
+<!-- METRICS BENTO -->
+<section id="metrics">
+  <div class="wrap">
+    <span class="eyebrow reveal">What it tracks</span>
+    <h2 class="sec-title reveal">Signals, not notifications.</h2>
+    <p class="sec-lede reveal">Meridian measures quietly all day and says one useful thing each morning. Everything below is on the band and in the app — nothing is paywalled.</p>
+
+    <div class="bento">
+      <!-- Readiness -->
+      <div class="cell wide reveal">
+        <h3>Morning readiness</h3>
+        <p class="sub">Overnight HRV, resting heart rate, and sleep debt, combined into a single 0–100 score with a plain-English recommendation.</p>
+        <div class="fig" style="display:flex;align-items:center;gap:22px;flex-wrap:wrap">
+          <svg class="chart" width="110" height="110" viewBox="0 0 110 110" role="img" aria-label="Readiness dial showing 84 out of 100">
+            <circle cx="55" cy="55" r="46" fill="none" class="grid-l" stroke-width="10" stroke="currentColor" opacity=".15"/>
+            <circle cx="55" cy="55" r="46" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"
+                    stroke-dasharray="243 289" transform="rotate(-90 55 55)"/>
+            <text x="55" y="52" text-anchor="middle" style="font-size:26px;font-weight:800;font-family:var(--font-display)" fill="currentColor">84</text>
+            <text x="55" y="70" text-anchor="middle" class="muted">ready</text>
+          </svg>
+          <p class="sub" style="max-width:30ch">“Recovery is ahead of schedule. Today is a good day to push.”</p>
+        </div>
+      </div>
+
+      <!-- HRV sparkline -->
+      <div class="cell reveal">
+        <h3>HRV trend</h3>
+        <p class="sub">7-night average: <strong style="color:var(--accent)">62 ms ↑</strong></p>
+        <div class="fig">
+          <svg class="chart" width="100%" height="64" viewBox="0 0 220 64" preserveAspectRatio="none" role="img" aria-label="Heart-rate variability rising over seven nights">
+            <polyline points="0,46 30,50 60,38 90,42 120,30 150,34 190,18 220,14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <polygon points="0,46 30,50 60,38 90,42 120,30 150,34 190,18 220,14 220,64 0,64" fill="currentColor" opacity=".12"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Sleep staging -->
+      <div class="cell reveal">
+        <h3>Sleep staging</h3>
+        <p class="sub">7 h 41 m last night</p>
+        <div class="fig">
+          <svg class="chart" width="100%" height="72" viewBox="0 0 220 72" role="img" aria-label="Sleep stages: 1 hour 52 minutes deep, 1 hour 34 minutes REM, 4 hours 15 minutes light">
+            <rect x="0"  y="6"  width="52"  height="12" rx="6" fill="currentColor"/>
+            <text x="60" y="16" class="muted">Deep · 1h 52m</text>
+            <rect x="0"  y="30" width="44"  height="12" rx="6" fill="currentColor" opacity=".65"/>
+            <text x="52" y="40" class="muted">REM · 1h 34m</text>
+            <rect x="0"  y="54" width="118" height="12" rx="6" fill="currentColor" opacity=".3"/>
+            <text x="126" y="64" class="muted">Light · 4h 15m</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Temperature -->
+      <div class="cell reveal">
+        <h3>Skin temperature</h3>
+        <p class="sub">Nightly deviation from your baseline — an early flag for strain or illness.</p>
+        <div class="fig">
+          <svg class="chart" width="100%" height="56" viewBox="0 0 220 56" role="img" aria-label="Nightly temperature deviation bars, mostly near baseline">
+            <line x1="0" y1="28" x2="220" y2="28" class="grid-l" stroke-width="1" stroke="currentColor" opacity=".3"/>
+            <rect x="8"   y="22" width="14" height="6"  rx="3" fill="currentColor" opacity=".55"/>
+            <rect x="38"  y="24" width="14" height="4"  rx="2" fill="currentColor" opacity=".55"/>
+            <rect x="68"  y="28" width="14" height="7"  rx="3" fill="currentColor" opacity=".55"/>
+            <rect x="98"  y="26" width="14" height="2"  rx="1" fill="currentColor" opacity=".55"/>
+            <rect x="128" y="28" width="14" height="4"  rx="2" fill="currentColor" opacity=".55"/>
+            <rect x="158" y="14" width="14" height="14" rx="3" fill="currentColor"/>
+            <rect x="188" y="26" width="14" height="2"  rx="1" fill="currentColor" opacity=".55"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Battery -->
+      <div class="cell reveal">
+        <h3>Battery that disappears</h3>
+        <p class="sub">Charge over coffee twice a month. 80% in 45 minutes.</p>
+        <div class="fig">
+          <span class="big">10<span style="font-size:20px;color:var(--ink-2)"> days</span></span>
+        </div>
+      </div>
+
+      <!-- No subscription -->
+      <div class="cell reveal">
+        <h3>Your data stays yours</h3>
+        <p class="sub">Every metric unlocked on day one. On-device processing, exportable history, delete everything with one tap.</p>
+        <div class="fig"><span class="big">$0<span style="font-size:20px;color:var(--ink-2)"> / month</span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FULL BLEED 1 -->
+<div class="bleed">
+  <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=2000&q=80" loading="lazy"
+       alt="Runner stretching outdoors at sunrise">
+  <div class="wrap reveal">
+    <h2>Train on the days your body says yes.</h2>
+    <p>Meridian doesn't count steps at you. It tells you when to push, when to recover, and when the tired you feel is real — so the hard sessions land on the right days.</p>
+  </div>
+</div>
+
+<!-- A DAY WITH MERIDIAN -->
+<section id="day">
+  <div class="wrap">
+    <span class="eyebrow reveal">A day with Meridian</span>
+    <h2 class="sec-title reveal">It works while you don't look at it.</h2>
+    <div class="timeline">
+      <ol class="tl">
+        <li class="reveal">
+          <time>7:02 AM</time>
+          <h3>One number with your coffee</h3>
+          <p>Readiness 84. HRV up 9 ms on your weekly baseline. The app suggests intervals today — then gets out of the way.</p>
+        </li>
+        <li class="reveal">
+          <time>12:30 PM</time>
+          <h3>Movement, noticed — not nagged</h3>
+          <p>Your lunchtime walk logs itself. No badges, no streak guilt, no buzz on your wrist during a meeting.</p>
+        </li>
+        <li class="reveal">
+          <time>9:41 PM</time>
+          <h3>A quiet wind-down cue</h3>
+          <p>Based on tonight's sleep debt, Meridian nudges once: lights out by 10:30 keeps tomorrow's readiness above 80.</p>
+        </li>
+        <li class="reveal">
+          <time>All night</time>
+          <h3>Sleep staged, silently</h3>
+          <p>Deep, REM and light phases sampled every 30 seconds — with the band in airplane mode until you wake.</p>
+        </li>
+      </ol>
+      <img src="https://images.unsplash.com/photo-1544117519-31a4b719223d?auto=format&fit=crop&w=1000&q=80" loading="lazy"
+           alt="Person checking a fitness band on their wrist after a workout">
+    </div>
+  </div>
+</section>
+
+<!-- MATERIALS -->
+<section class="materials" id="materials">
+  <div class="wrap">
+    <img src="https://images.unsplash.com/photo-1551816230-ef5deaed4a26?auto=format&fit=crop&w=1000&q=80" loading="lazy"
+         alt="Close-up of a woven wearable band and metal clasp">
+    <div>
+      <span class="eyebrow reveal">Materials</span>
+      <h2 class="sec-title reveal">Built to be forgotten.</h2>
+      <p class="sec-lede reveal">You'll wear it 24 hours a day, so every gram matters. The pod is machined from grade-2 titanium; the strap is woven from recycled ocean-bound nylon and dries in minutes.</p>
+      <ul class="spec reveal">
+        <li><span class="k">Sensor pod</span><span class="v">Grade-2 titanium · 4.2 g</span></li>
+        <li><span class="k">Strap</span><span class="v">Recycled ocean-bound nylon, 3 sizes</span></li>
+        <li><span class="k">Water resistance</span><span class="v">5 ATM — swim, shower, forget it</span></li>
+        <li><span class="k">Charging</span><span class="v">Magnetic USB-C puck, 45 min to 80%</span></li>
+        <li><span class="k">Connectivity</span><span class="v">Bluetooth LE · works offline for 6 weeks</span></li>
+        <li><span class="k">Colors</span><span class="v">Moss · Bone · Graphite</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FULL BLEED 2 -->
+<div class="bleed">
+  <img src="https://images.unsplash.com/photo-1550345332-09e3ac987658?auto=format&fit=crop&w=2000&q=80" loading="lazy"
+       alt="Person resting outdoors after exercise, morning light">
+  <div class="wrap reveal">
+    <h2>Rest is training too.</h2>
+    <p>The best athletes we tested with didn't need more data — they needed permission to recover. Meridian gives it, with evidence.</p>
+  </div>
+</div>
+
+<!-- WAITLIST -->
+<section id="waitlist" class="waitlist">
+  <div class="wrap">
+    <div class="card reveal">
+      <h2>First run ships this spring.</h2>
+      <p>$299, one time. Waitlist members pick their color first and get lifetime firmware updates — which everyone gets anyway, because that's how it should work.</p>
+      <form class="wl-form" id="wlForm">
+        <label for="wlEmail" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
+        <input id="wlEmail" type="email" required placeholder="you@example.com" autocomplete="email">
+        <button class="btn" type="submit">Join the waitlist</button>
+      </form>
+      <p class="wl-ok" id="wlOk" role="status">You're on the list — we'll email you before anyone else. ✓</p>
+      <p class="wl-note">No spam. Two emails total: one when preorders open, one when your band ships.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="padding-top:0">
+  <div class="wrap">
+    <span class="eyebrow reveal">Questions, answered honestly</span>
+    <h2 class="sec-title reveal">FAQ</h2>
+    <div class="faq reveal">
+      <details>
+        <summary>Does it have a screen?</summary>
+        <p>No — on purpose. A screen on your wrist becomes another feed. Meridian's job is to gather signals silently and give you one considered answer each morning in the app. If you want a watch, keep wearing your watch; Meridian sits on the other wrist and disappears.</p>
+      </details>
+      <details>
+        <summary>Really no subscription?</summary>
+        <p>Really. $299 buys the hardware and every metric it can measure, forever. We'd rather sell you a strap in two years than rent you your own heart rate.</p>
+      </details>
+      <details>
+        <summary>Is the 10-day battery honest?</summary>
+        <p>It's our measured median across the test fleet with all-night sleep tracking on. Heavy workout logging brings it closer to 8 days; airplane mode stretches it past 12. We publish the test protocol.</p>
+      </details>
+      <details>
+        <summary>What happens to my data?</summary>
+        <p>Scores are computed on the band and your phone. Cloud sync is off by default, opt-in for backup only, and export or full deletion is one tap. We don't sell data — there's no subscription business model to feed.</p>
+      </details>
+      <details>
+        <summary>How do I get the right size?</summary>
+        <p>Three strap sizes cover wrists from 135 mm to 220 mm. A printable sizing guide arrives with your waitlist confirmation, and swaps are free within 60 days.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="brand">
+      <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="currentColor" stroke-width="3.6"/><circle cx="16" cy="16" r="4.2" fill="currentColor"/></svg>
+      Meridian
+    </span>
+    <p>Meridian Band is a fictional product — a configurable template by <a href="../">Kiln</a>. Photography via Unsplash.</p>
+  </div>
+</footer>
+
+<script>
+// waitlist demo state
+document.getElementById('wlForm').addEventListener('submit', e => {
+  e.preventDefault();
+  e.target.style.display = 'none';
+  document.getElementById('wlOk').style.display = 'block';
+});
+
+// scroll reveals (respect reduced motion)
+(() => {
+  const els = document.querySelectorAll('.reveal');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('in')); return;
+  }
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: .12 });
+  els.forEach(el => io.observe(el));
+})();
+</script>
+
+<!-- ============================================================
+KILN CUSTOMIZE WIDGET
+============================================================= -->
+<div class="kw" id="kw">
+  <button class="kw-fab" id="kwFab" aria-expanded="false" aria-controls="kwPanel">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.5 1.5M16.9 16.9l1.5 1.5M5.6 18.4l1.5-1.5M16.9 7.1l1.5-1.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+    Make it yours
+  </button>
+  <div class="kw-panel" id="kwPanel" role="dialog" aria-label="Customize this template" hidden>
+    <div class="kw-row kw-head">
+      <strong>Customize</strong>
+      <span class="kw-note">live — this whole site is tokens</span>
+    </div>
+    <div class="kw-row">
+      <label for="kwHue">Brand hue</label>
+      <input type="range" id="kwHue" min="0" max="360" step="1">
+      <div class="kw-swatches" id="kwSwatches"></div>
+    </div>
+    <div class="kw-row">
+      <label>Type pairing</label>
+      <div class="kw-seg" id="kwFonts" role="radiogroup" aria-label="Font pairing"></div>
+    </div>
+    <div class="kw-row">
+      <label>Corners</label>
+      <div class="kw-seg" id="kwRadius" role="radiogroup" aria-label="Corner radius">
+        <button data-r="2px" role="radio">Sharp</button>
+        <button data-r="14px" role="radio">Soft</button>
+        <button data-r="26px" role="radio">Round</button>
+      </div>
+    </div>
+    <div class="kw-row">
+      <label>Mode</label>
+      <div class="kw-seg" id="kwTheme" role="radiogroup" aria-label="Color mode">
+        <button data-t="dark" role="radio">Dark</button>
+        <button data-t="light" role="radio">Light</button>
+      </div>
+    </div>
+    <button class="kw-reset" id="kwReset">Reset to default</button>
+  </div>
+</div>
+
+<style>
+.kw{position:fixed;right:18px;bottom:18px;z-index:999;font-family:var(--font-body);}
+.kw-fab{display:flex;align-items:center;gap:8px;border:1px solid hsl(var(--hue) var(--sat) 60% / .5);
+  background:hsl(var(--hue) var(--sat) 55% / .14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:inherit;font:inherit;font-size:13px;font-weight:600;letter-spacing:.02em;
+  padding:10px 16px;border-radius:999px;cursor:pointer;box-shadow:0 6px 24px hsl(var(--hue) var(--sat) 40% / .25);}
+.kw-fab:hover{background:hsl(var(--hue) var(--sat) 55% / .24);}
+.kw-fab:focus-visible,.kw-panel :focus-visible{outline:2px solid hsl(var(--hue) var(--sat) 60%);outline-offset:2px;}
+.kw-panel{position:absolute;right:0;bottom:52px;width:264px;padding:16px;border-radius:calc(var(--radius)*1.1);
+  border:1px solid hsl(var(--hue) 20% 50% / .25);background:var(--kw-bg,hsl(var(--hue) 15% 10% / .92));
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 50px rgb(0 0 0/.35);}
+html[data-theme="light"] .kw-panel{--kw-bg:hsl(var(--hue) 30% 98% / .92);}
+.kw-row{margin-bottom:14px;display:flex;flex-direction:column;gap:7px;}
+.kw-head{flex-direction:row;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+.kw-note{font-size:10.5px;opacity:.6;}
+.kw-row label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;opacity:.65;}
+.kw-row input[type=range]{width:100%;accent-color:hsl(var(--hue) var(--sat) 55%);}
+.kw-swatches{display:flex;gap:6px;}
+.kw-swatches button{width:22px;height:22px;border-radius:50%;border:1px solid rgb(128 128 128/.35);cursor:pointer;padding:0;}
+.kw-seg{display:flex;gap:4px;background:rgb(128 128 128/.12);padding:3px;border-radius:calc(var(--radius)*.6);}
+.kw-seg button{flex:1;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:600;
+  padding:6px 4px;border-radius:calc(var(--radius)*.45);cursor:pointer;opacity:.7;}
+.kw-seg button[aria-checked="true"]{background:hsl(var(--hue) var(--sat) 55% / .25);opacity:1;
+  box-shadow:inset 0 0 0 1px hsl(var(--hue) var(--sat) 60% / .5);}
+.kw-reset{width:100%;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;
+  opacity:.6;cursor:pointer;padding:6px;text-decoration:underline;}
+.kw-reset:hover{opacity:1;}
+@media (max-width:560px){.kw{right:12px;bottom:12px}.kw-panel{width:min(264px,calc(100vw - 24px))}}
+</style>
+
+<script>
+(() => {
+  /* ==== CONFIG — the only part a template changes ==== */
+  const KEY = "kiln.tpl.meridian.v1";
+  const DEFAULTS = { hue: 160, sat: "70%", radius: "14px", theme: "light", font: 0 };
+  const SWATCH_HUES = [160, 210, 262, 330, 20, 45];
+  const FONTS = [ // [label, display stack, body stack] — families must be in the <link> preload
+    ["Modern", "'Sora',sans-serif", "'Inter',sans-serif"],
+    ["Editorial", "'Fraunces',serif", "'Inter',sans-serif"],
+    ["Mono", "'Space Grotesk',sans-serif", "'Space Grotesk',sans-serif"],
+  ];
+  /* ==== END CONFIG ==== */
+
+  const root = document.documentElement;
+  const $ = id => document.getElementById(id);
+  let s = { ...DEFAULTS };
+  try { s = { ...DEFAULTS, ...JSON.parse(localStorage.getItem(KEY) || "{}") }; } catch {}
+
+  function apply() {
+    root.style.setProperty("--hue", s.hue);
+    root.style.setProperty("--radius", s.radius);
+    root.style.setProperty("--font-display", FONTS[s.font][1]);
+    root.style.setProperty("--font-body", FONTS[s.font][2]);
+    root.dataset.theme = s.theme;
+    $("kwHue").value = s.hue;
+    [...$("kwFonts").children].forEach((b, i) => b.setAttribute("aria-checked", i === s.font));
+    [...$("kwRadius").children].forEach(b => b.setAttribute("aria-checked", b.dataset.r === s.radius));
+    [...$("kwTheme").children].forEach(b => b.setAttribute("aria-checked", b.dataset.t === s.theme));
+    localStorage.setItem(KEY, JSON.stringify(s));
+    document.dispatchEvent(new CustomEvent("kiln:theme", { detail: s }));
+  }
+  FONTS.forEach((f, i) => {
+    const b = document.createElement("button");
+    b.role = "radio"; b.textContent = f[0];
+    b.onclick = () => { s.font = i; apply(); };
+    $("kwFonts").appendChild(b);
+  });
+  SWATCH_HUES.forEach(h => {
+    const b = document.createElement("button");
+    b.style.background = `hsl(${h} 70% 55%)`;
+    b.setAttribute("aria-label", `Hue ${h}`);
+    b.onclick = () => { s.hue = h; apply(); };
+    $("kwSwatches").appendChild(b);
+  });
+  $("kwHue").oninput = e => { s.hue = +e.target.value; apply(); };
+  [...$("kwRadius").children].forEach(b => b.onclick = () => { s.radius = b.dataset.r; apply(); });
+  [...$("kwTheme").children].forEach(b => b.onclick = () => { s.theme = b.dataset.t; apply(); });
+  $("kwReset").onclick = () => { s = { ...DEFAULTS }; apply(); };
+  $("kwFab").onclick = () => {
+    const open = $("kwPanel").hidden;
+    $("kwPanel").hidden = !open;
+    $("kwFab").setAttribute("aria-expanded", open);
+  };
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !$("kwPanel").hidden) { $("kwPanel").hidden = true; $("kwFab").setAttribute("aria-expanded", "false"); }
+  });
+  apply();
+})();
+</script>
+
+</body>
+</html>
