@@ -1,0 +1,466 @@
+<title>Kiln Studio — We build configurable everything</title>
+<style>
+  :root {
+    --page: #f6f5f1;
+    --panel: #fdfcf9;
+    --ink: #191811;
+    --ink-2: #5d5b50;
+    --ink-3: #8f8d80;
+    --line: #e4e2d7;
+    --accent: #177268;
+    --accent-soft: #17726818;
+    --accent-ink: #ffffff;
+    --hero-bg: #141817;
+    --hero-ink: #f0efe8;
+    --hero-ink-2: #a8b0ab;
+    --f-display: "Futura", "Avenir Next", "Century Gothic", system-ui, sans-serif;
+    --f-body: "Avenir Next", "Helvetica Neue", system-ui, sans-serif;
+    --f-data: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #131310; --panel: #1c1b17; --ink: #f2f1e9; --ink-2: #b3b1a4;
+      --ink-3: #82806f; --line: #2e2d26; --accent: #45a99b; --accent-soft: #45a99b1f;
+      --accent-ink: #0d1512; --hero-bg: #101413; --hero-ink: #f0efe8; --hero-ink-2: #97a09b;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page: #131310; --panel: #1c1b17; --ink: #f2f1e9; --ink-2: #b3b1a4;
+    --ink-3: #82806f; --line: #2e2d26; --accent: #45a99b; --accent-soft: #45a99b1f;
+    --accent-ink: #0d1512; --hero-bg: #101413; --hero-ink: #f0efe8; --hero-ink-2: #97a09b;
+  }
+  :root[data-theme="light"] {
+    --page: #f6f5f1; --panel: #fdfcf9; --ink: #191811; --ink-2: #5d5b50;
+    --ink-3: #8f8d80; --line: #e4e2d7; --accent: #177268; --accent-soft: #17726818;
+    --accent-ink: #ffffff; --hero-bg: #141817; --hero-ink: #f0efe8; --hero-ink-2: #a8b0ab;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font-family: var(--f-body); font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :is(a, button):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+
+  .eyebrow {
+    font-family: var(--f-display); font-size: 12px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .eyebrow::after { content: "."; color: var(--accent); }
+  h2 {
+    font-family: var(--f-display); font-weight: 700;
+    font-size: clamp(26px, 3.4vw, 40px); line-height: 1.12;
+    letter-spacing: -0.01em; text-wrap: balance;
+    margin: 10px 0 14px;
+  }
+  section { padding: 84px 0; }
+  section + section { border-top: 1px solid var(--line); }
+  .lede { color: var(--ink-2); max-width: 58ch; margin: 0; }
+
+  /* ————— Nav ————— */
+  .nav {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 5;
+    display: flex; align-items: baseline; gap: 26px;
+    max-width: 1100px; margin: 0 auto; padding: 26px 28px;
+    color: var(--hero-ink);
+  }
+  .wordmark {
+    font-family: var(--f-display); font-size: 19px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  .wordmark em { font-style: normal; color: var(--accent); }
+  .nav nav { margin-left: auto; display: flex; gap: 22px; }
+  .nav a { font-size: 13.5px; text-decoration: none; color: var(--hero-ink-2); }
+  .nav a:hover { color: var(--hero-ink); }
+
+  /* ————— Hero ————— */
+  .hero {
+    position: relative; overflow: hidden;
+    background: var(--hero-bg); color: var(--hero-ink);
+    padding: 168px 0 120px;
+  }
+  .hero-art {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    display: flex; justify-content: flex-end; align-items: center;
+  }
+  .hero-art svg { height: 150%; margin-right: -12%; opacity: 0.85; }
+  .ring { transform-box: fill-box; transform-origin: center; }
+  @media (prefers-reduced-motion: no-preference) {
+    .spin { animation: spin 70s linear infinite; }
+    .spinr { animation: spinr 90s linear infinite; }
+    .breathe { animation: breathe 9s ease-in-out infinite; }
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes spinr { to { transform: rotate(-360deg); } }
+  @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+  .hero .wrap { position: relative; z-index: 1; }
+  h1 {
+    font-family: var(--f-display); font-weight: 700;
+    font-size: clamp(42px, 7vw, 88px); line-height: 1.02;
+    letter-spacing: -0.015em; text-wrap: balance;
+    margin: 0 0 22px; max-width: 13ch;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .hero p { color: var(--hero-ink-2); font-size: 18px; max-width: 46ch; margin: 0 0 34px; }
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; text-decoration: none;
+    font-family: var(--f-display); font-weight: 600; font-size: 14.5px;
+    letter-spacing: 0.04em;
+    padding: 13px 26px; border-radius: 10px;
+  }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-ghost { border: 1px solid #ffffff2e; color: var(--hero-ink); }
+  .btn-ghost:hover { border-color: #ffffff5a; }
+  .hero-foot {
+    margin-top: 64px; display: flex; gap: 30px; flex-wrap: wrap;
+    color: var(--hero-ink-2); font-size: 13px;
+  }
+  .hero-foot span b { color: var(--hero-ink); font-family: var(--f-data); font-weight: 600; }
+
+  /* ————— Work ————— */
+  .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 38px; }
+  @media (max-width: 820px) { .work-grid { grid-template-columns: 1fr; } }
+  .case {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    overflow: hidden; text-decoration: none; display: block;
+  }
+  .case:hover .case-art svg { transform: scale(1.04); }
+  .case-art { height: 250px; overflow: hidden; line-height: 0; }
+  .case-art svg { width: 100%; height: 100%; transition: transform .5s ease; }
+  .case-body { padding: 22px 24px 26px; }
+  .case-kind { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+  .case h3 { font-family: var(--f-display); font-size: 21px; margin: 8px 0 8px; }
+  .case p { margin: 0; color: var(--ink-2); font-size: 14.5px; }
+
+  /* ————— Services ————— */
+  .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 38px; }
+  @media (max-width: 900px) { .svc-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .svc-grid { grid-template-columns: 1fr; } }
+  .svc {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 24px 24px 22px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .svc.feature { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .svc h3 { font-family: var(--f-display); font-size: 18px; margin: 0; }
+  .svc .time { font-size: 12px; color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; }
+  .svc p { margin: 0; color: var(--ink-2); font-size: 14px; flex: 1; }
+  .svc .price { font-family: var(--f-data); font-size: 14px; color: var(--ink); }
+  .svc .badge {
+    align-self: flex-start; font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent);
+    background: var(--accent-soft); border-radius: 999px; padding: 3px 10px;
+  }
+
+  /* ————— Process ————— */
+  .steps { counter-reset: step; display: grid; gap: 0; margin-top: 30px; }
+  .step {
+    display: grid; grid-template-columns: 74px 1fr; gap: 18px;
+    padding: 26px 0; border-bottom: 1px solid var(--line);
+  }
+  .step:last-child { border-bottom: 0; }
+  .step::before {
+    counter-increment: step; content: "0" counter(step);
+    font-family: var(--f-data); font-size: 15px; color: var(--accent);
+    padding-top: 3px;
+  }
+  .step h3 { font-family: var(--f-display); font-size: 18px; margin: 0 0 5px; }
+  .step p { margin: 0; color: var(--ink-2); font-size: 14.5px; max-width: 62ch; }
+  .step .hl { color: var(--ink); font-weight: 600; }
+
+  /* ————— Products ————— */
+  .prod-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 38px; }
+  @media (max-width: 820px) { .prod-grid { grid-template-columns: 1fr; } }
+  .prod { border: 1px solid var(--line); border-radius: 14px; padding: 24px; background: transparent; }
+  .prod .status { font-family: var(--f-data); font-size: 11.5px; color: var(--ink-3); }
+  .prod h3 { font-family: var(--f-display); font-size: 18px; margin: 8px 0 8px; }
+  .prod p { margin: 0; color: var(--ink-2); font-size: 14px; }
+
+  /* ————— Manifesto ————— */
+  .manifesto { text-align: center; }
+  .manifesto blockquote {
+    font-family: var(--f-display); font-weight: 700;
+    font-size: clamp(24px, 3.6vw, 42px); line-height: 1.2; letter-spacing: -0.01em;
+    max-width: 22ch; margin: 0 auto; text-wrap: balance;
+  }
+  .manifesto blockquote em { font-style: normal; color: var(--accent); }
+  .manifesto figcaption { margin-top: 16px; color: var(--ink-3); font-size: 13.5px; }
+
+  /* ————— Contact / footer ————— */
+  .contact {
+    background: var(--hero-bg); color: var(--hero-ink);
+    border-radius: 20px; padding: 64px 40px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .contact .eyebrow { color: var(--hero-ink-2); }
+  .contact h2 { max-width: 24ch; margin-left: auto; margin-right: auto; }
+  .contact p { color: var(--hero-ink-2); max-width: 52ch; margin: 0 auto 30px; }
+  .contact .mail { font-family: var(--f-data); font-size: 14px; color: var(--hero-ink-2); margin-top: 26px; display: block; }
+  .contact .mail a { color: var(--hero-ink); text-decoration-color: var(--accent); }
+  footer {
+    display: flex; gap: 18px; align-items: baseline; flex-wrap: wrap;
+    padding: 34px 0 44px; color: var(--ink-3); font-size: 13px;
+  }
+  footer .wordmark { font-size: 15px; color: var(--ink); }
+  footer .right { margin-left: auto; }
+</style>
+
+<header class="hero">
+  <div class="nav">
+    <div class="wordmark">Kiln<em>.</em></div>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#products">Products</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+
+  <div class="hero-art" aria-hidden="true">
+    <svg viewBox="0 0 900 900">
+      <g class="ring spin"><circle cx="450" cy="450" r="392" fill="none" stroke="#2e6b62" stroke-width="1.6" stroke-dasharray="10 26" stroke-linecap="round"/></g>
+      <g class="ring spinr"><circle cx="450" cy="450" r="318" fill="none" stroke="#3f8d81" stroke-width="1.2" stroke-dasharray="2 20" stroke-linecap="round"/></g>
+      <g class="ring spin" style="animation-duration: 110s"><circle cx="450" cy="450" r="238" fill="none" stroke="#2e6b62" stroke-width="7" stroke-dasharray="1 46" stroke-linecap="round"/></g>
+      <g class="ring spinr" style="animation-duration: 60s">
+        <circle cx="450" cy="450" r="160" fill="none" stroke="#57b3a4" stroke-width="1.4" stroke-dasharray="60 34" stroke-linecap="round"/>
+        <circle cx="610" cy="450" r="9" fill="#57b3a4"/>
+      </g>
+      <g class="ring breathe"><circle cx="450" cy="450" r="64" fill="#177268"/><circle cx="450" cy="450" r="26" fill="#101413"/></g>
+    </svg>
+  </div>
+
+  <div class="wrap">
+    <h1>We build configurable <em>everything.</em></h1>
+    <p>Kiln is a frontend studio for web apps, cross-platform mobile, and games.
+       Your brand lives in one token file — so every surface we ship can be
+       re-skinned in minutes, not sprints.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#contact">Book a token workshop</a>
+      <a class="btn btn-ghost" href="#work">See the proof</a>
+    </div>
+    <div class="hero-foot">
+      <span><b>1</b> token file per client</span>
+      <span><b>3</b> surfaces from one config</span>
+      <span><b>≥95</b> Lighthouse, every launch</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="work">
+    <div class="wrap">
+      <div class="eyebrow">Work</div>
+      <h2>The pitch is a live demo, not a deck.</h2>
+      <p class="lede">Both of these run in the browser right now — click one, change
+         the theme yourself, and watch three products re-skin live.</p>
+      <div class="work-grid">
+        <a class="case" href="showcase/">
+          <div class="case-art">
+            <svg viewBox="0 0 560 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="560" height="250" fill="#1b1626"/>
+              <circle cx="470" cy="40" r="130" fill="#d5408c" opacity="0.22"/>
+              <circle cx="80" cy="230" r="110" fill="#7a4dd8" opacity="0.18"/>
+              <rect x="46" y="46" width="150" height="74" rx="12" fill="#ffffff14" stroke="#ffffff2b"/>
+              <rect x="212" y="46" width="150" height="74" rx="12" fill="#ffffff14" stroke="#ffffff2b"/>
+              <rect x="378" y="46" width="136" height="74" rx="12" fill="#ffffff14" stroke="#ffffff2b"/>
+              <rect x="62" y="62" width="60" height="9" rx="4.5" fill="#ffffff55"/>
+              <rect x="62" y="82" width="94" height="16" rx="8" fill="#e561a3"/>
+              <rect x="228" y="62" width="60" height="9" rx="4.5" fill="#ffffff55"/>
+              <rect x="228" y="82" width="80" height="16" rx="8" fill="#ffffffcc"/>
+              <rect x="394" y="62" width="60" height="9" rx="4.5" fill="#ffffff55"/>
+              <rect x="394" y="82" width="66" height="16" rx="8" fill="#ffffffcc"/>
+              <path d="M46 200 L110 182 L174 188 L238 168 L302 172 L366 150 L430 156 L514 128"
+                fill="none" stroke="#e561a3" stroke-width="3.5" stroke-linecap="round"/>
+              <circle cx="514" cy="128" r="6" fill="#e561a3" stroke="#1b1626" stroke-width="3"/>
+            </svg>
+          </div>
+          <div class="case-body">
+            <div class="case-kind">Product systems</div>
+            <h3>The Prototype Console</h3>
+            <p>One token config drives a SaaS dashboard, a mobile app, and a playable
+               game — glass finish, ambient light, and copy included. Our whole thesis,
+               running in a browser tab.</p>
+          </div>
+        </a>
+        <a class="case" href="motion/">
+          <div class="case-art">
+            <svg viewBox="0 0 560 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="560" height="250" fill="#f2efe6"/>
+              <g class="ring spin" style="animation-duration: 50s">
+                <circle cx="280" cy="125" r="150" fill="none" stroke="#177268" stroke-width="2" stroke-dasharray="8 22" stroke-linecap="round"/>
+              </g>
+              <g class="ring spinr" style="animation-duration: 70s">
+                <circle cx="280" cy="125" r="104" fill="none" stroke="#b8722d" stroke-width="5" stroke-dasharray="1 30" stroke-linecap="round"/>
+              </g>
+              <g class="ring spin" style="animation-duration: 36s">
+                <circle cx="280" cy="125" r="62" fill="none" stroke="#2d4f9e" stroke-width="1.6" stroke-dasharray="46 26"/>
+                <circle cx="342" cy="125" r="7" fill="#2d4f9e"/>
+              </g>
+              <circle cx="280" cy="125" r="22" fill="#177268"/>
+              <circle cx="280" cy="125" r="9" fill="#f2efe6"/>
+            </svg>
+          </div>
+          <div class="case-body">
+            <div class="case-kind">Brand motion</div>
+            <h3>The Motion Lab</h3>
+            <p>Generative geometry that turns brand tokens into animated campaign
+               assets — five composition engines, four social formats, seeded and
+               reproducible, exported as real SVG.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="eyebrow">Services</div>
+      <h2>Packages, not hourly mystery.</h2>
+      <p class="lede">Fixed scope, fixed price, live preview links from day one.
+         Every engagement starts with your token file — so everything we make for
+         you matches, forever.</p>
+      <div class="svc-grid">
+        <div class="svc">
+          <span class="badge">The wedge</span>
+          <h3>Brand Motion Pack</h3>
+          <div class="time">2–3 days</div>
+          <p>Twelve animated social pieces across square, story, portrait, and banner —
+             generated from your brand tokens, delivered as SVG + PNG with templates
+             for your team.</p>
+          <div class="price">from $1,500</div>
+        </div>
+        <div class="svc feature">
+          <h3>Launch Site</h3>
+          <div class="time">1–2 weeks</div>
+          <p>A five-page marketing site: CMS, analytics, SEO, both color modes,
+             ≥95 Lighthouse. Built on our starter system, themed by your tokens.</p>
+          <div class="price">from $6,000</div>
+        </div>
+        <div class="svc">
+          <h3>Web App MVP</h3>
+          <div class="time">4–6 weeks</div>
+          <p>A dashboard-grade product with auth, billing, and real data — the same
+             stack as our Prototype Console, hardened for production.</p>
+          <div class="price">from $25,000</div>
+        </div>
+        <div class="svc">
+          <h3>App + Site Bundle</h3>
+          <div class="time">6–10 weeks</div>
+          <p>Cross-platform mobile app and marketing site sharing one design system —
+             one token file, every screen matching.</p>
+          <div class="price">custom</div>
+        </div>
+        <div class="svc">
+          <h3>Care Plan</h3>
+          <div class="time">Monthly</div>
+          <p>Updates, monitoring, content changes, and fresh motion assets each
+             month. Your site stays fast, current, and alive.</p>
+          <div class="price">from $750/mo</div>
+        </div>
+        <div class="svc">
+          <h3>Game Jam</h3>
+          <div class="time">2–4 weeks</div>
+          <p>A branded playable — for a campaign, a launch, or just because your
+             audience deserves fun. Web-first, mobile-friendly, tokens throughout.</p>
+          <div class="price">from $8,000</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="wrap">
+      <div class="eyebrow">Process</div>
+      <h2>Five steps, no surprises.</h2>
+      <div class="steps">
+        <div class="step"><div>
+          <h3>Discovery</h3>
+          <p>Thirty minutes. What you're building, who it's for, what done looks like.</p>
+        </div></div>
+        <div class="step"><div>
+          <h3>Token workshop</h3>
+          <p><span class="hl">The signature move.</span> On the call, we build your brand's
+             token file live and you watch it drive a dashboard, a mobile app, and a game —
+             in your colors, your type, your shapes — within the hour.</p>
+        </div></div>
+        <div class="step"><div>
+          <h3>Prototype</h3>
+          <p>A clickable version of the real thing within days, at a live URL you can
+             share internally.</p>
+        </div></div>
+        <div class="step"><div>
+          <h3>Build</h3>
+          <p>Weekly preview links, not screenshots. Comment directly on the live site.
+             Two structured revision rounds keep it moving.</p>
+        </div></div>
+        <div class="step"><div>
+          <h3>Launch &amp; care</h3>
+          <p>Performance and accessibility verified in CI, monitoring switched on,
+             handoff doc delivered. Care Plan keeps it improving after launch day.</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="products">
+    <div class="wrap">
+      <div class="eyebrow">Products</div>
+      <h2>We also build our own bets.</h2>
+      <p class="lede">The tools we sharpen on client work become things we sell.</p>
+      <div class="prod-grid">
+        <div class="prod">
+          <div class="status">in development</div>
+          <h3>Kiln Console</h3>
+          <p>Self-serve theming for teams: edit your tokens, preview across every
+             surface, publish. The prototype console, productized.</p>
+        </div>
+        <div class="prod">
+          <div class="status">exploring</div>
+          <h3>Motion templates</h3>
+          <p>The Motion Lab's composition engines as a template marketplace —
+             plug in your brand, export a campaign.</p>
+        </div>
+        <div class="prod">
+          <div class="status">exploring</div>
+          <h3>Original games</h3>
+          <p>Small, sharp, web-first games under our own banner. Casual play,
+             configurable everything — naturally.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="manifesto">
+    <div class="wrap">
+      <figure>
+        <blockquote>“Hard-coded is a bug. <em>Configurable</em> is the feature.”</blockquote>
+        <figcaption>The Kiln thesis — every component reads tokens, no exceptions.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact">
+        <div class="eyebrow">Contact</div>
+        <h2>Watch your brand run three products in one call.</h2>
+        <p>The token workshop is free, takes thirty minutes, and ends with your
+           brand live across a dashboard, an app, and a game. Worst case, you
+           leave with a great demo of your own identity.</p>
+        <a class="btn btn-primary" href="mailto:hello@kiln.studio?subject=Token%20workshop">Book a token workshop</a>
+        <span class="mail">or write to <a href="mailto:hello@kiln.studio">hello@kiln.studio</a></span>
+      </div>
+      <footer>
+        <div class="wordmark">Kiln<em>.</em></div>
+        <span>Web · Mobile · Games</span>
+        <span class="right">© 2026 Kiln Studio. Set in geometry, themed by tokens.</span>
+      </footer>
+    </div>
+  </section>
+</main>

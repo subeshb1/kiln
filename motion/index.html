@@ -1,0 +1,610 @@
+<title>Kiln Motion Lab — Generative SVG Studio</title>
+<style>
+  /* ————— Studio chrome tokens (shared Kiln identity) ————— */
+  :root {
+    --page: #f6f5f1;
+    --panel: #fdfcf9;
+    --ink: #191811;
+    --ink-2: #605e53;
+    --ink-3: #8f8d80;
+    --line: #e4e2d7;
+    --accent: #177268;
+    --accent-ink: #ffffff;
+    --focus: #177268;
+    --f-display: "Futura", "Avenir Next", "Century Gothic", system-ui, sans-serif;
+    --f-body: "Avenir Next", "Helvetica Neue", system-ui, sans-serif;
+    --f-data: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #131310; --panel: #1c1b17; --ink: #f2f1e9; --ink-2: #b5b3a6;
+      --ink-3: #82806f; --line: #2e2d26; --accent: #45a99b; --accent-ink: #0d1512; --focus: #45a99b;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page: #131310; --panel: #1c1b17; --ink: #f2f1e9; --ink-2: #b5b3a6;
+    --ink-3: #82806f; --line: #2e2d26; --accent: #45a99b; --accent-ink: #0d1512; --focus: #45a99b;
+  }
+  :root[data-theme="light"] {
+    --page: #f6f5f1; --panel: #fdfcf9; --ink: #191811; --ink-2: #605e53;
+    --ink-3: #8f8d80; --line: #e4e2d7; --accent: #177268; --accent-ink: #ffffff; --focus: #177268;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font-family: var(--f-body); font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :is(button, input, [tabindex]):focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .topbar {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 18px 24px 14px; border-bottom: 1px solid var(--line);
+  }
+  .wordmark {
+    font-family: var(--f-display); font-size: 20px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  .wordmark em { font-style: normal; color: var(--accent); }
+  .topbar .tag { font-size: 12px; color: var(--ink-2); letter-spacing: 0.06em; text-transform: uppercase; }
+  .topbar .hint { margin-left: auto; font-size: 12.5px; color: var(--ink-3); }
+
+  .shell {
+    display: grid; grid-template-columns: 300px minmax(0, 1fr);
+    gap: 22px; padding: 22px 24px 40px;
+    max-width: 1360px; margin: 0 auto;
+  }
+  @media (max-width: 900px) { .shell { grid-template-columns: 1fr; } }
+
+  .console { display: flex; flex-direction: column; gap: 18px; align-self: start; position: sticky; top: 18px; }
+  @media (max-width: 900px) { .console { position: static; } }
+  .console-intro { font-size: 13.5px; color: var(--ink-2); max-width: 42ch; margin: 0; }
+  .group { display: flex; flex-direction: column; gap: 8px; }
+  .group-label {
+    font-family: var(--f-display); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    border: 1px solid var(--line); background: var(--panel); border-radius: 999px;
+    padding: 6px 13px; font-size: 13px; display: inline-flex; align-items: center; gap: 7px;
+  }
+  .chip .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--chip-hue, var(--ink-3)); }
+  .chip[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .chip small { color: var(--ink-3); font-size: 11px; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field-head { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); }
+  .field-head output { font-family: var(--f-data); font-size: 12px; color: var(--ink); }
+  input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
+  input[type="text"] {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+    color: var(--ink); font: inherit; font-size: 13.5px; padding: 7px 10px; width: 100%;
+  }
+
+  .seg { display: flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; background: var(--panel); }
+  .seg button { flex: 1; border: 0; background: transparent; padding: 7px 4px; font-size: 12.5px; color: var(--ink-2); }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--page); }
+
+  .btnrow { display: flex; gap: 7px; }
+  .btn {
+    flex: 1; border: 1px solid var(--line); background: var(--panel);
+    border-radius: 9px; padding: 8px 10px; font-size: 13px; font-weight: 600;
+  }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+
+  .tokens-out {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; font-family: var(--f-data); font-size: 11.5px; line-height: 1.65;
+    color: var(--ink-2); margin: 0; overflow-x: auto;
+  }
+  .tokens-out .k { color: var(--ink-3); }
+  .tokens-out .v { color: var(--ink); }
+
+  /* ————— Stage ————— */
+  .stage-wrap { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+  .stage {
+    background:
+      radial-gradient(60% 60% at 30% 20%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 70%),
+      var(--panel);
+    border: 1px solid var(--line); border-radius: 18px;
+    min-height: 640px; padding: 30px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .artboard {
+    box-shadow: 0 30px 70px -30px rgba(0,0,0,.45);
+    border-radius: 6px; overflow: hidden;
+    line-height: 0;
+    max-width: 100%;
+  }
+  .artboard svg { max-height: 66vh; max-width: 100%; height: auto; display: block; }
+  .paused svg * { animation-play-state: paused !important; }
+  .stage-caption {
+    display: flex; gap: 14px; align-items: baseline;
+    font-size: 12.5px; color: var(--ink-3);
+  }
+  .stage-caption .dims { font-family: var(--f-data); }
+  .stage-caption .note { margin-left: auto; }
+</style>
+
+<header class="topbar">
+  <div class="wordmark">Kiln<em>.</em></div>
+  <div class="tag">Motion lab</div>
+  <div class="hint">Generative geometry → social-ready animated SVG. Every dial is a token.</div>
+</header>
+
+<main class="shell">
+  <aside class="console" aria-label="Motion console">
+    <p class="console-intro">Pick a client, a composition, and a canvas — the lab
+      generates an animated geometric piece from their brand tokens. Shuffle the
+      seed until you love it, then export.</p>
+
+    <div class="group">
+      <div class="group-label">Client</div>
+      <div class="chips" id="presetChips"></div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Composition</div>
+      <div class="chips" id="compChips"></div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Canvas</div>
+      <div class="seg" role="group" aria-label="Canvas format" id="formatSeg">
+        <button data-format="square" aria-pressed="true">1:1</button>
+        <button data-format="portrait">4:5</button>
+        <button data-format="story">9:16</button>
+        <button data-format="wide">16:9</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Geometry</div>
+      <div class="field">
+        <div class="field-head"><label for="density">Complexity</label><output id="densityOut">6</output></div>
+        <input type="range" id="density" min="3" max="10" value="6">
+      </div>
+      <div class="field">
+        <div class="field-head"><label for="speed">Motion speed</label><output id="speedOut">1.0×</output></div>
+        <input type="range" id="speed" min="25" max="200" value="100">
+      </div>
+      <div class="field">
+        <div class="field-head"><span id="motionLabel">Animation</span></div>
+        <div class="seg" role="group" aria-labelledby="motionLabel" id="motionSeg">
+          <button data-motion="on" aria-pressed="true">Playing</button>
+          <button data-motion="off">Paused</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-head"><span id="modeLabel">Ground</span></div>
+        <div class="seg" role="group" aria-labelledby="modeLabel" id="modeSeg">
+          <button data-mode="light" aria-pressed="true">Light</button>
+          <button data-mode="dark">Dark</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Copy</div>
+      <div class="field">
+        <div class="field-head"><span id="textLabel">Headline overlay</span></div>
+        <div class="seg" role="group" aria-labelledby="textLabel" id="textSeg">
+          <button data-text="on" aria-pressed="true">On</button>
+          <button data-text="off">Off</button>
+        </div>
+      </div>
+      <input type="text" id="headline" value="Money, in motion." aria-label="Headline">
+      <input type="text" id="subline" value="Meridian Treasury — now live" aria-label="Subline">
+    </div>
+
+    <div class="group">
+      <div class="group-label">Seed</div>
+      <div class="btnrow">
+        <button class="btn primary" id="shuffleBtn">Shuffle ✦</button>
+        <button class="btn" id="seedBtn" title="Seed">#41</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Export</div>
+      <div class="btnrow">
+        <button class="btn" id="dlSvg">SVG</button>
+        <button class="btn" id="dlPng">PNG</button>
+        <button class="btn" id="copySvg">Copy code</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Live config</div>
+      <pre class="tokens-out" id="tokensOut"></pre>
+    </div>
+  </aside>
+
+  <section class="stage-wrap">
+    <div class="stage">
+      <div class="artboard" id="artboard"></div>
+    </div>
+    <div class="stage-caption">
+      <span id="capFormat">Square · 1080 × 1080</span>
+      <span class="dims" id="capSeed">seed 41</span>
+      <span class="note">Exports are the real SVG — animations included.</span>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  const PRESETS = {
+    meridian: { label: "Meridian", vertical: "Fintech", hue: 222, sat: 66, mode: "light",
+      headline: "Money, in motion.", subline: "Meridian Treasury — now live" },
+    verda: { label: "Verda", vertical: "Health", hue: 152, sat: 52, mode: "light",
+      headline: "Feel the streak.", subline: "12 days and counting — Verda Care" },
+    nova: { label: "Nova Arcade", vertical: "Games", hue: 322, sat: 72, mode: "dark",
+      headline: "Season 5 starts tonight.", subline: "Nova Arcade — 8PM UTC" },
+    slate: { label: "Slate & Co", vertical: "B2B", hue: 34, sat: 78, mode: "light",
+      headline: "Insight, on schedule.", subline: "The Slate & Co quarterly brief" }
+  };
+
+  const COMPS = {
+    orbit: "Orbit", lattice: "Lattice", waves: "Waves", bloom: "Bloom", field: "Field"
+  };
+
+  const FORMATS = {
+    square: { W: 1080, H: 1080, label: "Square · 1080 × 1080" },
+    portrait: { W: 1080, H: 1350, label: "Portrait · 1080 × 1350" },
+    story: { W: 1080, H: 1920, label: "Story · 1080 × 1920" },
+    wide: { W: 1920, H: 1080, label: "Wide · 1920 × 1080" }
+  };
+
+  const state = {
+    preset: "meridian", hue: 222, sat: 66, mode: "light",
+    comp: "orbit", format: "square", density: 6, speed: 1,
+    motion: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    showText: true, seed: 41
+  };
+
+  const $ = (id) => document.getElementById(id);
+
+  /* Seeded RNG — same seed, same artwork. */
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function palette() {
+    const { hue: h, sat: s, mode } = state;
+    const dark = mode === "dark";
+    return {
+      bg: dark ? `hsl(${h} 22% 9%)` : `hsl(${h} 30% 96%)`,
+      ink: dark ? `hsl(${h} 12% 92%)` : `hsl(${h} 22% 13%)`,
+      c1: dark ? `hsl(${h} ${s}% 62%)` : `hsl(${h} ${s}% 44%)`,
+      c2: dark ? `hsl(${(h + 48) % 360} ${s}% 58%)` : `hsl(${(h + 48) % 360} ${s}% 52%)`,
+      c3: dark ? `hsl(${(h + 200) % 360} ${Math.max(s - 25, 18)}% 55%)` : `hsl(${(h + 200) % 360} ${Math.max(s - 20, 22)}% 40%)`,
+      c4: dark ? `hsl(${h} 30% 22%)` : `hsl(${h} 45% 86%)`
+    };
+  }
+
+  const dur = (base) => (base / state.speed).toFixed(2) + "s";
+
+  const SVG_STYLE = () => `
+    <style>
+      .tb { transform-box: fill-box; transform-origin: center; }
+      @keyframes k-spin  { to { transform: rotate(360deg); } }
+      @keyframes k-spinr { to { transform: rotate(-360deg); } }
+      @keyframes k-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.14); } }
+      @keyframes k-pulse { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
+      @keyframes k-sway { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+    </style>`;
+
+  /* ————— Generators — each returns inner SVG for a W×H canvas ————— */
+
+  function genOrbit(W, H, rng, p) {
+    const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.42;
+    const rings = state.density + 2;
+    let out = "";
+    out += `<circle cx="${cx}" cy="${cy}" r="${R * 1.25}" fill="${p.c4}" opacity="0.45"/>`;
+    for (let i = 1; i <= rings; i++) {
+      const r = (R * i) / rings;
+      const col = [p.c1, p.c2, p.c3][i % 3];
+      const dash = rng() > 0.4 ? `stroke-dasharray="${(6 + rng() * 40).toFixed(0)} ${(10 + rng() * 60).toFixed(0)}"` : "";
+      const sw = (2 + rng() * (i === rings ? 10 : 5)).toFixed(1);
+      const dir = rng() > 0.5 ? "k-spin" : "k-spinr";
+      const d = dur(18 + i * 7 + rng() * 20);
+      out += `<g class="tb" style="animation:${dir} ${d} linear infinite">
+        <circle cx="${cx}" cy="${cy}" r="${r.toFixed(0)}" fill="none" stroke="${col}" stroke-width="${sw}" ${dash} stroke-linecap="round" opacity="${(0.35 + rng() * 0.6).toFixed(2)}"/>`;
+      if (rng() > 0.45) {
+        const dotR = 6 + rng() * 16;
+        out += `<circle cx="${cx + r}" cy="${cy}" r="${dotR.toFixed(0)}" fill="${[p.c1, p.c2, p.c3][Math.floor(rng() * 3)]}"/>`;
+      }
+      out += `</g>`;
+    }
+    out += `<g class="tb" style="animation:k-breathe ${dur(6)} ease-in-out infinite">
+      <circle cx="${cx}" cy="${cy}" r="${(R * 0.16).toFixed(0)}" fill="${p.c1}"/>
+      <circle cx="${cx}" cy="${cy}" r="${(R * 0.16 * 0.45).toFixed(0)}" fill="${p.bg}"/></g>`;
+    return out;
+  }
+
+  function genLattice(W, H, rng, p) {
+    const cols = state.density + 2;
+    const cell = W / cols;
+    const rows = Math.ceil(H / cell);
+    const cs = [p.c1, p.c2, p.c3, p.c4];
+    let out = "";
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = c * cell, y = r * cell, m = cell * 0.08;
+        const col = cs[Math.floor(rng() * 4)];
+        const kind = Math.floor(rng() * 6);
+        const delay = `animation-delay:-${(rng() * 8).toFixed(1)}s`;
+        const anim = rng() < 0.3
+          ? `class="tb" style="animation:${rng() > 0.5 ? "k-sway" : "k-breathe"} ${dur(5 + rng() * 6)} ease-in-out infinite;${delay}"`
+          : rng() < 0.12
+            ? `class="tb" style="animation:k-spin ${dur(14 + rng() * 14)} linear infinite;${delay}"`
+            : "";
+        if (kind === 0) {
+          const rot = Math.floor(rng() * 4) * 90;
+          out += `<g ${anim}><path d="M ${x + m} ${y + m} A ${cell - 2 * m} ${cell - 2 * m} 0 0 1 ${x + cell - m} ${y + cell - m} L ${x + m} ${y + cell - m} Z"
+            fill="${col}" transform="rotate(${rot} ${x + cell / 2} ${y + cell / 2})"/></g>`;
+        } else if (kind === 1) {
+          out += `<g ${anim}><circle cx="${x + cell / 2}" cy="${y + cell / 2}" r="${(cell / 2 - m).toFixed(0)}" fill="${col}"/></g>`;
+        } else if (kind === 2) {
+          out += `<g ${anim}><circle cx="${x + cell / 2}" cy="${y + cell / 2}" r="${(cell / 2 - m).toFixed(0)}" fill="none" stroke="${col}" stroke-width="${(cell * 0.09).toFixed(0)}"/></g>`;
+        } else if (kind === 3) {
+          const rot = Math.floor(rng() * 4) * 90;
+          out += `<g ${anim}><path d="M ${x + m} ${y + cell - m} L ${x + cell / 2} ${y + m} L ${x + cell - m} ${y + cell - m} Z"
+            fill="${col}" transform="rotate(${rot} ${x + cell / 2} ${y + cell / 2})"/></g>`;
+        } else if (kind === 4) {
+          const rot = Math.floor(rng() * 4) * 90;
+          out += `<g ${anim}><path d="M ${x + m} ${y + m} H ${x + cell - m} V ${y + cell - m} Z" fill="${col}"
+            transform="rotate(${rot} ${x + cell / 2} ${y + cell / 2})"/></g>`;
+        } else {
+          out += `<g ${anim}><circle cx="${x + cell / 2}" cy="${y + cell / 2}" r="${(cell * 0.11).toFixed(0)}" fill="${col}"/></g>`;
+        }
+      }
+    }
+    return out;
+  }
+
+  function genWaves(W, H, rng, p) {
+    const layers = Math.max(4, Math.round(state.density * 0.8));
+    const cs = [p.c4, p.c3, p.c2, p.c1];
+    let out = "";
+    const sunR = Math.min(W, H) * (0.10 + rng() * 0.08);
+    out += `<g class="tb" style="animation:k-breathe ${dur(7)} ease-in-out infinite">
+      <circle cx="${(W * (0.25 + rng() * 0.5)).toFixed(0)}" cy="${(H * 0.24).toFixed(0)}" r="${sunR.toFixed(0)}" fill="${p.c2}"/></g>`;
+    for (let k = 0; k < layers; k++) {
+      const col = cs[k % cs.length];
+      const baseY = H * (0.42 + (k / layers) * 0.52);
+      const amp = H * (0.02 + rng() * 0.05);
+      const cycles = 2 + Math.floor(rng() * 3);
+      const step = 24;
+      let d = `M 0 ${baseY.toFixed(1)}`;
+      for (let x = 0; x <= W * 2; x += step) {
+        const y = baseY + Math.sin(((x / W) * cycles + rng() * 0) * Math.PI * 2) * amp;
+        d += ` L ${x} ${y.toFixed(1)}`;
+      }
+      d += ` L ${W * 2} ${H} L 0 ${H} Z`;
+      const sp = dur(9 + k * 4 + rng() * 6);
+      out += `<g style="animation:k-slide-${k} ${sp} linear infinite">
+        <path d="${d}" fill="${col}" opacity="${(0.5 + (k / layers) * 0.5).toFixed(2)}"/></g>
+        <style>@keyframes k-slide-${k} { to { transform: translateX(-${W}px); } }</style>`;
+    }
+    return out;
+  }
+
+  function genBloom(W, H, rng, p) {
+    const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.4;
+    const petals = state.density * 2 + 6;
+    let out = `<circle cx="${cx}" cy="${cy}" r="${R * 1.18}" fill="${p.c4}" opacity="0.4"/>`;
+    out += `<g class="tb" style="animation:k-spin ${dur(60)} linear infinite">`;
+    for (let i = 0; i < petals; i++) {
+      const a = (i / petals) * 360;
+      const col = i % 2 ? p.c2 : p.c1;
+      const ry = R * (0.72 + rng() * 0.28);
+      const rx = R * (0.09 + rng() * 0.08);
+      out += `<g transform="rotate(${a.toFixed(1)} ${cx} ${cy})">
+        <ellipse class="tb" style="animation:k-breathe ${dur(5 + (i % 5))} ease-in-out infinite;animation-delay:-${(i * 0.4).toFixed(1)}s"
+          cx="${cx}" cy="${(cy - ry / 2).toFixed(0)}" rx="${rx.toFixed(0)}" ry="${(ry / 2).toFixed(0)}" fill="${col}" opacity="0.62"/></g>`;
+    }
+    out += `</g>`;
+    out += `<g class="tb" style="animation:k-spinr ${dur(40)} linear infinite">
+      <circle cx="${cx}" cy="${cy}" r="${(R * 0.34).toFixed(0)}" fill="none" stroke="${p.c3}" stroke-width="3"
+        stroke-dasharray="4 18" stroke-linecap="round"/></g>`;
+    out += `<circle cx="${cx}" cy="${cy}" r="${(R * 0.12).toFixed(0)}" fill="${p.ink}"/>`;
+    return out;
+  }
+
+  function genField(W, H, rng, p) {
+    const n = state.density * 9;
+    const pts = [];
+    for (let i = 0; i < n; i++) pts.push({ x: rng() * W, y: rng() * H, r: 3 + rng() * 7 });
+    let out = "";
+    out += `<circle cx="${W * 0.22}" cy="${H * 0.26}" r="${Math.min(W, H) * 0.3}" fill="${p.c1}" opacity="0.10"/>
+            <circle cx="${W * 0.78}" cy="${H * 0.74}" r="${Math.min(W, H) * 0.34}" fill="${p.c2}" opacity="0.10"/>`;
+    const thr = Math.min(W, H) * 0.17;
+    for (let i = 0; i < n; i++) {
+      for (let j = i + 1; j < n; j++) {
+        const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < thr) {
+          out += `<line x1="${pts[i].x.toFixed(0)}" y1="${pts[i].y.toFixed(0)}" x2="${pts[j].x.toFixed(0)}" y2="${pts[j].y.toFixed(0)}"
+            stroke="${p.ink}" stroke-width="1" opacity="${(0.32 * (1 - dist / thr)).toFixed(2)}"/>`;
+        }
+      }
+    }
+    pts.forEach((pt, i) => {
+      const col = [p.c1, p.c2, p.c3][i % 3];
+      out += `<circle class="tb" style="animation:k-pulse ${dur(3 + (i % 4))} ease-in-out infinite;animation-delay:-${((i % 9) * 0.5).toFixed(1)}s"
+        cx="${pt.x.toFixed(0)}" cy="${pt.y.toFixed(0)}" r="${pt.r.toFixed(1)}" fill="${col}"/>`;
+    });
+    return out;
+  }
+
+  const GENERATORS = { orbit: genOrbit, lattice: genLattice, waves: genWaves, bloom: genBloom, field: genField };
+
+  function textOverlay(W, H, p) {
+    if (!state.showText) return "";
+    const preset = PRESETS[state.preset];
+    const hSize = W * 0.062, sSize = W * 0.026, x = W * 0.07;
+    const yBase = H - W * 0.09;
+    const head = $("headline").value || " ";
+    const sub = $("subline").value || " ";
+    return `
+      <rect x="0" y="${(yBase - hSize * 2.4).toFixed(0)}" width="${W}" height="${H}" fill="${p.bg}" opacity="0.72"/>
+      <text x="${x}" y="${(yBase - hSize * 1.35).toFixed(0)}" font-family="Futura, 'Avenir Next', system-ui, sans-serif"
+        font-size="${(sSize * 0.82).toFixed(0)}" font-weight="600" letter-spacing="${(sSize * 0.2).toFixed(1)}"
+        fill="${p.c1}">${esc(preset.label.toUpperCase())} × KILN</text>
+      <text x="${x}" y="${yBase.toFixed(0)}" font-family="Futura, 'Avenir Next', system-ui, sans-serif"
+        font-size="${hSize.toFixed(0)}" font-weight="700" fill="${p.ink}">${esc(head)}</text>
+      <text x="${x}" y="${(yBase + sSize * 2.1).toFixed(0)}" font-family="'Avenir Next', system-ui, sans-serif"
+        font-size="${sSize.toFixed(0)}" fill="${p.ink}" opacity="0.72">${esc(sub)}</text>`;
+  }
+
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function buildSvg() {
+    const { W, H } = FORMATS[state.format];
+    const rng = mulberry32(state.seed);
+    const p = palette();
+    const inner = GENERATORS[state.comp](W, H, rng, p);
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+      ${SVG_STYLE()}
+      <rect width="${W}" height="${H}" fill="${p.bg}"/>
+      ${inner}
+      ${textOverlay(W, H, p)}
+    </svg>`;
+  }
+
+  function render() {
+    const board = $("artboard");
+    board.innerHTML = buildSvg();
+    board.classList.toggle("paused", !state.motion);
+    $("capFormat").textContent = FORMATS[state.format].label;
+    $("capSeed").textContent = "seed " + state.seed;
+    $("seedBtn").textContent = "#" + state.seed;
+    $("densityOut").textContent = state.density;
+    $("speedOut").textContent = state.speed.toFixed(2).replace(/0$/, "") + "×";
+    $("tokensOut").innerHTML =
+      `<span class="k">client</span>      <span class="v">${state.preset}</span>\n` +
+      `<span class="k">composition</span> <span class="v">${state.comp}</span>\n` +
+      `<span class="k">canvas</span>      <span class="v">${state.format}</span>\n` +
+      `<span class="k">brand.hue</span>   <span class="v">${state.hue}</span>\n` +
+      `<span class="k">complexity</span>  <span class="v">${state.density}</span>\n` +
+      `<span class="k">speed</span>       <span class="v">${state.speed}×</span>\n` +
+      `<span class="k">seed</span>        <span class="v">${state.seed}</span>`;
+  }
+
+  /* ————— Console wiring ————— */
+  function syncSeg(segId, dataKey, value) {
+    document.querySelectorAll("#" + segId + " button").forEach((b) =>
+      b.setAttribute("aria-pressed", String(b.dataset[dataKey] === value)));
+  }
+  function wireSeg(segId, dataKey, apply) {
+    document.querySelectorAll("#" + segId + " button").forEach((b) => {
+      b.addEventListener("click", () => {
+        apply(b.dataset[dataKey]);
+        syncSeg(segId, dataKey, b.dataset[dataKey]);
+        render();
+      });
+    });
+  }
+
+  const chipWrap = $("presetChips");
+  Object.entries(PRESETS).forEach(([key, p]) => {
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.dataset.preset = key;
+    b.setAttribute("aria-pressed", String(key === state.preset));
+    b.innerHTML = `<span class="dot" style="--chip-hue:hsl(${p.hue} ${p.sat}% 48%)"></span>${p.label} <small>${p.vertical}</small>`;
+    b.addEventListener("click", () => {
+      state.preset = key; state.hue = p.hue; state.sat = p.sat; state.mode = p.mode;
+      $("headline").value = p.headline;
+      $("subline").value = p.subline;
+      syncSeg("modeSeg", "mode", p.mode);
+      document.querySelectorAll("#presetChips .chip").forEach((c) =>
+        c.setAttribute("aria-pressed", String(c.dataset.preset === key)));
+      render();
+    });
+    chipWrap.appendChild(b);
+  });
+
+  const compWrap = $("compChips");
+  Object.entries(COMPS).forEach(([key, label]) => {
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.dataset.comp = key;
+    b.textContent = label;
+    b.setAttribute("aria-pressed", String(key === state.comp));
+    b.addEventListener("click", () => {
+      state.comp = key;
+      document.querySelectorAll("#compChips .chip").forEach((c) =>
+        c.setAttribute("aria-pressed", String(c.dataset.comp === key)));
+      render();
+    });
+    compWrap.appendChild(b);
+  });
+
+  wireSeg("formatSeg", "format", (v) => { state.format = v; });
+  wireSeg("modeSeg", "mode", (v) => { state.mode = v; });
+  wireSeg("motionSeg", "motion", (v) => { state.motion = v === "on"; });
+  wireSeg("textSeg", "text", (v) => { state.showText = v === "on"; });
+  syncSeg("motionSeg", "motion", state.motion ? "on" : "off");
+
+  $("density").addEventListener("input", (e) => { state.density = +e.target.value; render(); });
+  $("speed").addEventListener("input", (e) => { state.speed = +e.target.value / 100; render(); });
+  $("headline").addEventListener("input", render);
+  $("subline").addEventListener("input", render);
+  $("shuffleBtn").addEventListener("click", () => {
+    state.seed = 1 + Math.floor(Math.random() * 99999);
+    render();
+  });
+
+  /* ————— Export ————— */
+  function download(name, blob) {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  }
+  const fileStem = () => `kiln-${state.preset}-${state.comp}-${state.format}-s${state.seed}`;
+
+  $("dlSvg").addEventListener("click", () => {
+    download(fileStem() + ".svg", new Blob([buildSvg()], { type: "image/svg+xml" }));
+  });
+  $("dlPng").addEventListener("click", () => {
+    const { W, H } = FORMATS[state.format];
+    const img = new Image();
+    const url = URL.createObjectURL(new Blob([buildSvg()], { type: "image/svg+xml" }));
+    img.onload = () => {
+      const c = document.createElement("canvas");
+      c.width = W; c.height = H;
+      c.getContext("2d").drawImage(img, 0, 0, W, H);
+      URL.revokeObjectURL(url);
+      c.toBlob((b) => download(fileStem() + ".png", b), "image/png");
+    };
+    img.src = url;
+  });
+  $("copySvg").addEventListener("click", async () => {
+    await navigator.clipboard.writeText(buildSvg());
+    const btn = $("copySvg");
+    const t = btn.textContent;
+    btn.textContent = "Copied ✓";
+    setTimeout(() => { btn.textContent = t; }, 1400);
+  });
+
+  render();
+})();
+</script>

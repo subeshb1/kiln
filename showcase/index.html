@@ -1,0 +1,1124 @@
+<title>Kiln Studio — Configurable Prototypes</title>
+<style>
+  /* ————— Studio chrome tokens (fixed page identity) ————— */
+  :root {
+    --page: #f6f5f1;
+    --panel: #fdfcf9;
+    --ink: #191811;
+    --ink-2: #605e53;
+    --ink-3: #8f8d80;
+    --line: #e4e2d7;
+    --accent: #177268;
+    --accent-ink: #ffffff;
+    --focus: #177268;
+    --f-display: "Futura", "Avenir Next", "Century Gothic", system-ui, sans-serif;
+    --f-body: "Avenir Next", "Helvetica Neue", system-ui, sans-serif;
+    --f-data: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #131310;
+      --panel: #1c1b17;
+      --ink: #f2f1e9;
+      --ink-2: #b5b3a6;
+      --ink-3: #82806f;
+      --line: #2e2d26;
+      --accent: #45a99b;
+      --accent-ink: #0d1512;
+      --focus: #45a99b;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page: #131310; --panel: #1c1b17; --ink: #f2f1e9; --ink-2: #b5b3a6;
+    --ink-3: #82806f; --line: #2e2d26; --accent: #45a99b; --accent-ink: #0d1512; --focus: #45a99b;
+  }
+  :root[data-theme="light"] {
+    --page: #f6f5f1; --panel: #fdfcf9; --ink: #191811; --ink-2: #605e53;
+    --ink-3: #8f8d80; --line: #e4e2d7; --accent: #177268; --accent-ink: #ffffff; --focus: #177268;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :is(button, input, [tabindex]):focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* ————— Top bar ————— */
+  .topbar {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 18px 24px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .wordmark {
+    font-family: var(--f-display);
+    font-size: 20px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  .wordmark em { font-style: normal; color: var(--accent); }
+  .topbar .tag {
+    font-size: 12px; color: var(--ink-2);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .topbar .hint { margin-left: auto; font-size: 12.5px; color: var(--ink-3); }
+
+  /* ————— Shell layout ————— */
+  .shell {
+    display: grid;
+    grid-template-columns: 292px minmax(0, 1fr);
+    gap: 22px;
+    padding: 22px 24px 40px;
+    max-width: 1340px;
+    margin: 0 auto;
+  }
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+  }
+
+  /* ————— Console (left rail) ————— */
+  .console {
+    display: flex; flex-direction: column; gap: 20px;
+    align-self: start;
+    position: sticky; top: 18px;
+  }
+  @media (max-width: 900px) { .console { position: static; } }
+  .console-intro { font-size: 13.5px; color: var(--ink-2); max-width: 40ch; }
+  .group { display: flex; flex-direction: column; gap: 9px; }
+  .group-label {
+    font-family: var(--f-display);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    border-radius: 999px;
+    padding: 6px 13px;
+    font-size: 13px;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .chip .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--chip-hue, var(--ink-3)); }
+  .chip[aria-pressed="true"] {
+    border-color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--ink);
+  }
+  .chip small { color: var(--ink-3); font-size: 11px; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field-head { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); }
+  .field-head output { font-family: var(--f-data); font-size: 12px; color: var(--ink); }
+  input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
+  #hue {
+    appearance: none; -webkit-appearance: none;
+    height: 10px; border-radius: 5px;
+    background: linear-gradient(90deg,
+      hsl(0 65% 55%), hsl(60 65% 50%), hsl(120 55% 45%),
+      hsl(180 60% 45%), hsl(240 65% 60%), hsl(300 65% 55%), hsl(360 65% 55%));
+  }
+  #hue::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--panel);
+    border: 3px solid var(--ink);
+  }
+
+  .seg { display: flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; background: var(--panel); }
+  .seg button {
+    flex: 1; border: 0; background: transparent;
+    padding: 7px 4px; font-size: 12.5px; color: var(--ink-2);
+  }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--page); }
+
+  .tokens-out {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: var(--f-data);
+    font-size: 11.5px; line-height: 1.65;
+    color: var(--ink-2);
+    margin: 0;
+    overflow-x: auto;
+  }
+  .tokens-out .k { color: var(--ink-3); }
+  .tokens-out .v { color: var(--ink); }
+
+  /* ————— Stage header: tabs ————— */
+  .stage-wrap { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+  .tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--line); }
+  .tab {
+    border: 0; background: transparent;
+    padding: 9px 16px 11px;
+    font-family: var(--f-display);
+    font-size: 12.5px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-2);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+  /* ————— Stage & demo tokens (set by JS) ————— */
+  .stage {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--d-bg);
+    color: var(--d-ink);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: calc(var(--sp) * 3);
+    min-height: 560px;
+    font-family: var(--d-f-body);
+  }
+  /* Ambient light field — brand-hued, sits under the glass */
+  .ambient {
+    position: absolute; inset: -25%;
+    z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(38% 38% at 18% 12%, var(--amb-a), transparent 70%),
+      radial-gradient(42% 42% at 84% 20%, var(--amb-b), transparent 70%),
+      radial-gradient(48% 40% at 55% 96%, var(--amb-a), transparent 70%);
+    opacity: var(--amb-o, 1);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .ambient { animation: drift 26s ease-in-out infinite alternate; }
+  }
+  @keyframes drift {
+    from { transform: translate(-2.5%, -2%) rotate(-1.5deg) scale(1); }
+    to   { transform: translate(2.5%, 2%) rotate(1.5deg) scale(1.06); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .stage, .stage *:not(canvas) {
+      transition: background-color .3s ease, color .3s ease,
+        border-color .3s ease, border-radius .3s ease, fill .3s ease, stroke .3s ease;
+    }
+  }
+  .surface { display: none; position: relative; z-index: 1; }
+  .surface.active { display: block; }
+
+  /* ————— Web dashboard demo ————— */
+  .dash-top { display: flex; align-items: center; gap: 12px; margin-bottom: calc(var(--sp) * 2.5); flex-wrap: wrap; }
+  .dash-logo {
+    width: 30px; height: 30px; border-radius: var(--r);
+    background: var(--brand); color: var(--on-brand);
+    display: grid; place-items: center;
+    font-family: var(--d-f-display); font-weight: 700; font-size: 15px;
+  }
+  .dash-name { font-family: var(--d-f-display); font-size: 17px; font-weight: 700; }
+  .dash-nav { display: flex; gap: 4px; margin-left: 10px; }
+  .dash-nav button {
+    border: 0; background: transparent; color: var(--d-ink-2);
+    font-size: 13px; padding: 6px 11px; border-radius: var(--r);
+  }
+  .dash-nav button[aria-current="true"] { background: var(--brand-tint); color: var(--brand-strong); font-weight: 600; }
+  .dash-cta {
+    margin-left: auto;
+    background: var(--brand); color: var(--on-brand);
+    border: 0; border-radius: var(--r);
+    padding: 8px 15px; font-size: 13.5px; font-weight: 600;
+    box-shadow: var(--glow-brand);
+  }
+
+  .tiles {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: calc(var(--sp) * 1.5);
+    margin-bottom: calc(var(--sp) * 1.5);
+  }
+  @media (max-width: 1080px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  .tile {
+    background: var(--panel-bg);
+    -webkit-backdrop-filter: var(--panel-backdrop);
+    backdrop-filter: var(--panel-backdrop);
+    border: 1px solid var(--panel-border);
+    box-shadow: var(--panel-shadow);
+    border-radius: var(--r-lg);
+    padding: calc(var(--sp) * 1.75);
+    min-width: 0;
+  }
+  .tile .label { font-size: 12px; color: var(--d-ink-2); letter-spacing: 0.04em; text-transform: uppercase; }
+  .tile .value {
+    font-family: var(--d-f-display);
+    font-size: clamp(20px, 2vw, 26px); font-weight: 700;
+    margin: 3px 0 5px;
+  }
+  .delta { font-size: 12.5px; font-weight: 600; }
+  .delta.up { color: var(--good-ink); }
+  .delta.down { color: var(--bad-ink); }
+  .delta small { color: var(--d-ink-3); font-weight: 400; margin-left: 4px; }
+
+  .charts { display: grid; grid-template-columns: 3fr 2fr; gap: calc(var(--sp) * 1.5); }
+  @media (max-width: 1080px) { .charts { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--panel-bg);
+    -webkit-backdrop-filter: var(--panel-backdrop);
+    backdrop-filter: var(--panel-backdrop);
+    border: 1px solid var(--panel-border);
+    box-shadow: var(--panel-shadow);
+    border-radius: var(--r-lg);
+    padding: calc(var(--sp) * 1.75);
+    min-width: 0;
+  }
+  .card h3 { margin: 0 0 2px; font-family: var(--d-f-display); font-size: 14.5px; font-weight: 700; }
+  .card .sub { margin: 0 0 12px; font-size: 12.5px; color: var(--d-ink-2); }
+  .plot { position: relative; }
+  .plot svg { display: block; width: 100%; height: auto; }
+  .gridline { stroke: var(--d-line); stroke-width: 1; }
+  .axis-label { fill: var(--d-ink-3); font-size: 10.5px; font-family: var(--d-f-body); }
+  .tooltip {
+    position: absolute; pointer-events: none;
+    background: var(--d-ink); color: var(--d-bg);
+    font-size: 12px; line-height: 1.45;
+    padding: 6px 9px; border-radius: 7px;
+    transform: translate(-50%, -110%);
+    white-space: nowrap; opacity: 0;
+  }
+  .tooltip.show { opacity: 1; }
+  .tooltip b { font-family: var(--f-data); font-size: 11.5px; }
+
+  /* ————— Mobile demo ————— */
+  .surface-mobile.active { display: flex; justify-content: center; padding: calc(var(--sp) * 1) 0; }
+  .phone {
+    width: 316px; height: 620px;
+    border-radius: 42px;
+    border: 10px solid var(--d-ink);
+    background: radial-gradient(140% 65% at 50% -12%, var(--amb-a), var(--d-bg) 62%);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 24px 48px -24px rgba(0,0,0,.35), var(--glow-brand);
+  }
+  .phone-status {
+    display: flex; justify-content: space-between;
+    padding: 10px 20px 4px;
+    font-size: 11px; color: var(--d-ink-2); font-family: var(--f-data);
+  }
+  .app { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: calc(var(--sp) * 1.5) calc(var(--sp) * 1.75) 0; gap: calc(var(--sp) * 1.5); }
+  .app-head { display: flex; align-items: center; gap: 10px; }
+  .app-head .hello { font-size: 12px; color: var(--d-ink-2); }
+  .app-head .who { font-family: var(--d-f-display); font-weight: 700; font-size: 16px; }
+  .avatar {
+    margin-left: auto; width: 32px; height: 32px; border-radius: 50%;
+    background: var(--brand-tint); color: var(--brand-strong);
+    display: grid; place-items: center; font-size: 12.5px; font-weight: 700;
+  }
+  .hero-card {
+    background: var(--brand); color: var(--on-brand);
+    border-radius: var(--r-lg);
+    padding: calc(var(--sp) * 2);
+    box-shadow: var(--glow-brand);
+  }
+  .hero-card .label { font-size: 12px; opacity: .82; }
+  .hero-card .amount { font-family: var(--d-f-display); font-size: 28px; font-weight: 700; margin: 2px 0 10px; }
+  .hero-card .meta { font-family: var(--f-data); font-size: 11.5px; opacity: .82; letter-spacing: 0.08em; }
+  .quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .quick button {
+    border: 1px solid var(--panel-border); background: var(--panel-bg);
+    -webkit-backdrop-filter: var(--panel-backdrop);
+    backdrop-filter: var(--panel-backdrop);
+    border-radius: var(--r); padding: 9px 2px 7px;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-size: 10.5px; color: var(--d-ink-2);
+  }
+  .quick svg { width: 17px; height: 17px; stroke: var(--brand-strong); }
+  .txns { flex: 1; overflow: hidden; }
+  .txns h4 { margin: 0 0 8px; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--d-ink-2); }
+  .txn { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--d-line); }
+  .txn:last-child { border-bottom: 0; }
+  .txn .ico {
+    width: 32px; height: 32px; border-radius: var(--r);
+    background: var(--brand-tint); color: var(--brand-strong);
+    display: grid; place-items: center; font-size: 12px; font-weight: 700; flex: none;
+  }
+  .txn .t-name { font-size: 13.5px; font-weight: 600; }
+  .txn .t-time { font-size: 11.5px; color: var(--d-ink-3); }
+  .txn .t-amt { margin-left: auto; font-family: var(--f-data); font-size: 12.5px; }
+  .txn .t-amt.plus { color: var(--good-ink); }
+  .tabbar {
+    display: flex; border-top: 1px solid var(--panel-border);
+    background: var(--panel-bg);
+    -webkit-backdrop-filter: var(--panel-backdrop);
+    backdrop-filter: var(--panel-backdrop);
+    padding: 8px 6px 14px;
+  }
+  .tabbar button {
+    flex: 1; border: 0; background: transparent;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    font-size: 10px; color: var(--d-ink-3);
+  }
+  .tabbar button[aria-current="true"] { color: var(--brand-strong); font-weight: 600; }
+  .tabbar svg { width: 19px; height: 19px; }
+
+  /* ————— Game demo ————— */
+  .surface-game.active { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .game-head { display: flex; align-items: baseline; gap: 14px; width: min(640px, 100%); }
+  .game-title { font-family: var(--d-f-display); font-weight: 700; font-size: 17px; }
+  .game-score { margin-left: auto; font-family: var(--f-data); font-size: 13px; color: var(--d-ink-2); }
+  .game-frame { position: relative; width: min(640px, 100%); }
+  canvas {
+    display: block; width: 100%; height: auto;
+    background: var(--panel-bg);
+    -webkit-backdrop-filter: var(--panel-backdrop);
+    backdrop-filter: var(--panel-backdrop);
+    border: 1px solid var(--panel-border);
+    box-shadow: var(--panel-shadow);
+    border-radius: var(--r-lg);
+  }
+  .game-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    background: color-mix(in srgb, var(--d-bg) 55%, transparent);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border-radius: var(--r-lg);
+    text-align: center; padding: 20px;
+  }
+  .game-overlay.hidden { display: none; }
+  .game-overlay p { margin: 0; font-size: 13.5px; color: var(--d-ink-2); max-width: 34ch; }
+  .game-overlay .big { font-family: var(--d-f-display); font-size: 22px; font-weight: 700; color: var(--d-ink); }
+  .game-overlay button {
+    background: var(--brand); color: var(--on-brand);
+    border: 0; border-radius: var(--r);
+    padding: 10px 22px; font-size: 14px; font-weight: 600;
+    box-shadow: var(--glow-brand);
+  }
+  .game-note { font-size: 12px; color: var(--ink-3); }
+</style>
+
+<header class="topbar">
+  <div class="wordmark">Kiln<em>.</em></div>
+  <div class="tag">Prototype console</div>
+  <div class="hint">One token config → three products. Change anything on the left.</div>
+</header>
+
+<main class="shell">
+  <!-- ————— Theme console ————— -->
+  <aside class="console" aria-label="Theme console">
+    <p class="console-intro">Every surface on the right reads the same design tokens.
+      Pick a client identity or turn the dials yourself — the dashboard, the mobile
+      app, and the game re-skin live.</p>
+
+    <div class="group">
+      <div class="group-label">Client</div>
+      <div class="chips" id="presetChips"></div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Brand</div>
+      <div class="field">
+        <div class="field-head"><label for="hue">Hue</label><output id="hueOut">222°</output></div>
+        <input type="range" id="hue" min="0" max="359" value="222">
+      </div>
+      <div class="field">
+        <div class="field-head"><label for="sat">Saturation</label><output id="satOut">66%</output></div>
+        <input type="range" id="sat" min="15" max="90" value="66">
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Shape &amp; rhythm</div>
+      <div class="field">
+        <div class="field-head"><label for="radius">Corner radius</label><output id="radiusOut">4px</output></div>
+        <input type="range" id="radius" min="0" max="24" value="4">
+      </div>
+      <div class="field">
+        <div class="field-head"><span id="densityLabel">Density</span></div>
+        <div class="seg" role="group" aria-labelledby="densityLabel" id="densitySeg">
+          <button data-space="6">Compact</button>
+          <button data-space="8" aria-pressed="true">Regular</button>
+          <button data-space="10">Airy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Type</div>
+      <div class="seg" role="group" aria-label="Type pairing" id="fontSeg">
+        <button data-font="geometric" aria-pressed="true">Geometric</button>
+        <button data-font="humanist">Humanist</button>
+        <button data-font="editorial">Editorial</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Finish</div>
+      <div class="field">
+        <div class="field-head"><span id="finishLabel">Surface</span></div>
+        <div class="seg" role="group" aria-labelledby="finishLabel" id="finishSeg">
+          <button data-finish="solid">Solid</button>
+          <button data-finish="glass" aria-pressed="true">Glass</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-head"><label for="blur">Glass blur</label><output id="blurOut">14px</output></div>
+        <input type="range" id="blur" min="4" max="28" value="14">
+      </div>
+      <div class="field">
+        <div class="field-head"><span id="glowLabel">Ambient glow</span></div>
+        <div class="seg" role="group" aria-labelledby="glowLabel" id="glowSeg">
+          <button data-glow="off" aria-pressed="true">Off</button>
+          <button data-glow="on">On</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Product mode</div>
+      <div class="seg" role="group" aria-label="Product color mode" id="modeSeg">
+        <button data-mode="light" aria-pressed="true">Light</button>
+        <button data-mode="dark">Dark</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Live tokens</div>
+      <pre class="tokens-out" id="tokensOut" aria-live="off"></pre>
+    </div>
+  </aside>
+
+  <!-- ————— Stage ————— -->
+  <section class="stage-wrap">
+    <div class="tabs" role="tablist" aria-label="Prototype surface">
+      <button class="tab" role="tab" aria-selected="true" data-surface="web">Web app</button>
+      <button class="tab" role="tab" aria-selected="false" data-surface="mobile">Mobile</button>
+      <button class="tab" role="tab" aria-selected="false" data-surface="game">Game</button>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="ambient" aria-hidden="true"></div>
+
+      <!-- Web dashboard -->
+      <div class="surface surface-web active" id="surface-web" role="tabpanel">
+        <div class="dash-top">
+          <div class="dash-logo" id="dashLogo">M</div>
+          <div class="dash-name" id="dashName">Meridian Treasury</div>
+          <nav class="dash-nav">
+            <button aria-current="true">Overview</button>
+            <button>Reports</button>
+            <button>Settings</button>
+          </nav>
+          <button class="dash-cta">Export report</button>
+        </div>
+
+        <div class="tiles">
+          <div class="tile">
+            <div class="label" id="heroLabel">Total balance</div>
+            <div class="value" id="heroValue">$4,829,120</div>
+            <div class="delta up">▲ 12.4% <small>vs last month</small></div>
+          </div>
+          <div class="tile">
+            <div class="label">Weekly active</div>
+            <div class="value">18,240</div>
+            <div class="delta up">▲ 3.1% <small>vs last week</small></div>
+          </div>
+          <div class="tile">
+            <div class="label">Conversion</div>
+            <div class="value">4.7%</div>
+            <div class="delta down">▼ 0.4 pt <small>vs last week</small></div>
+          </div>
+          <div class="tile">
+            <div class="label">Avg. session</div>
+            <div class="value">6m 12s</div>
+            <div class="delta up">▲ 0m 22s <small>vs last week</small></div>
+          </div>
+        </div>
+
+        <div class="charts">
+          <div class="card">
+            <h3 id="lineTitle">Cash inflow — last 26 weeks</h3>
+            <p class="sub">Weekly totals, indexed</p>
+            <div class="plot" id="linePlot">
+              <svg id="lineSvg" viewBox="0 0 640 230" role="img" aria-label="Line chart of weekly totals over 26 weeks, trending upward"></svg>
+              <div class="tooltip" id="lineTip"></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3 id="barTitle">Payments processed by weekday</h3>
+            <p class="sub">Last 7 days</p>
+            <div class="plot" id="barPlot">
+              <svg id="barSvg" viewBox="0 0 420 230" role="img" aria-label="Bar chart of totals by weekday; Thursday is highest"></svg>
+              <div class="tooltip" id="barTip"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile app -->
+      <div class="surface surface-mobile" id="surface-mobile" role="tabpanel">
+        <div class="phone">
+          <div class="phone-status"><span>9:41</span><span>●●●●</span></div>
+          <div class="app">
+            <div class="app-head">
+              <div>
+                <div class="hello">Good morning</div>
+                <div class="who">Amara</div>
+              </div>
+              <div class="avatar">AO</div>
+            </div>
+            <div class="hero-card">
+              <div class="label" id="mHeroLabel">Total balance</div>
+              <div class="amount" id="mHeroValue">$12,480.20</div>
+              <div class="meta" id="mHeroMeta">•••• 4821 · UPDATED 2M AGO</div>
+            </div>
+            <div class="quick">
+              <button><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>Send</button>
+              <button><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 7L7 17M15 17H7V9"/></svg>Request</button>
+              <button><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Top up</button>
+              <button><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>More</button>
+            </div>
+            <div class="txns">
+              <h4>Recent activity</h4>
+              <div class="txn"><div class="ico">AC</div><div><div class="t-name">Acme Supplies</div><div class="t-time">Today, 08:12</div></div><div class="t-amt">−$248.00</div></div>
+              <div class="txn"><div class="ico">RB</div><div><div class="t-name">Rana Batra</div><div class="t-time">Yesterday, 19:40</div></div><div class="t-amt plus">+$1,120.00</div></div>
+              <div class="txn"><div class="ico">NT</div><div><div class="t-name">Northline Transit</div><div class="t-time">Yesterday, 08:03</div></div><div class="t-amt">−$3.20</div></div>
+              <div class="txn"><div class="ico">PY</div><div><div class="t-name">Payroll</div><div class="t-time">Jul 10, 09:00</div></div><div class="t-amt plus">+$4,210.00</div></div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <button aria-current="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Home</button>
+            <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5m5.5 14V9m5.5 10v-7M20.5 19V7"/></svg>Activity</button>
+            <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>Cards</button>
+            <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>Profile</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game -->
+      <div class="surface surface-game" id="surface-game" role="tabpanel">
+        <div class="game-head">
+          <div class="game-title" id="gameTitle">Ledger Breaker</div>
+          <div class="game-score" id="gameScore">Score 0 · Lives 3</div>
+        </div>
+        <div class="game-frame">
+          <canvas id="gameCanvas" width="640" height="400"></canvas>
+          <div class="game-overlay" id="gameOverlay">
+            <div class="big" id="overlayTitle">Ready?</div>
+            <p id="overlayText">Move with your mouse, touch, or ← → keys. Clear every brick — the whole board is painted by the client's tokens.</p>
+            <button id="startBtn">Start game</button>
+          </div>
+        </div>
+        <div class="game-note">Same tokens, different medium — swap the client preset mid-game and watch the board repaint.</div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ————— Token state ————— */
+  const FONTS = {
+    geometric: {
+      display: "'Futura','Avenir Next','Century Gothic',system-ui,sans-serif",
+      body: "'Avenir Next','Helvetica Neue',system-ui,sans-serif"
+    },
+    humanist: {
+      display: "'Seravek','Gill Sans','Segoe UI',system-ui,sans-serif",
+      body: "'Seravek','Gill Sans','Segoe UI',system-ui,sans-serif"
+    },
+    editorial: {
+      display: "'Iowan Old Style','Palatino','Georgia',serif",
+      body: "'Avenir Next','Helvetica Neue',system-ui,sans-serif"
+    }
+  };
+
+  const PRESETS = {
+    meridian: {
+      label: "Meridian", vertical: "Fintech",
+      hue: 222, sat: 66, radius: 4, space: 8, mode: "light", font: "geometric",
+      finish: "glass", blur: 14, glow: false,
+      product: "Meridian Treasury", initial: "M",
+      heroLabel: "Total balance", heroValue: "$4,829,120",
+      lineTitle: "Cash inflow — last 26 weeks",
+      barTitle: "Payments processed by weekday",
+      mHeroLabel: "Total balance", mHeroValue: "$12,480.20", mHeroMeta: "•••• 4821 · UPDATED 2M AGO",
+      game: "Ledger Breaker"
+    },
+    verda: {
+      label: "Verda", vertical: "Health",
+      hue: 152, sat: 52, radius: 14, space: 10, mode: "light", font: "humanist",
+      finish: "solid", blur: 10, glow: false,
+      product: "Verda Care", initial: "V",
+      heroLabel: "Active members", heroValue: "28,410",
+      lineTitle: "Daily check-ins — last 26 weeks",
+      barTitle: "Sessions by weekday",
+      mHeroLabel: "Wellness score", mHeroValue: "84 / 100", mHeroMeta: "STREAK 12 DAYS · SYNCED 2M AGO",
+      game: "Sprout Dash"
+    },
+    nova: {
+      label: "Nova Arcade", vertical: "Games",
+      hue: 322, sat: 72, radius: 20, space: 8, mode: "dark", font: "geometric",
+      finish: "glass", blur: 22, glow: true,
+      product: "Nova Live Ops", initial: "N",
+      heroLabel: "Players online", heroValue: "182,657",
+      lineTitle: "Concurrent players — last 26 weeks",
+      barTitle: "Matches played by weekday",
+      mHeroLabel: "Season pass XP", mHeroValue: "12,480 XP", mHeroMeta: "TIER 24 · NEXT REWARD 520 XP",
+      game: "Nova Breakout"
+    },
+    slate: {
+      label: "Slate & Co", vertical: "B2B",
+      hue: 34, sat: 78, radius: 8, space: 8, mode: "light", font: "editorial",
+      finish: "solid", blur: 10, glow: false,
+      product: "Slate & Co Insights", initial: "S",
+      heroLabel: "Qualified leads", heroValue: "1,204",
+      lineTitle: "Pipeline value — last 26 weeks",
+      barTitle: "Meetings booked by weekday",
+      mHeroLabel: "Open pipeline", mHeroValue: "$342,900", mHeroMeta: "18 DEALS · UPDATED 2M AGO",
+      game: "Brief Breaker"
+    }
+  };
+
+  const state = {
+    hue: 222, sat: 66, radius: 4, space: 8, mode: "light", font: "geometric",
+    finish: "glass", blur: 14, glow: false, preset: "meridian"
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const stage = $("stage");
+
+  function applyTokens() {
+    const { hue: h, sat: s, radius: r, space: sp, mode, font, finish, blur, glow } = state;
+    const dark = mode === "dark";
+    const glass = finish === "glass";
+    const set = (k, v) => stage.style.setProperty(k, v);
+
+    // Brand colors, derived from a single hue — the whole point.
+    set("--brand", dark ? `hsl(${h} ${s}% 60%)` : `hsl(${h} ${s}% 42%)`);
+    set("--brand-strong", dark ? `hsl(${h} ${Math.min(s + 10, 95)}% 72%)` : `hsl(${h} ${s}% 32%)`);
+    set("--brand-tint", dark ? `hsl(${h} 32% 19%)` : `hsl(${h} 55% 94%)`);
+    set("--on-brand", dark ? `hsl(${h} 45% 10%)` : "#ffffff");
+
+    // Demo neutrals: hue-biased toward the brand so they read as chosen.
+    set("--d-bg", dark ? `hsl(${h} 12% 8%)` : `hsl(${h} 22% 97%)`);
+    set("--d-panel", dark ? `hsl(${h} 10% 12%)` : "#ffffff");
+    set("--d-ink", dark ? `hsl(${h} 14% 93%)` : `hsl(${h} 18% 12%)`);
+    set("--d-ink-2", dark ? `hsl(${h} 7% 68%)` : `hsl(${h} 9% 40%)`);
+    set("--d-ink-3", dark ? `hsl(${h} 5% 52%)` : `hsl(${h} 7% 56%)`);
+    set("--d-line", dark ? `hsl(${h} 8% 20%)` : `hsl(${h} 16% 90%)`);
+
+    // Status ink (fixed hues, stepped per surface — never themed).
+    set("--good-ink", dark ? "#2fbf4f" : "#0a6b1d");
+    set("--bad-ink", dark ? "#e66767" : "#b3261e");
+
+    // Finish: glass panels float on an ambient brand-hued light field.
+    set("--panel-bg", glass
+      ? (dark ? `hsl(${h} 14% 15% / 0.52)` : `hsl(0 0% 100% / 0.55)`)
+      : (dark ? `hsl(${h} 10% 12%)` : "#ffffff"));
+    set("--panel-backdrop", glass ? `blur(${blur}px) saturate(1.45)` : "none");
+    set("--panel-border", glass
+      ? (dark ? `hsl(${h} 40% 70% / 0.16)` : `hsl(${h} 35% 35% / 0.13)`)
+      : (dark ? `hsl(${h} 8% 20%)` : `hsl(${h} 16% 90%)`));
+    set("--panel-shadow", glass
+      ? `0 10px 28px -14px rgb(0 0 0 / ${dark ? 0.55 : 0.16}), inset 0 1px 0 0 hsl(0 0% 100% / ${dark ? 0.07 : 0.55})`
+      : "none");
+    set("--amb-a", `hsl(${h} ${Math.min(s + 8, 92)}% ${dark ? 42 : 74}% / ${glow ? 0.34 : 0.16})`);
+    set("--amb-b", `hsl(${(h + 70) % 360} ${Math.min(s + 8, 92)}% ${dark ? 40 : 76}% / ${glow ? 0.28 : 0.13})`);
+    set("--amb-o", glass ? "1" : "0.55");
+    set("--glow-brand", glow
+      ? `0 12px 38px -10px hsl(${h} ${s}% ${dark ? 58 : 46}% / 0.55)`
+      : "none");
+
+    // Shape, rhythm, type.
+    set("--r", r + "px");
+    set("--r-lg", Math.min(Math.round(r * 1.75), 28) + "px");
+    set("--sp", sp + "px");
+    set("--d-f-display", FONTS[font].display);
+    set("--d-f-body", FONTS[font].body);
+
+    $("tokensOut").innerHTML =
+      `<span class="k">brand.hue</span>       <span class="v">${h}</span>\n` +
+      `<span class="k">brand.saturation</span> <span class="v">${(s / 100).toFixed(2)}</span>\n` +
+      `<span class="k">shape.radius</span>     <span class="v">${r}px</span>\n` +
+      `<span class="k">density.unit</span>     <span class="v">${sp}px</span>\n` +
+      `<span class="k">type.pairing</span>     <span class="v">${font}</span>\n` +
+      `<span class="k">finish.surface</span>   <span class="v">${finish}</span>\n` +
+      `<span class="k">finish.blur</span>      <span class="v">${blur}px</span>\n` +
+      `<span class="k">finish.glow</span>      <span class="v">${glow ? "on" : "off"}</span>\n` +
+      `<span class="k">mode.default</span>     <span class="v">${mode}</span>`;
+
+    $("hueOut").textContent = h + "°";
+    $("satOut").textContent = s + "%";
+    $("radiusOut").textContent = r + "px";
+    $("blurOut").textContent = blur + "px";
+    game.repaint();
+  }
+
+  function applyCopy(p) {
+    $("dashName").textContent = p.product;
+    $("dashLogo").textContent = p.initial;
+    $("heroLabel").textContent = p.heroLabel;
+    $("heroValue").textContent = p.heroValue;
+    $("lineTitle").textContent = p.lineTitle;
+    $("barTitle").textContent = p.barTitle;
+    $("mHeroLabel").textContent = p.mHeroLabel;
+    $("mHeroValue").textContent = p.mHeroValue;
+    $("mHeroMeta").textContent = p.mHeroMeta;
+    $("gameTitle").textContent = p.game;
+  }
+
+  function selectPreset(key) {
+    const p = PRESETS[key];
+    Object.assign(state, {
+      hue: p.hue, sat: p.sat, radius: p.radius, space: p.space,
+      mode: p.mode, font: p.font, finish: p.finish, blur: p.blur, glow: p.glow,
+      preset: key
+    });
+    $("hue").value = p.hue;
+    $("sat").value = p.sat;
+    $("radius").value = p.radius;
+    $("blur").value = p.blur;
+    syncSeg("densitySeg", "space", String(p.space));
+    syncSeg("fontSeg", "font", p.font);
+    syncSeg("modeSeg", "mode", p.mode);
+    syncSeg("finishSeg", "finish", p.finish);
+    syncSeg("glowSeg", "glow", p.glow ? "on" : "off");
+    document.querySelectorAll("#presetChips .chip").forEach((c) =>
+      c.setAttribute("aria-pressed", String(c.dataset.preset === key)));
+    applyCopy(p);
+    applyTokens();
+  }
+
+  function syncSeg(segId, dataKey, value) {
+    document.querySelectorAll("#" + segId + " button").forEach((b) =>
+      b.setAttribute("aria-pressed", String(b.dataset[dataKey] === value)));
+  }
+
+  function clearPresetSelection() {
+    state.preset = null;
+    document.querySelectorAll("#presetChips .chip").forEach((c) =>
+      c.setAttribute("aria-pressed", "false"));
+  }
+
+  /* ————— Console controls ————— */
+  const chipWrap = $("presetChips");
+  Object.entries(PRESETS).forEach(([key, p]) => {
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.dataset.preset = key;
+    b.setAttribute("aria-pressed", "false");
+    b.innerHTML = `<span class="dot" style="--chip-hue:hsl(${p.hue} ${p.sat}% 48%)"></span>${p.label} <small>${p.vertical}</small>`;
+    b.addEventListener("click", () => selectPreset(key));
+    chipWrap.appendChild(b);
+  });
+
+  $("hue").addEventListener("input", (e) => { state.hue = +e.target.value; clearPresetSelection(); applyTokens(); });
+  $("sat").addEventListener("input", (e) => { state.sat = +e.target.value; clearPresetSelection(); applyTokens(); });
+  $("radius").addEventListener("input", (e) => { state.radius = +e.target.value; clearPresetSelection(); applyTokens(); });
+
+  function wireSeg(segId, dataKey, apply) {
+    document.querySelectorAll("#" + segId + " button").forEach((b) => {
+      b.addEventListener("click", () => {
+        apply(b.dataset[dataKey]);
+        syncSeg(segId, dataKey, b.dataset[dataKey]);
+        clearPresetSelection();
+        applyTokens();
+      });
+    });
+  }
+  wireSeg("densitySeg", "space", (v) => { state.space = +v; });
+  wireSeg("fontSeg", "font", (v) => { state.font = v; });
+  wireSeg("modeSeg", "mode", (v) => { state.mode = v; });
+  wireSeg("finishSeg", "finish", (v) => { state.finish = v; });
+  wireSeg("glowSeg", "glow", (v) => { state.glow = v === "on"; });
+  $("blur").addEventListener("input", (e) => { state.blur = +e.target.value; clearPresetSelection(); applyTokens(); });
+
+  /* ————— Surface tabs ————— */
+  document.querySelectorAll(".tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach((t) =>
+        t.setAttribute("aria-selected", String(t === tab)));
+      document.querySelectorAll(".surface").forEach((s) =>
+        s.classList.toggle("active", s.id === "surface-" + tab.dataset.surface));
+      if (tab.dataset.surface !== "game") game.pause();
+    });
+  });
+
+  /* ————— Charts (single series = the brand color; titles name the series) ————— */
+  const LINE_DATA = [42, 45, 44, 48, 51, 49, 53, 57, 55, 60, 58, 63, 61, 66, 70, 68, 74, 72, 78, 82, 80, 86, 84, 90, 95, 99];
+  const BAR_DATA = [
+    { d: "Mon", v: 132 }, { d: "Tue", v: 158 }, { d: "Wed", v: 176 },
+    { d: "Thu", v: 214 }, { d: "Fri", v: 189 }, { d: "Sat", v: 84 }, { d: "Sun", v: 61 }
+  ];
+
+  const NS = "http://www.w3.org/2000/svg";
+  function el(name, attrs, parent) {
+    const n = document.createElementNS(NS, name);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+
+  function buildLineChart() {
+    const svg = $("lineSvg");
+    const W = 640, H = 230, padL = 34, padR = 16, padT = 14, padB = 26;
+    const iw = W - padL - padR, ih = H - padT - padB;
+    const max = 110, min = 30;
+    const x = (i) => padL + (i / (LINE_DATA.length - 1)) * iw;
+    const y = (v) => padT + ih - ((v - min) / (max - min)) * ih;
+
+    // Faint grid + axis labels
+    [30, 50, 70, 90, 110].forEach((v) => {
+      el("line", { x1: padL, x2: W - padR, y1: y(v), y2: y(v), class: "gridline" }, svg);
+      el("text", { x: padL - 7, y: y(v) + 3.5, "text-anchor": "end", class: "axis-label" }, svg).textContent = v;
+    });
+    [0, 8, 17, 25].forEach((i) => {
+      el("text", { x: x(i), y: H - 8, "text-anchor": "middle", class: "axis-label" }, svg).textContent = "W" + (i + 1);
+    });
+
+    const pts = LINE_DATA.map((v, i) => [x(i), y(v)]);
+    const path = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+
+    // Area fill (brand at low opacity), then the 2px line, then the endpoint.
+    el("path", {
+      d: path + ` L ${x(LINE_DATA.length - 1)} ${padT + ih} L ${padL} ${padT + ih} Z`,
+      fill: "var(--brand)", opacity: "0.10", stroke: "none"
+    }, svg);
+    el("path", { d: path, fill: "none", stroke: "var(--brand)", "stroke-width": "2.25", "stroke-linejoin": "round" }, svg);
+    const last = pts[pts.length - 1];
+    el("circle", { cx: last[0], cy: last[1], r: 4, fill: "var(--brand)", stroke: "var(--d-panel)", "stroke-width": "2" }, svg);
+    el("text", { x: last[0] - 8, y: last[1] - 9, "text-anchor": "end", class: "axis-label", "font-weight": "700", fill: "var(--d-ink)" }, svg)
+      .textContent = LINE_DATA[LINE_DATA.length - 1];
+
+    // Hover: crosshair + tooltip
+    const cross = el("line", { y1: padT, y2: padT + ih, stroke: "var(--d-ink-3)", "stroke-width": "1", "stroke-dasharray": "3 3", opacity: "0" }, svg);
+    const hoverDot = el("circle", { r: 4.5, fill: "var(--brand)", stroke: "var(--d-panel)", "stroke-width": "2", opacity: "0" }, svg);
+    const tip = $("lineTip");
+    const plot = $("linePlot");
+
+    function onMove(clientX) {
+      const rect = svg.getBoundingClientRect();
+      const sx = ((clientX - rect.left) / rect.width) * W;
+      const i = Math.max(0, Math.min(LINE_DATA.length - 1, Math.round(((sx - padL) / iw) * (LINE_DATA.length - 1))));
+      const px = x(i), py = y(LINE_DATA[i]);
+      cross.setAttribute("x1", px); cross.setAttribute("x2", px); cross.setAttribute("opacity", "1");
+      hoverDot.setAttribute("cx", px); hoverDot.setAttribute("cy", py); hoverDot.setAttribute("opacity", "1");
+      tip.innerHTML = `Week ${i + 1} · <b>${LINE_DATA[i]}</b>`;
+      tip.style.left = (px / W) * plot.clientWidth + "px";
+      tip.style.top = (py / H) * plot.clientHeight + "px";
+      tip.classList.add("show");
+    }
+    svg.addEventListener("mousemove", (e) => onMove(e.clientX));
+    svg.addEventListener("mouseleave", () => {
+      cross.setAttribute("opacity", "0"); hoverDot.setAttribute("opacity", "0"); tip.classList.remove("show");
+    });
+  }
+
+  function buildBarChart() {
+    const svg = $("barSvg");
+    const W = 420, H = 230, padL = 12, padR = 12, padT = 14, padB = 26;
+    const iw = W - padL - padR, ih = H - padT - padB;
+    const max = 220;
+    const bw = 28, step = iw / BAR_DATA.length;
+    const tip = $("barTip");
+    const plot = $("barPlot");
+    const maxV = Math.max(...BAR_DATA.map((b) => b.v));
+
+    [0, 110, 220].forEach((v) => {
+      const gy = padT + ih - (v / max) * ih;
+      el("line", { x1: padL, x2: W - padR, y1: gy, y2: gy, class: "gridline" }, svg);
+    });
+
+    BAR_DATA.forEach((b, i) => {
+      const cx = padL + step * i + step / 2;
+      const h = (b.v / max) * ih;
+      const bx = cx - bw / 2, by = padT + ih - h, r = 4;
+      // Rounded at the data end only; square on the baseline.
+      const bar = el("path", {
+        d: `M ${bx} ${padT + ih} V ${by + r} Q ${bx} ${by} ${bx + r} ${by} H ${bx + bw - r} Q ${bx + bw} ${by} ${bx + bw} ${by + r} V ${padT + ih} Z`,
+        fill: "var(--brand)"
+      }, svg);
+      el("text", { x: cx, y: H - 8, "text-anchor": "middle", class: "axis-label" }, svg).textContent = b.d;
+      if (b.v === maxV) {
+        el("text", { x: cx, y: by - 7, "text-anchor": "middle", class: "axis-label", "font-weight": "700", fill: "var(--d-ink)" }, svg)
+          .textContent = b.v;
+      }
+      // Hover target wider than the mark
+      const hit = el("rect", { x: padL + step * i, y: padT, width: step, height: ih, fill: "transparent" }, svg);
+      hit.addEventListener("mouseenter", () => {
+        bar.setAttribute("fill", "var(--brand-strong)");
+        tip.innerHTML = `${b.d} · <b>${b.v}</b>`;
+        tip.style.left = (cx / W) * plot.clientWidth + "px";
+        tip.style.top = (by / H) * plot.clientHeight + "px";
+        tip.classList.add("show");
+      });
+      hit.addEventListener("mouseleave", () => {
+        bar.setAttribute("fill", "var(--brand)");
+        tip.classList.remove("show");
+      });
+    });
+  }
+
+  /* ————— Mini game: breakout, painted by the live tokens ————— */
+  const game = (function () {
+    const canvas = $("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    const overlay = $("gameOverlay"), overlayTitle = $("overlayTitle"),
+          overlayText = $("overlayText"), startBtn = $("startBtn"), scoreEl = $("gameScore");
+
+    const COLS = 8, ROWS = 4, BW = 66, BH = 20, GAP = 8;
+    const gridW = COLS * BW + (COLS - 1) * GAP;
+    const offX = (W - gridW) / 2, offY = 46;
+
+    let bricks, paddle, ball, score, lives, running = false, raf = null;
+    let colors = { brand: "#2456c4", strong: "#1a3f92", tint: "#e5ecfa", panel: "#ffffff", ink: "#171717", line: "#e5e5e5", rowFills: [] };
+
+    function repaint() {
+      const cs = getComputedStyle(stage);
+      const { hue: h, sat: s, mode } = state;
+      const dark = mode === "dark";
+      colors = {
+        brand: cs.getPropertyValue("--brand").trim(),
+        strong: cs.getPropertyValue("--brand-strong").trim(),
+        panel: cs.getPropertyValue("--d-panel").trim(),
+        ink: cs.getPropertyValue("--d-ink").trim(),
+        line: cs.getPropertyValue("--d-line").trim(),
+        // One-hue ramp for the brick rows — an ordinal ramp of the brand hue.
+        rowFills: dark
+          ? [66, 57, 48, 39].map((l) => `hsl(${h} ${s}% ${l}%)`)
+          : [36, 46, 56, 66].map((l) => `hsl(${h} ${s}% ${l}%)`)
+      };
+      if (!running) draw();
+    }
+
+    function reset(full) {
+      bricks = [];
+      for (let r = 0; r < ROWS; r++)
+        for (let c = 0; c < COLS; c++)
+          bricks.push({ x: offX + c * (BW + GAP), y: offY + r * (BH + GAP), row: r, alive: true });
+      paddle = { w: 96, h: 12, x: W / 2 - 48, y: H - 28 };
+      ball = { x: W / 2, y: H - 60, r: 7, vx: 3.1, vy: -3.6 };
+      if (full) { score = 0; lives = 3; }
+      updateScore();
+    }
+
+    function updateScore() { scoreEl.textContent = `Score ${score} · Lives ${lives}`; }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      bricks.forEach((b) => {
+        if (!b.alive) return;
+        ctx.fillStyle = colors.rowFills[b.row] || colors.brand;
+        const r = Math.min(state.radius / 2 + 2, 9);
+        ctx.beginPath();
+        ctx.roundRect(b.x, b.y, BW, BH, r);
+        ctx.fill();
+      });
+      ctx.fillStyle = colors.brand;
+      ctx.beginPath();
+      ctx.roundRect(paddle.x, paddle.y, paddle.w, paddle.h, 6);
+      ctx.fill();
+      ctx.fillStyle = colors.strong;
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function tick() {
+      ball.x += ball.vx; ball.y += ball.vy;
+      if (ball.x < ball.r || ball.x > W - ball.r) ball.vx *= -1;
+      if (ball.y < ball.r) ball.vy *= -1;
+
+      if (ball.y > paddle.y - ball.r && ball.y < paddle.y + paddle.h &&
+          ball.x > paddle.x - ball.r && ball.x < paddle.x + paddle.w + ball.r && ball.vy > 0) {
+        const t = (ball.x - (paddle.x + paddle.w / 2)) / (paddle.w / 2);
+        ball.vx = t * 4.2;
+        ball.vy = -Math.abs(ball.vy);
+      }
+
+      for (const b of bricks) {
+        if (!b.alive) continue;
+        if (ball.x > b.x - ball.r && ball.x < b.x + BW + ball.r &&
+            ball.y > b.y - ball.r && ball.y < b.y + BH + ball.r) {
+          b.alive = false;
+          score += 10;
+          updateScore();
+          const fromSide = ball.x < b.x || ball.x > b.x + BW;
+          if (fromSide) ball.vx *= -1; else ball.vy *= -1;
+          break;
+        }
+      }
+
+      if (bricks.every((b) => !b.alive)) return end(true);
+      if (ball.y > H + ball.r) {
+        lives -= 1;
+        updateScore();
+        if (lives <= 0) return end(false);
+        reset(false);
+      }
+      draw();
+      raf = requestAnimationFrame(tick);
+    }
+
+    function end(won) {
+      running = false;
+      cancelAnimationFrame(raf);
+      overlayTitle.textContent = won ? "Board cleared!" : "Game over";
+      overlayText.textContent = won
+        ? `Final score ${score}. Try another client preset and play it in their colors.`
+        : `Score ${score}. The bricks are a one-hue ramp of the brand token — have another go.`;
+      startBtn.textContent = "Play again";
+      overlay.classList.remove("hidden");
+    }
+
+    function start() {
+      reset(true);
+      overlay.classList.add("hidden");
+      running = true;
+      repaint();
+      raf = requestAnimationFrame(tick);
+    }
+
+    function pause() {
+      if (!running) return;
+      running = false;
+      cancelAnimationFrame(raf);
+      overlayTitle.textContent = "Paused";
+      overlayText.textContent = "The game pauses when you switch surfaces.";
+      startBtn.textContent = "Resume-ish (restarts the ball)";
+      overlay.classList.remove("hidden");
+    }
+
+    startBtn.addEventListener("click", start);
+    canvas.addEventListener("mousemove", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      paddle.x = Math.max(0, Math.min(W - paddle.w, ((e.clientX - rect.left) / rect.width) * W - paddle.w / 2));
+      if (!running) draw();
+    });
+    canvas.addEventListener("touchmove", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      paddle.x = Math.max(0, Math.min(W - paddle.w, ((e.touches[0].clientX - rect.left) / rect.width) * W - paddle.w / 2));
+      e.preventDefault();
+    }, { passive: false });
+    document.addEventListener("keydown", (e) => {
+      if (!document.getElementById("surface-game").classList.contains("active")) return;
+      if (e.key === "ArrowLeft") { paddle.x = Math.max(0, paddle.x - 26); if (!running) draw(); }
+      if (e.key === "ArrowRight") { paddle.x = Math.min(W - paddle.w, paddle.x + 26); if (!running) draw(); }
+    });
+    document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); });
+
+    reset(true);
+    return { repaint, pause, draw };
+  })();
+
+  /* ————— Boot ————— */
+  buildLineChart();
+  buildBarChart();
+  selectPreset("meridian");
+  game.draw();
+})();
+</script>
